@@ -2,10 +2,14 @@
 # Feature: god-opencode, Property 20: Workflow Parameterization Substitution
 # Run: Invoke-Pester -Path .\tests\property\ -Output Detailed
 
-BeforeAll {
-    $Root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
-    . (Join-Path $Root "scripts\workflow-engine.ps1")
+BeforeDiscovery {
+    $Root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
     $WorkflowFiles = Get-ChildItem (Join-Path $Root "workflows") -Filter "*.md"
+}
+
+BeforeAll {
+    $Root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+    . (Join-Path $Root "scripts\workflow-engine.ps1")
 }
 
 Describe "Property 19: Workflow Step Ordering" {

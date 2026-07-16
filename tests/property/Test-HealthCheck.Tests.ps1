@@ -11,8 +11,7 @@ Describe "Property 15: Health Check Failure Message Completeness" {
     # Every [FAIL] line must contain: component name, expected state, actual state.
     It "Health check [FAIL] lines include component, expected, and found" {
         # Run health check and capture output
-        $Output = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "god-health.ps1") 2>&1 |
-            Out-String
+        $Output = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "god-health.ps1") 2>&1 | Out-String
 
         $FailLines = $Output -split "`n" | Where-Object { $_ -match '^\[FAIL\]' }
 
@@ -30,8 +29,7 @@ Describe "Property 15: Health Check Failure Message Completeness" {
 Describe "Property 16: Health Check Success Count" {
     # When all checks pass, the final line must include the count of verified components.
     It "Health check final line contains a numeric component count" {
-        $Output = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "god-health.ps1") 2>&1 |
-            Out-String
+        $Output = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "god-health.ps1") 2>&1 | Out-String
 
         $FinalLine = ($Output -split "`n" | Where-Object { $_ -match '\d+ components' } | Select-Object -Last 1)
         $FinalLine | Should -Not -BeNullOrEmpty
@@ -51,7 +49,7 @@ Describe "Property 8: MCP Manager error isolation" {
     }
 
     It "install-mcps.ps1 processes all 5 required MCPs" {
-        $Output = & (Join-Path $Root "scripts\install-mcps.ps1") 2>&1 | Out-String
+        $Output = & (Join-Path $Root "scripts\install-mcps.ps1") 6>&1 2>&1 | Out-String
         $RequiredMCPs = @("filesystem","github","playwright","context7","tavily")
         foreach ($MCP in $RequiredMCPs) {
             $Output | Should -Match $MCP
@@ -61,8 +59,7 @@ Describe "Property 8: MCP Manager error isolation" {
 
 Describe "Health check verifies all 10 agents" {
     It "Health check output includes a check for each required agent" {
-        $Output = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "god-health.ps1") 2>&1 |
-            Out-String
+        $Output = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "god-health.ps1") 2>&1 | Out-String
 
         $RequiredAgents = @(
             "principal-engineer","backend-engineer","frontend-engineer",

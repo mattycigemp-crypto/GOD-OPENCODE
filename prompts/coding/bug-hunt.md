@@ -1,4 +1,4 @@
-# Bug Hunt
+﻿# Bug Hunt
 
 ## Purpose
 
@@ -37,12 +37,12 @@ You are a senior debugger. Investigate the following bug using systematic root-c
 
 Produce a structured investigation:
 
-1. **Evidence Analysis** — What does the error output tell you? What does it rule out?
-2. **Root Cause Hypotheses** — List 2–3 ranked hypotheses. Explain why each could be the cause.
-3. **Root Cause Identification** — Which hypothesis is most likely and why?
-4. **Fix** — Provide the specific code change to fix the root cause.
-5. **Regression Test** — Write a test that fails before the fix and passes after.
-6. **Prevention** — What could prevent this class of bug in the future?
+1. **Evidence Analysis** - What does the error output tell you? What does it rule out?
+2. **Root Cause Hypotheses** - List 2–3 ranked hypotheses. Explain why each could be the cause.
+3. **Root Cause Identification** - Which hypothesis is most likely and why?
+4. **Fix** - Provide the specific code change to fix the root cause.
+5. **Regression Test** - Write a test that fails before the fix and passes after.
+6. **Prevention** - What could prevent this class of bug in the future?
 
 Do not patch symptoms. Fix the root cause.
 
@@ -50,8 +50,9 @@ Do not patch symptoms. Fix the root cause.
 
 ```
 BUG_DESCRIPTION: Users occasionally see duplicate orders in their history
-COMPONENT: order_service.py — create_order()
-ERROR_OUTPUT: No explicit error — duplicate rows appear in orders table
+COMPONENT: order_service.py - create_order()
+ERROR_OUTPUT: No explicit error - duplicate rows appear in orders table
 STEPS_TO_REPRODUCE: Submit an order while the network is slow; sometimes 2 orders appear
 EXPECTED_BEHAVIOR: Exactly one order should be created per submission
 ```
+

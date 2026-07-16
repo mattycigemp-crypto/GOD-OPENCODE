@@ -1,4 +1,4 @@
-# Integration tests — require a working installation.
+﻿# Integration tests - require a working installation.
 # Tag: [Integration]
 # Run: Invoke-Pester -Path .\tests\integration\ -Tag Integration -Output Detailed
 
@@ -76,3 +76,4 @@ Describe "Intelligence Engine scan of GOD-OPENCODE repo" -Tag Integration {
         $Plan | Should -Match "Prioritized Improvements"
     }
 }
+

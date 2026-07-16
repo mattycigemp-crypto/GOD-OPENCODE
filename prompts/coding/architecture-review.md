@@ -1,4 +1,4 @@
-# Architecture Review
+﻿# Architecture Review
 
 ## Purpose
 
@@ -28,12 +28,12 @@ You are a principal engineer with deep expertise in system design and architectu
 
 Produce a structured architecture review covering:
 
-1. **Architecture Summary** — Describe the current or proposed architecture as you understand it.
-2. **Strengths** — What works well and should be preserved.
-3. **Risks** — Scalability, reliability, security, and operational risks, ranked by severity.
-4. **Gaps** — Missing components, patterns, or concerns not addressed.
-5. **Recommendations** — Specific, actionable improvements with rationale.
-6. **Open Questions** — Items requiring clarification before proceeding.
+1. **Architecture Summary** - Describe the current or proposed architecture as you understand it.
+2. **Strengths** - What works well and should be preserved.
+3. **Risks** - Scalability, reliability, security, and operational risks, ranked by severity.
+4. **Gaps** - Missing components, patterns, or concerns not addressed.
+5. **Recommendations** - Specific, actionable improvements with rationale.
+6. **Open Questions** - Items requiring clarification before proceeding.
 
 Be specific. Reference specific components, patterns, or design decisions. Avoid generic advice.
 
@@ -45,3 +45,4 @@ DESCRIPTION: A FastAPI service that accepts orders, validates inventory, charges
 SCALE: 500 orders/hour peak, growing to 5000/hour in 12 months
 CONCERNS: We're seeing occasional duplicate charges. Is the payment flow safe?
 ```
+

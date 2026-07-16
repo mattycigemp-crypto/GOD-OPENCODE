@@ -1,4 +1,4 @@
-# ============================================
+﻿# ============================================
 # GOD-OPENCODE PROJECT SCANNER
 # Version 1.0
 # ============================================
@@ -70,12 +70,12 @@ function Get-ProjectType($Path) {
     $HasRequirements  = Test-Path (Join-Path $Path "requirements.txt")
     $HasDockerfile    = Test-Path (Join-Path $Path "Dockerfile")
     $HasOpenAPI       = (Test-Path (Join-Path $Path "openapi.yaml")) -or (Test-Path (Join-Path $Path "openapi.json"))
-    $HasNextConfig    = Test-Path (Join-Path $Path "next.config.js") -or (Test-Path (Join-Path $Path "next.config.ts"))
-    $HasViteConfig    = Test-Path (Join-Path $Path "vite.config.ts") -or (Test-Path (Join-Path $Path "vite.config.js"))
+    $HasNextConfig    = (Test-Path (Join-Path $Path "next.config.js")) -or (Test-Path (Join-Path $Path "next.config.mjs"))
+    $HasViteConfig    = (Test-Path (Join-Path $Path "vite.config.ts")) -or (Test-Path (Join-Path $Path "vite.config.js"))
     $HasCargoToml     = Test-Path (Join-Path $Path "Cargo.toml")
     $HasGoMod         = Test-Path (Join-Path $Path "go.mod")
     $HasMainPy        = Test-Path (Join-Path $Path "main.py")
-    $HasDockerCompose = Test-Path (Join-Path $Path "docker-compose.yml") -or (Test-Path (Join-Path $Path "docker-compose.yaml"))
+    $HasDockerCompose = (Test-Path (Join-Path $Path "docker-compose.yml")) -or (Test-Path (Join-Path $Path "docker-compose.yaml"))
 
     # Detect src/app directories
     $HasSrcApp = (Test-Path (Join-Path $Path "src\app")) -or (Test-Path (Join-Path $Path "app"))
@@ -240,7 +240,7 @@ function Invoke-ProjectScan {
     if ($ImprovementsList -eq "") { $ImprovementsList = "No critical improvements identified." }
 
     $Plan = @"
-# Implementation Plan — $ProjectName
+# Implementation Plan - $ProjectName
 
 ## Detected Project Type
 
@@ -280,7 +280,7 @@ $ImprovementsList
     $MemContent = @"
 ---
 type: architecture-decision
-title: Project Scan — $ProjectName
+title: Project Scan - $ProjectName
 timestamp: $Timestamp
 author: god-intelligence
 ---
@@ -301,3 +301,4 @@ $Plan
 # ENTRY POINT
 # ============================================
 Invoke-ProjectScan -Path $TargetPath
+

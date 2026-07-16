@@ -4,9 +4,13 @@
 # Feature: god-opencode, Property 10: Skill Directory Structure Invariant
 # Run: Invoke-Pester -Path .\tests\property\ -Output Detailed
 
-BeforeAll {
+BeforeDiscovery {
     $Root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
     $SkillFiles = Get-ChildItem (Join-Path $Root "skills") -Recurse -Filter "SKILL.md"
+}
+
+BeforeAll {
+    $Root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 }
 
 Describe "Property 6: SKILL.md Schema Completeness" {

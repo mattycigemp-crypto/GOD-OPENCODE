@@ -1,4 +1,4 @@
-# {{PROJECT_NAME}} — Discord Bot
+﻿# {{PROJECT_NAME}} - Discord Bot
 
 ## Purpose
 
@@ -71,7 +71,8 @@ pytest tests/ -v
 
 ## Dependencies
 
-- discord.py — Discord API wrapper
-- python-dotenv — environment configuration
-- aiosqlite — async SQLite for persistence
-- pytest, pytest-asyncio — testing
+- discord.py - Discord API wrapper
+- python-dotenv - environment configuration
+- aiosqlite - async SQLite for persistence
+- pytest, pytest-asyncio - testing
+

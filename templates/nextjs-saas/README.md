@@ -1,4 +1,4 @@
-# {{PROJECT_NAME}} — Next.js SaaS
+﻿# {{PROJECT_NAME}} - Next.js SaaS
 
 ## Purpose
 
@@ -71,3 +71,4 @@ prisma/
 | `pnpm test` | Run tests |
 | `pnpm prisma studio` | Open Prisma database UI |
 | `pnpm stripe listen` | Forward Stripe webhooks |
+

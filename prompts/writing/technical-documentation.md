@@ -1,4 +1,4 @@
-# Technical Documentation
+﻿# Technical Documentation
 
 ## Purpose
 
@@ -27,11 +27,11 @@ You are a senior technical writer. Produce {{DOC_TYPE}} documentation for {{SUBJ
 
 Produce documentation that is:
 
-1. **Accurate** — Reflects the actual behavior described in the source content.
-2. **Structured** — Organized with clear headings and logical flow.
-3. **Practical** — Includes working code examples and real-world usage patterns.
-4. **Complete** — Covers all public interfaces, configuration options, and error conditions.
-5. **Accessible** — Written for {{AUDIENCE}} without assuming unexplained context.
+1. **Accurate** - Reflects the actual behavior described in the source content.
+2. **Structured** - Organized with clear headings and logical flow.
+3. **Practical** - Includes working code examples and real-world usage patterns.
+4. **Complete** - Covers all public interfaces, configuration options, and error conditions.
+5. **Accessible** - Written for {{AUDIENCE}} without assuming unexplained context.
 
 Include:
 - Prerequisites and setup instructions
@@ -48,3 +48,4 @@ AUDIENCE: Backend developers integrating the auth service
 DOC_TYPE: API reference
 CONTENT: [OpenAPI spec or code here]
 ```
+

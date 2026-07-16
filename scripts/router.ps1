@@ -1,4 +1,4 @@
-# ============================================
+﻿# ============================================
 # GOD-OPENCODE ROUTER ENGINE
 # Version 1.0
 # ============================================
@@ -9,7 +9,8 @@ $ErrorActionPreference = "Stop"
 
 function Invoke-Router {
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyString()]
         [string]$Request
     )
 
@@ -31,7 +32,16 @@ function Invoke-Router {
     $Config = Get-Content $RouterConfig -Raw | ConvertFrom-Json
     $Routing = $Config.routing
 
-    # Tokenize request — lowercase words, strip punctuation
+    # Tokenize request - lowercase words, strip punctuation
+    if (!$Request -or $Request.Trim() -eq '') {
+        return @{
+            SelectedAgent = "principal-engineer"
+            Candidates    = @(@{ Agent = "principal-engineer"; Score = 0 })
+            Skills        = Get-AgentSkills "principal-engineer" $Root
+            Fallback      = $true
+            Notice        = "Empty request. Defaulted to principal-engineer."
+        }
+    }
     $Tokens = $Request.ToLower() -replace '[^a-z0-9\-\s]', '' -split '\s+' | Where-Object { $_ -ne '' }
 
     # Count keyword matches per agent
@@ -49,7 +59,7 @@ function Invoke-Router {
         }
     }
 
-    # Handle fallback — no matches
+    # Handle fallback - no matches
     if ($AgentScores.Count -eq 0) {
         Write-Host "[INFO] No routing match found for request. Defaulting to principal-engineer." -ForegroundColor Yellow
         return @{
@@ -65,9 +75,9 @@ function Invoke-Router {
     $Sorted = $AgentScores.GetEnumerator() |
         Sort-Object Value -Descending
 
-    $Top3 = $Sorted | Select-Object -First 3 | ForEach-Object {
+    $Top3 = @($Sorted | Select-Object -First 3 | ForEach-Object {
         @{ Agent = $_.Key; Score = $_.Value }
-    }
+    })
 
     $Selected = $Top3[0].Agent
 
@@ -117,47 +127,30 @@ function Get-AgentSkills {
 }
 
 
-# ============================================
-# DIRECT INVOCATION (non-import mode)
-# ============================================
+# Direct invocation guard
 if ($MyInvocation.InvocationName -ne '.') {
-
-    param(
-        [string]$Request = ""
-    )
-
-    if ($Request -eq "") {
+    # Only run when called directly, not dot-sourced
+    $Request = $args[0]
+    if (!$Request) {
         Write-Host ""
         Write-Host "Usage: .\scripts\router.ps1 -Request 'describe your task here'"
         Write-Host ""
-        exit
+    } else {
+        $Result = Invoke-Router -Request $Request
+        Write-Host ""
+        Write-Host "=============================="
+        Write-Host "  GOD-OPENCODE ROUTER RESULT"
+        Write-Host "=============================="
+        Write-Host "Selected Agent : $($Result.SelectedAgent)"
+        Write-Host "Fallback       : $($Result.Fallback)"
+        if ($Result.Notice) { Write-Host "Notice         : $($Result.Notice)" -ForegroundColor Yellow }
+        Write-Host ""
+        Write-Host "Top Candidates:"
+        foreach ($C in $Result.Candidates) { Write-Host "  $($C.Agent) (score: $($C.Score))" }
+        Write-Host ""
+        Write-Host "Skills Loaded:"
+        foreach ($S in $Result.Skills) { Write-Host "  - $S" }
+        Write-Host ""
     }
-
-    $Result = Invoke-Router -Request $Request
-
-    Write-Host ""
-    Write-Host "=============================="
-    Write-Host "  GOD-OPENCODE ROUTER RESULT"
-    Write-Host "=============================="
-    Write-Host ""
-    Write-Host "Selected Agent : $($Result.SelectedAgent)"
-    Write-Host "Fallback       : $($Result.Fallback)"
-
-    if ($Result.Notice) {
-        Write-Host "Notice         : $($Result.Notice)" -ForegroundColor Yellow
-    }
-
-    Write-Host ""
-    Write-Host "Top Candidates:"
-    foreach ($C in $Result.Candidates) {
-        Write-Host "  $($C.Agent) (score: $($C.Score))"
-    }
-
-    Write-Host ""
-    Write-Host "Skills Loaded:"
-    foreach ($S in $Result.Skills) {
-        Write-Host "  - $S"
-    }
-
-    Write-Host ""
 }
+

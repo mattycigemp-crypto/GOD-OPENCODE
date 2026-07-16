@@ -1,4 +1,4 @@
-# Refactoring
+﻿# Refactoring
 
 ## Purpose
 
@@ -30,11 +30,11 @@ You are a senior engineer performing a systematic refactoring. Refactor the foll
 
 Produce a structured refactoring:
 
-1. **Current State Analysis** — Identify the specific code smells and issues present.
-2. **Refactoring Plan** — Describe the transformations to apply in order (to ensure safety at each step).
-3. **Refactored Code** — Provide the complete refactored implementation.
-4. **Changes Explained** — Explain each significant change and why it improves the code.
-5. **Test Coverage Needed** — List the tests needed to safely verify the refactoring didn't break behavior.
+1. **Current State Analysis** - Identify the specific code smells and issues present.
+2. **Refactoring Plan** - Describe the transformations to apply in order (to ensure safety at each step).
+3. **Refactored Code** - Provide the complete refactored implementation.
+4. **Changes Explained** - Explain each significant change and why it improves the code.
+5. **Test Coverage Needed** - List the tests needed to safely verify the refactoring didn't break behavior.
 
 Do not change behavior. Only restructure, simplify, or reorganize.
 
@@ -46,3 +46,4 @@ PROBLEM: This 200-line function does validation, business logic, database writes
 GOAL: Separate concerns into distinct functions or classes. Make it unit-testable.
 CODE: [paste code here]
 ```
+

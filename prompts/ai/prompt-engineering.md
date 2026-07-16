@@ -1,4 +1,4 @@
-# Prompt Engineering
+﻿# Prompt Engineering
 
 ## Purpose
 
@@ -35,11 +35,11 @@ You are an expert prompt engineer. Design a production-quality prompt for the fo
 
 Produce:
 
-1. **System Prompt** — The complete system prompt for this task. Use clear role definition, explicit output format instructions, and constraint statements.
-2. **Few-Shot Examples** — 2–3 input/output examples that demonstrate the target behavior.
-3. **Edge Case Handling** — Instructions for handling ambiguous or edge-case inputs.
-4. **Evaluation Criteria** — 5 criteria for measuring whether the prompt is working correctly.
-5. **Failure Modes** — Common ways this prompt might fail and mitigations.
+1. **System Prompt** - The complete system prompt for this task. Use clear role definition, explicit output format instructions, and constraint statements.
+2. **Few-Shot Examples** - 2–3 input/output examples that demonstrate the target behavior.
+3. **Edge Case Handling** - Instructions for handling ambiguous or edge-case inputs.
+4. **Evaluation Criteria** - 5 criteria for measuring whether the prompt is working correctly.
+5. **Failure Modes** - Common ways this prompt might fail and mitigations.
 
 ## Example Usage
 
@@ -50,3 +50,4 @@ INPUT_FORMAT: Raw invoice text as a string
 OUTPUT_FORMAT: JSON with fields: vendor, amount, date, line_items
 CONSTRAINTS: Return null for any field that cannot be found; never hallucinate values
 ```
+

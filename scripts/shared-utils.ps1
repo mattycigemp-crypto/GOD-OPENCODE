@@ -1,4 +1,4 @@
-# ============================================
+﻿# ============================================
 # GOD-OPENCODE SHARED UTILITIES
 # Version 1.0
 # ============================================
@@ -53,7 +53,7 @@ function Write-IfChanged {
 # ============================================
 # RunStep
 # Executes a sub-script by name from $Scripts.
-# Wraps execution in try/catch — logs failure
+# Wraps execution in try/catch - logs failure
 # and continues. Never aborts the pipeline.
 # Returns $true on success, $false on failure.
 # ============================================
@@ -106,3 +106,4 @@ function ConvertTo-Slug {
     if ($Slug.Length -gt $MaxLength) { $Slug = $Slug.Substring(0, $MaxLength).TrimEnd('-') }
     return $Slug
 }
+

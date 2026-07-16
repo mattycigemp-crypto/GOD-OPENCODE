@@ -1,4 +1,4 @@
-# ============================================
+﻿# ============================================
 # GOD-OPENCODE HEALTH CHECK
 # Version 2.0
 # ============================================
@@ -37,7 +37,7 @@ Write-Host "======================================================"
 Write-Host ""
 
 # ============================================
-# CHECK 1 — Required directories exist
+# CHECK 1 - Required directories exist
 # ============================================
 $RequiredDirs = @(
     "agents","backups","commands","config","logs","mcps",
@@ -55,7 +55,7 @@ foreach ($Dir in $RequiredDirs) {
 }
 
 # ============================================
-# CHECK 2 — Skills installed in OpenCode
+# CHECK 2 - Skills installed in OpenCode
 # ============================================
 $SkillsRepo = Get-ChildItem (Join-Path $Root "skills") -Recurse -File -Filter "SKILL.md" -ErrorAction SilentlyContinue
 $SkillCount = $SkillsRepo.Count
@@ -74,7 +74,7 @@ if (Test-Path $SkillsTarget) {
 }
 
 # ============================================
-# CHECK 3 — MCPs registry valid and enabled MCPs listed
+# CHECK 3 - MCPs registry valid and enabled MCPs listed
 # ============================================
 $RegistryPath = Join-Path $Root "mcps\registry.json"
 if (!(Test-Path $RegistryPath)) {
@@ -95,7 +95,7 @@ if (!(Test-Path $RegistryPath)) {
 }
 
 # ============================================
-# CHECK 4 — Router config valid with ≥1 routing rule
+# CHECK 4 - Router config valid with ≥1 routing rule
 # ============================================
 $RouterPath = Join-Path $Root "router\agent-router.json"
 if (!(Test-Path $RouterPath)) {
@@ -115,7 +115,7 @@ if (!(Test-Path $RouterPath)) {
 }
 
 # ============================================
-# CHECK 5 — Key scripts exist
+# CHECK 5 - Key scripts exist
 # ============================================
 $RequiredScripts = @(
     "god-install.ps1",
@@ -142,7 +142,7 @@ foreach ($Script in $RequiredScripts) {
 }
 
 # ============================================
-# CHECK 6 — Agents all present with required sections
+# CHECK 6 - Agents all present with required sections
 # ============================================
 $RequiredAgents = @(
     "principal-engineer","backend-engineer","frontend-engineer",
@@ -171,7 +171,7 @@ foreach ($Agent in $RequiredAgents) {
 }
 
 # ============================================
-# CHECK 7 — Required workflows present
+# CHECK 7 - Required workflows present
 # ============================================
 $RequiredWorkflows = @("build-application","api-development","security-audit","bug-investigation")
 
@@ -185,7 +185,7 @@ foreach ($Wf in $RequiredWorkflows) {
 }
 
 # ============================================
-# CHECK 8 — Required commands present
+# CHECK 8 - Required commands present
 # ============================================
 $RequiredCommands = @("build","architect","debug","review","secure","optimize")
 
@@ -222,3 +222,4 @@ Write-Host ""
 
 # Exit code for CI integration
 if ($Failed -gt 0) { exit 1 } else { exit 0 }
+

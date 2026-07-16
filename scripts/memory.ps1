@@ -40,7 +40,7 @@ function New-MemoryArtifact {
         Write-Host "[MEMORY] Updated: $FilePath"
     } else {
         $Body = "---`ntype: $Type`ntitle: $Title`ntimestamp: $Timestamp`nauthor: $Author`n---`n`n# $Title`n`n$Content"
-        Set-Content -Path $FilePath -Value $Body -Encoding UTF8
+        [System.IO.File]::WriteAllText($FilePath, $Body)
         Write-Host "[MEMORY] Created: $FilePath"
     }
 

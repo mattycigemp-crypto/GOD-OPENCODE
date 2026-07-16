@@ -1,9 +1,13 @@
 # Feature: god-opencode, Property 7: AGENT.md Schema Completeness
 # Run: Invoke-Pester -Path .\tests\property\ -Output Detailed
 
-BeforeAll {
-    $Root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
+BeforeDiscovery {
+    $Root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
     $AgentFiles = Get-ChildItem (Join-Path $Root "agents") -Recurse -Filter "AGENT.md"
+}
+
+BeforeAll {
+    $Root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 }
 
 Describe "Property 7: AGENT.md Schema Completeness" {

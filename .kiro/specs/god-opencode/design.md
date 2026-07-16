@@ -1,8 +1,8 @@
-# Design Document: GOD-OPENCODE
+﻿# Design Document: GOD-OPENCODE
 
 ## Overview
 
-GOD-OPENCODE is an AI engineering operating system layered on top of OpenCode. It wraps OpenCode's underlying AI coding assistant with a modular, self-contained framework — organized into 10 functional layers — that gives any developer a single-command setup for a production-grade AI engineering environment.
+GOD-OPENCODE is an AI engineering operating system layered on top of OpenCode. It wraps OpenCode's underlying AI coding assistant with a modular, self-contained framework - organized into 10 functional layers - that gives any developer a single-command setup for a production-grade AI engineering environment.
 
 The core insight is that OpenCode's value compounds when it has rich, task-specific context: the right Skills (domain knowledge), the right Agent persona (role framing), and the right Workflow (step sequence). GOD-OPENCODE provides all three, plus the infrastructure to manage, install, update, and verify them.
 
@@ -13,7 +13,7 @@ The system is entirely file-based and declarative: Skills are Markdown files, Ag
 - **File-system as the data layer.** All framework artifacts (Skills, Agents, Workflows, Prompts, Templates, Memory) live as Markdown/JSON files. This keeps the framework transparent, diff-able, and portable.
 - **PowerShell as the orchestration layer.** The installer and all maintenance scripts are PowerShell, matching the Windows-first audience of the project and requiring no external runtime dependencies.
 - **OpenCode as the execution host.** GOD-OPENCODE does not replace OpenCode; it enriches it by writing files to the directories OpenCode reads (e.g., `~/.config/opencode/skills/`).
-- **Router-driven dispatch.** Rather than requiring users to know which Agent or Skill to invoke, the Router keyword-matches user requests and auto-selects the right context — making the system usable from the first command.
+- **Router-driven dispatch.** Rather than requiring users to know which Agent or Skill to invoke, the Router keyword-matches user requests and auto-selects the right context - making the system usable from the first command.
 - **Idempotent installation.** Every install step uses `Write-IfChanged` semantics: it only writes files when content has changed, so re-running the installer is always safe.
 
 
@@ -49,7 +49,7 @@ GOD-OPENCODE is organized as a layered stack. Each layer has a single responsibi
 │  (skills/{category}/{name}/SKILL.md → ~/.config/opencode/…)     │
 ├─────────────────────────────────────────────────────────────────┤
 │  Layer 8b: Memory System                                         │
-│  (memory/*.md — artifact store for decisions, TODOs, ADRs)      │
+│  (memory/*.md - artifact store for decisions, TODOs, ADRs)      │
 ├─────────────────────────────────────────────────────────────────┤
 │  Layer 1: Core Installer Engine                                  │
 │  (god-install.ps1 → god-builder → god-expansion →               │
@@ -210,7 +210,7 @@ workflows/
 ```
 
 **Required built-in workflows:**
-- `build-application.md` — Full-Stack Application Build
+- `build-application.md` - Full-Stack Application Build
 - `api-development.md`
 - `security-audit.md`
 - `bug-investigation.md`
@@ -394,7 +394,7 @@ commands/
 5. Execute the Workflow steps, passing agent/skill context to each step
 6. Produce a structured Implementation Plan (project type, workflow, agents, skills, prioritized improvements)
 
-**Extensibility:** New commands are added by creating a new `.md` file in `commands/` — no script changes required.
+**Extensibility:** New commands are added by creating a new `.md` file in `commands/` - no script changes required.
 
 ---
 
@@ -408,16 +408,16 @@ Scans repositories and produces implementation plans.
 - Language detection: count files by extension (`.py`, `.ts`, `.js`, `.go`, `.rs`, etc.)
 - Project type detection: presence of config files (`package.json` → Node, `pyproject.toml` → Python, `Dockerfile` → containerized, `openapi.yaml` → API, etc.)
 
-**Output — Implementation Plan document (Markdown):**
+**Output - Implementation Plan document (Markdown):**
 ```markdown
-# Implementation Plan — {project-name}
+# Implementation Plan - {project-name}
 ## Detected Project Type
 ## Primary Languages
 ## Recommended Workflow
 ## Assigned Agents
 ## Applied Skills
 ## Prioritized Improvements
-  1. {improvement} — rationale
+  1. {improvement} - rationale
   ...
 ```
 
@@ -437,12 +437,12 @@ Verifies framework installation state.
 5. `mcps/registry.json` is valid JSON
 6. Key scripts exist (`god-install.ps1`, `install-mcps.ps1`, etc.)
 
-**Output format — failure:**
+**Output format - failure:**
 ```
 [FAIL] {component}: expected {expected_state}, found {actual_state}
 ```
 
-**Output format — success:**
+**Output format - success:**
 ```
 [OK]   {component}
 ...
@@ -594,7 +594,7 @@ interface InstallSummary {
 
 ## Correctness Properties
 
-*A property is a characteristic or behavior that should hold true across all valid executions of a system — essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
+*A property is a characteristic or behavior that should hold true across all valid executions of a system - essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
 
 ### Property Reflection
 
@@ -603,7 +603,7 @@ Before listing properties, redundancies were eliminated:
 - Requirements 1.3 and 2.4 both describe "skills in repo → skills in target directory after install." These are merged into **Property 1**.
 - Requirements 2.5 and 1.7 both test idempotent install. The broader idempotence (1.7, custom content safety) subsumes the narrower overwrite case. Merged into **Property 2**.
 - Requirements 9.1 and 9.2 both describe the router's keyword→agent mapping. 9.2 is the complete behavior; 9.1 is implied. Merged into **Property 3**.
-- Requirements 12.5 and 12.6 are complementary failure/success reporting. Each provides unique value — kept as separate properties.
+- Requirements 12.5 and 12.6 are complementary failure/success reporting. Each provides unique value - kept as separate properties.
 - Requirements 1.6 and 5.3 both describe "fail one step, continue remaining." 5.3 is the MCP-specific instance. Combined into **Property 8** (error isolation).
 
 ---
@@ -781,7 +781,7 @@ Before listing properties, redundancies were eliminated:
 
 ### Installer Error Strategy
 
-The installer uses a `try/catch` pattern around each sub-step invocation via `RunStep`. The strategy is **log-and-continue**: no individual failure aborts the entire installation. This is intentional — a missing expansion engine should not prevent skills from being installed.
+The installer uses a `try/catch` pattern around each sub-step invocation via `RunStep`. The strategy is **log-and-continue**: no individual failure aborts the entire installation. This is intentional - a missing expansion engine should not prevent skills from being installed.
 
 ```
 For each step:
@@ -815,7 +815,7 @@ If a memory artifact file already exists at a target path, the Memory System app
 
 When the router finds no keyword matches, it logs a notice: `[INFO] No routing match found for request. Defaulting to principal-engineer.` This is surfaced to the user so they can manually specify an agent if the default is inappropriate.
 
-### Intelligence Engine — Unknown Project Type
+### Intelligence Engine - Unknown Project Type
 
 If the Intelligence Engine cannot determine a project type from the file structure, it sets `projectType: "unknown"` and recommends the `build-application` workflow as a safe default, noting in the plan that manual review is recommended.
 
@@ -950,4 +950,5 @@ Invoke-Pester -Path .\tests\ -Output Detailed
 # Integration tests only:
 Invoke-Pester -Path .\tests\integration\ -Tag Integration -Output Detailed
 ```
+
 

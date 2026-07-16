@@ -1,4 +1,4 @@
-# API Design
+﻿# API Design
 
 ## Purpose
 
@@ -32,13 +32,13 @@ You are a senior backend engineer specializing in API design. Design a productio
 
 Produce a complete API design:
 
-1. **Resource Definitions** — List all resources with their attributes and types.
-2. **Endpoint Catalog** — Define all endpoints: method, path, description, request schema, response schema, and error codes.
-3. **Authentication Design** — Detail the {{AUTH_METHOD}} implementation and authorization model.
-4. **Pagination Strategy** — Define how list endpoints paginate results.
-5. **Error Response Standard** — Define a consistent error response format with error codes.
-6. **Versioning Strategy** — Define how API versions are managed.
-7. **Sample OpenAPI Snippet** — Provide an OpenAPI 3.0 snippet for the 2 most important endpoints.
+1. **Resource Definitions** - List all resources with their attributes and types.
+2. **Endpoint Catalog** - Define all endpoints: method, path, description, request schema, response schema, and error codes.
+3. **Authentication Design** - Detail the {{AUTH_METHOD}} implementation and authorization model.
+4. **Pagination Strategy** - Define how list endpoints paginate results.
+5. **Error Response Standard** - Define a consistent error response format with error codes.
+6. **Versioning Strategy** - Define how API versions are managed.
+7. **Sample OpenAPI Snippet** - Provide an OpenAPI 3.0 snippet for the 2 most important endpoints.
 
 Follow REST best practices: consistent naming (plural nouns), appropriate HTTP methods and status codes, and semantic versioning.
 
@@ -46,8 +46,9 @@ Follow REST best practices: consistent naming (plural nouns), appropriate HTTP m
 
 ```
 API_NAME: Task Management API
-DOMAIN: Project management — users create projects, assign tasks, track progress
+DOMAIN: Project management - users create projects, assign tasks, track progress
 RESOURCES: Users, Projects, Tasks, Comments
 AUTH_METHOD: JWT
 FRAMEWORK: FastAPI
 ```
+

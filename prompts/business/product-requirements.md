@@ -1,4 +1,4 @@
-# Product Requirements
+﻿# Product Requirements
 
 ## Purpose
 
@@ -28,13 +28,13 @@ You are a senior product engineer. Produce a Product Requirements Document for {
 
 Produce a structured PRD:
 
-1. **Problem Statement** — Clear statement of the problem and who has it.
-2. **Goals** — 3–5 measurable success criteria.
-3. **Non-Goals** — Explicitly what this product does NOT do.
-4. **User Stories** — 5–10 user stories in "As a [user], I want [action], so that [outcome]" format.
-5. **Requirements** — Functional and non-functional requirements.
-6. **Technical Considerations** — Key technical decisions, dependencies, and risks.
-7. **Open Questions** — Unresolved questions that need answers before implementation.
+1. **Problem Statement** - Clear statement of the problem and who has it.
+2. **Goals** - 3–5 measurable success criteria.
+3. **Non-Goals** - Explicitly what this product does NOT do.
+4. **User Stories** - 5–10 user stories in "As a [user], I want [action], so that [outcome]" format.
+5. **Requirements** - Functional and non-functional requirements.
+6. **Technical Considerations** - Key technical decisions, dependencies, and risks.
+7. **Open Questions** - Unresolved questions that need answers before implementation.
 
 ## Example Usage
 
@@ -44,3 +44,4 @@ PROBLEM: Users miss important system alerts because they are buried in email
 TARGET_USERS: Engineering teams using a SaaS platform
 CONSTRAINTS: Must work within existing React frontend, 4-week timeline
 ```
+

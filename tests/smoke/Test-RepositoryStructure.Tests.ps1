@@ -1,5 +1,5 @@
-# Feature: god-opencode
-# Smoke tests — verify the repository structure is complete and well-formed.
+﻿# Feature: god-opencode
+# Smoke tests - verify the repository structure is complete and well-formed.
 # Run: Invoke-Pester -Path .\tests\smoke\ -Output Detailed
 
 BeforeAll {
@@ -88,10 +88,11 @@ Describe "README section completeness" {
 
 Describe "Template directories have README.md" {
     # Property 18: Every template must include a README.md
-    BeforeAll {
-        $script:Templates = Get-ChildItem (Join-Path $Root "templates") -Directory
-    }
-    It "Template '<name>' has README.md" -ForEach ($Templates | ForEach-Object { @{ name = $_.Name; path = $_.FullName } }) {
+    It "Template '<name>' has README.md" -ForEach @(
+        Get-ChildItem (Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path "templates") -Directory |
+            ForEach-Object { @{ name = $_.Name; path = $_.FullName } }
+    ) {
         Test-Path (Join-Path $path "README.md") | Should -BeTrue
     }
 }
+

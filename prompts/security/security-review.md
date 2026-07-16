@@ -1,4 +1,4 @@
-# Security Review
+﻿# Security Review
 
 ## Purpose
 
@@ -30,15 +30,15 @@ You are a senior security engineer. Perform a security review of the following {
 
 Produce a structured security review:
 
-1. **Threat Model** — Identify attack surfaces, trust boundaries, and most likely threat vectors.
-2. **Findings** — List all security issues found, each with:
+1. **Threat Model** - Identify attack surfaces, trust boundaries, and most likely threat vectors.
+2. **Findings** - List all security issues found, each with:
    - Severity (Critical / High / Medium / Low) and CVSS score estimate
    - Description of the vulnerability
    - Reproduction steps or proof of concept
    - Recommended remediation
-3. **Compliance Gaps** — Any OWASP Top 10 or common compliance issues identified.
-4. **Priority Remediation Plan** — Ordered list of fixes by risk severity.
-5. **Security Recommendations** — Defensive improvements beyond fixing current findings.
+3. **Compliance Gaps** - Any OWASP Top 10 or common compliance issues identified.
+4. **Priority Remediation Plan** - Ordered list of fixes by risk severity.
+5. **Security Recommendations** - Defensive improvements beyond fixing current findings.
 
 Be specific. Reference exact lines, fields, or components where vulnerabilities exist.
 
@@ -50,3 +50,4 @@ TECH_STACK: Python, FastAPI, PostgreSQL, JWT
 THREAT_ACTORS: External web attackers
 TARGET: [paste code here]
 ```
+

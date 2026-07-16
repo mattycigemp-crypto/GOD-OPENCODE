@@ -1,4 +1,4 @@
-# {{PROJECT_NAME}} — RAG Project
+﻿# {{PROJECT_NAME}} - RAG Project
 
 ## Purpose
 
@@ -76,9 +76,10 @@ python eval/evaluate.py --questions eval/questions.json
 
 ## Dependencies
 
-- langchain / llama-index — RAG orchestration
-- openai / anthropic — LLM providers
-- chromadb — local vector store
-- sentence-transformers — embedding models
-- fastapi, uvicorn — API server
-- pytest — testing
+- langchain / llama-index - RAG orchestration
+- openai / anthropic - LLM providers
+- chromadb - local vector store
+- sentence-transformers - embedding models
+- fastapi, uvicorn - API server
+- pytest - testing
+

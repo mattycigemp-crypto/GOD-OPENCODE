@@ -1,4 +1,4 @@
-# Code Review
+﻿# Code Review
 
 ## Purpose
 
@@ -30,11 +30,11 @@ You are a principal engineer performing a senior-level code review. Review the f
 
 Provide a structured code review:
 
-1. **Correctness** — Logic errors, edge cases, error handling gaps, off-by-one errors.
-2. **Security** — Injection risks, auth issues, secrets exposure, insecure patterns.
-3. **Performance** — Algorithmic complexity, N+1 queries, memory allocation, blocking operations.
-4. **Maintainability** — Naming, structure, duplication, coupling, missing tests.
-5. **Overall Assessment** — Short summary with a quality rating (1–5) and the top 3 things to fix.
+1. **Correctness** - Logic errors, edge cases, error handling gaps, off-by-one errors.
+2. **Security** - Injection risks, auth issues, secrets exposure, insecure patterns.
+3. **Performance** - Algorithmic complexity, N+1 queries, memory allocation, blocking operations.
+4. **Maintainability** - Naming, structure, duplication, coupling, missing tests.
+5. **Overall Assessment** - Short summary with a quality rating (1–5) and the top 3 things to fix.
 
 Rate findings by severity: **Critical** / **High** / **Medium** / **Low** / **Suggestion**.
 
@@ -46,3 +46,4 @@ CONTEXT: An API endpoint that authenticates users and returns a JWT token
 FOCUS_AREAS: security, error handling
 CODE: [paste code here]
 ```
+

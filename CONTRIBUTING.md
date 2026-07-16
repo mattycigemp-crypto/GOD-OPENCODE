@@ -1,8 +1,8 @@
-# Contributing to GOD-OPENCODE
+﻿# Contributing to GOD-OPENCODE
 
 ## Overview
 
-GOD-OPENCODE is file-based and declarative — contributing means adding or improving Markdown and JSON files. There are no runtime dependencies to install, no builds to run, and no databases to configure.
+GOD-OPENCODE is file-based and declarative - contributing means adding or improving Markdown and JSON files. There are no runtime dependencies to install, no builds to run, and no databases to configure.
 
 ---
 
@@ -168,3 +168,4 @@ Run the health check and confirm all checks pass:
 ```powershell
 .\god-health.ps1
 ```
+

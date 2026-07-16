@@ -4,6 +4,7 @@
 # ============================================
 
 $Root = Split-Path $PSScriptRoot -Parent
+. (Join-Path $PSScriptRoot "shared-utils.ps1")
 
 Write-Host ""
 Write-Host "============================================"
@@ -12,46 +13,21 @@ Write-Host "============================================"
 Write-Host ""
 
 
-function Ensure-Folder($Path) {
-
-    if (!(Test-Path $Path)) {
-
-        New-Item -ItemType Directory -Path $Path -Force | Out-Null
-        Write-Host "[CREATED] $Path"
-
+function Write-IfMissing {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$Content
+    )
+    if (Test-Path $Path) {
+        Write-Host "[EXISTS]  $Path" -ForegroundColor DarkGray
+        return
     }
-    else {
-
-        Write-Host "[EXISTS]  $Path"
-
+    $Dir = Split-Path $Path -Parent
+    if ($Dir -and !(Test-Path $Dir)) {
+        New-Item -ItemType Directory -Path $Dir -Force | Out-Null
     }
-}
-
-
-function Write-IfChanged($Path, $Content) {
-
-    if (!(Test-Path $Path)) {
-
-        Set-Content $Path $Content
-        Write-Host "[NEW] $Path"
-
-    }
-    else {
-
-        $Current = Get-Content $Path -Raw
-
-        if ($Current -ne $Content) {
-
-            Set-Content $Path $Content
-            Write-Host "[UPDATED] $Path"
-
-        }
-        else {
-
-            Write-Host "[UNCHANGED] $Path"
-
-        }
-    }
+    [System.IO.File]::WriteAllText($Path, $Content)
+    Write-Host "[NEW]     $Path" -ForegroundColor Green
 }
 
 
@@ -71,7 +47,7 @@ $Folders = @(
 
 foreach ($Folder in $Folders) {
 
-    Ensure-Folder "$Root\$Folder"
+    EnsureFolder "$Root\$Folder"
 
 }
 
@@ -97,7 +73,7 @@ $Agents = @(
 
 foreach ($Agent in $Agents) {
 
-    Ensure-Folder "$Root\agents\$Agent"
+    EnsureFolder "$Root\agents\$Agent"
 
 
 $content = @"
@@ -123,9 +99,20 @@ You are a senior $Agent.
 - Scalability
 - Reliability
 
+## Skills
+
+- architect
+- code-review
+- debugger
+- documentation
+- performance
+- refactor
+- security
+- testing
+
 "@
 
-    Write-IfChanged "$Root\agents\$Agent\AGENT.md" $content
+    Write-IfMissing "$Root\agents\$Agent\AGENT.md" $content
 
 }
 
@@ -136,7 +123,6 @@ You are a senior $Agent.
 # ============================================
 
 $Workflows = @(
-    "build-application",
     "debug-system",
     "refactor-codebase",
     "create-ai-agent",
@@ -166,7 +152,7 @@ $content = @"
 "@
 
 
-Write-IfChanged "$Root\workflows\$Workflow.md" $content
+Write-IfMissing "$Root\workflows\$Workflow.md" $content
 
 }
 

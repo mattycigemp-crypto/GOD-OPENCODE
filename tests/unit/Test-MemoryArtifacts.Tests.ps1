@@ -1,4 +1,4 @@
-# Feature: god-opencode, Property 11: Memory Artifact Timestamp and Author Invariant
+﻿# Feature: god-opencode, Property 11: Memory Artifact Timestamp and Author Invariant
 # Feature: god-opencode, Property 12: Memory List Completeness
 # Run: Invoke-Pester -Path .\tests\unit\ -Output Detailed
 
@@ -47,7 +47,7 @@ Describe "Property 11: Memory Artifact Timestamp and Author Invariant" {
     }
 
     It "Artifact <n> (<type>) has non-empty 'author' front-matter" -ForEach $TestCases {
-        # File already created above — read any matching file for this author
+        # File already created above - read any matching file for this author
         $Files = Get-ChildItem $TempMemDir -Filter "*.md"
         $MatchingFile = $Files | Where-Object {
             (Get-Content $_.FullName | Where-Object { $_ -match "author:\s*$author" })
@@ -131,3 +131,4 @@ Describe "Memory artifact conflict handling" {
         Remove-Item -Recurse -Force $Dir
     }
 }
+

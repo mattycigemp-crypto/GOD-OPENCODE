@@ -1,4 +1,4 @@
-# Feature: god-opencode, Property 8: Error Isolation
+﻿# Feature: god-opencode, Property 8: Error Isolation
 # Unit tests for installer utilities: Write-IfChanged, EnsureFolder, RunStep
 # Run: Invoke-Pester -Path .\tests\unit\ -Output Detailed
 
@@ -35,7 +35,7 @@ Describe "Write-IfChanged" {
         Start-Sleep -Milliseconds 50
         Write-IfChanged -Path $Path -Content "same content"
         $After = (Get-Item $Path).LastWriteTime
-        # LastWriteTime should be unchanged — file was not touched
+        # LastWriteTime should be unchanged - file was not touched
         $After | Should -Be $Before
     }
 
@@ -129,3 +129,4 @@ Describe "ConvertTo-Slug" {
         $Slug | Should -Not -Match "-$"
     }
 }
+

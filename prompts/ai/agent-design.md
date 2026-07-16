@@ -1,4 +1,4 @@
-# Agent Design
+﻿# Agent Design
 
 ## Purpose
 
@@ -26,13 +26,13 @@ You are a senior AI engineer. Design a production-quality AI agent.
 
 Produce a complete agent design:
 
-1. **Agent Architecture** — Component diagram: reasoning loop, tool registry, memory, output layer.
-2. **System Prompt** — The complete system prompt that defines the agent's role, capabilities, and constraints.
-3. **Tool Definitions** — For each tool: name, description, input schema, output schema, and error handling.
-4. **Reasoning Loop** — How the agent decides when to call tools vs. respond directly.
-5. **Memory Design** — How the agent stores and retrieves relevant context.
-6. **Safety Guardrails** — Constraints to prevent the agent from taking harmful or unintended actions.
-7. **Evaluation Plan** — How to test the agent's performance and detect regressions.
+1. **Agent Architecture** - Component diagram: reasoning loop, tool registry, memory, output layer.
+2. **System Prompt** - The complete system prompt that defines the agent's role, capabilities, and constraints.
+3. **Tool Definitions** - For each tool: name, description, input schema, output schema, and error handling.
+4. **Reasoning Loop** - How the agent decides when to call tools vs. respond directly.
+5. **Memory Design** - How the agent stores and retrieves relevant context.
+6. **Safety Guardrails** - Constraints to prevent the agent from taking harmful or unintended actions.
+7. **Evaluation Plan** - How to test the agent's performance and detect regressions.
 
 ## Example Usage
 
@@ -43,3 +43,4 @@ TOOLS: GitHub API (read PR diff), code analysis tool, comment posting API
 FRAMEWORK: LangGraph
 MEMORY_TYPE: conversation history within PR session
 ```
+

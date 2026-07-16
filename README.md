@@ -1,14 +1,14 @@
-# GOD-OPENCODE
+﻿# GOD-OPENCODE
 
 **An AI engineering operating system built on top of OpenCode.**
 
-One command bootstraps a complete, production-grade AI engineering environment — with the right experts, skills, workflows, and tools already loaded.
+One command bootstraps a complete, production-grade AI engineering environment - with the right experts, skills, workflows, and tools already loaded.
 
 ---
 
 ## Project Purpose
 
-GOD-OPENCODE wraps OpenCode with a modular framework that gives every request the right context: the expert agent persona, the domain-specific skill knowledge, and the proven workflow step sequence. Instead of getting a generic AI assistant, you get a senior principal engineer, a security auditor, a database architect, or a full-stack team — whichever the task calls for.
+GOD-OPENCODE wraps OpenCode with a modular framework that gives every request the right context: the expert agent persona, the domain-specific skill knowledge, and the proven workflow step sequence. Instead of getting a generic AI assistant, you get a senior principal engineer, a security auditor, a database architect, or a full-stack team - whichever the task calls for.
 
 The system is entirely file-based and transparent. Skills are Markdown files. Agents are Markdown files. Workflows are Markdown files. The router is a JSON config. PowerShell drives orchestration. Nothing is hidden.
 
@@ -45,11 +45,11 @@ GOD-OPENCODE is organized as a 10-layer stack:
 │  (ADRs, TODOs, conventions, changelogs, assumptions)    │
 ├─────────────────────────────────────────────────────────┤
 │  Layer 1: Core Installer Engine                          │
-│  (god-install.ps1 — fully idempotent one-command setup) │
+│  (god-install.ps1 - fully idempotent one-command setup) │
 └─────────────────────────────────────────────────────────┘
                        ↕
 ┌─────────────────────────────────────────────────────────┐
-│  OpenCode — reads ~/.config/opencode/skills/ at runtime │
+│  OpenCode - reads ~/.config/opencode/skills/ at runtime │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -90,7 +90,7 @@ This will:
 4. Process the MCP registry
 5. Print an installation summary
 
-Re-run any time — the installer is fully idempotent and will not overwrite your custom content.
+Re-run any time - the installer is fully idempotent and will not overwrite your custom content.
 
 ---
 
@@ -162,3 +162,4 @@ This verifies all directories, skills, agents, MCPs, workflows, and commands are
 ## UI Dashboard
 
 Open `ui/index.html` in a browser to view a local dashboard showing all installed components, routing rules, and system status.
+

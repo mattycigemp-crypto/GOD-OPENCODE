@@ -1,8 +1,8 @@
-# Requirements Document
+﻿# Requirements Document
 
 ## Introduction
 
-GOD-OPENCODE is an AI engineering operating system built on top of OpenCode. It extends OpenCode with a modular, layered framework of reusable skills, virtual agents, proven workflows, MCP integrations, a prompt library, project templates, memory management, intelligent request routing, and a self-improving intelligence engine. The goal is to give any developer a single-command setup that immediately provides a production-grade AI engineering environment — so that typing `/build ecommerce platform` produces a structured, fully coordinated implementation plan with the right agents, skills, and workflows applied automatically.
+GOD-OPENCODE is an AI engineering operating system built on top of OpenCode. It extends OpenCode with a modular, layered framework of reusable skills, virtual agents, proven workflows, MCP integrations, a prompt library, project templates, memory management, intelligent request routing, and a self-improving intelligence engine. The goal is to give any developer a single-command setup that immediately provides a production-grade AI engineering environment - so that typing `/build ecommerce platform` produces a structured, fully coordinated implementation plan with the right agents, skills, and workflows applied automatically.
 
 ---
 
@@ -67,7 +67,7 @@ GOD-OPENCODE is an AI engineering operating system built on top of OpenCode. It 
 1. THE Agent_System SHALL provide Agents covering at minimum these roles: Principal Engineer, Backend Engineer, Frontend Engineer, AI Engineer, Security Engineer, Database Architect, DevOps Engineer, Debugger, Researcher, and Technical Writer.
 2. WHEN an Agent is invoked, THE Agent_System SHALL apply the Skills referenced by that Agent's `AGENT.md` definition.
 3. WHEN a new Agent is defined, THE Agent MUST contain an `AGENT.md` file specifying: role, responsibilities, standards, and the Skills it coordinates.
-4. THE Agent_System SHALL allow Agents to be composed — where one Agent can delegate sub-tasks to another Agent by name.
+4. THE Agent_System SHALL allow Agents to be composed - where one Agent can delegate sub-tasks to another Agent by name.
 5. WHEN no Agent is explicitly specified by the user, THE Router SHALL select the most appropriate Agent based on the content of the user's request.
 
 ---
@@ -152,7 +152,7 @@ GOD-OPENCODE is an AI engineering operating system built on top of OpenCode. It 
 2. WHEN a keyword match is found, THE Router SHALL select the Agent associated with that keyword category.
 3. WHEN multiple keyword categories match a single request, THE Router SHALL select the Agent associated with the highest-confidence match, and surface the top 3 matches to the user.
 4. WHEN no keyword category matches a request, THE Router SHALL default to the Principal Engineer Agent and notify the user that automatic routing was not possible.
-5. THE Router SHALL be extensible — new keyword-to-Agent mappings SHALL be addable by editing `router/agent-router.json` without modifying any other file.
+5. THE Router SHALL be extensible - new keyword-to-Agent mappings SHALL be addable by editing `router/agent-router.json` without modifying any other file.
 6. WHEN the Router selects an Agent, THE Router SHALL also select the Skills associated with that Agent and include them in the execution context.
 
 ---
@@ -213,3 +213,4 @@ GOD-OPENCODE is an AI engineering operating system built on top of OpenCode. It 
 4. WHEN a new Skill, Agent, or Workflow is added to the repository, THE Repository SHALL follow the naming convention: lowercase with hyphens for directory names, and `SKILL.md` / `AGENT.md` / Markdown for content files.
 5. THE Repository SHALL include a license file (`LICENSE`) at the root level.
 6. THE Repository SHALL include a `god-health.ps1` script that developers can run at any time to verify installation state without running the full installer.
+

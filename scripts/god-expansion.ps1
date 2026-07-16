@@ -1,4 +1,4 @@
-# ============================================
+﻿# ============================================
 # GOD-OPENCODE EXPANSION ENGINE
 # Version 1.0
 # ============================================
@@ -86,12 +86,12 @@ Ensure software correctness through systematic $Skill practices.
 Always:
 - Name tests to describe the expected behavior, not the implementation.
 - Test one thing per test case.
-- Keep tests deterministic — no random or time-dependent behavior without mocking.
+- Keep tests deterministic - no random or time-dependent behavior without mocking.
 - Clean up side effects in teardown.
 
 Never:
 - Write tests that only verify the happy path.
-- Assert on implementation details — assert on behavior.
+- Assert on implementation details - assert on behavior.
 - Leave flaky tests in the suite.
 "@
     Write-IfChanged "$Root\skills\testing\$Skill\SKILL.md" $Content
@@ -257,3 +257,4 @@ Write-Host "============================================"
 Write-Host " EXPANSION ENGINE COMPLETE"
 Write-Host "============================================"
 Write-Host ""
+
