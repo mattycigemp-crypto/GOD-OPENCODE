@@ -1,0 +1,19 @@
+{
+    "servers": {
+        "filesystem": {
+            "enabled": true
+        },
+        "github": {
+            "enabled": true
+        },
+        "playwright": {
+            "enabled": true
+        },
+        "context7": {
+            "enabled": true
+        },
+        "tavily": {
+            "enabled": true
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+ "local":{
+   "ollama":true,
+   "lmstudio":true
+ },
+ "routing":{
+   "simple":"local",
+   "private":"local",
+   "architecture":"large",
+   "complex":"cloud"
+ }
+}

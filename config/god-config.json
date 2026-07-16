@@ -1,0 +1,9 @@
+{
+    "name": "GOD-OPENCODE",
+    "version": "1.0",
+    "autoUpdate": true,
+    "skillSystem": true,
+    "agentSystem": true,
+    "mcpSystem": true,
+    "workflowSystem": true
+}

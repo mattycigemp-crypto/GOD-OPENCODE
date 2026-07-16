@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOD-OPENCODE Dashboard</title>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --surface: #141414;
+      --surface2: #1c1c1c;
+      --border: #2a2a2a;
+      --accent: #7c3aed;
+      --accent2: #a855f7;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --text: #e5e7eb;
+      --muted: #6b7280;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5; }
+    a { color: var(--accent2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    /* Layout */
+    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+    .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .main { padding: 24px; overflow-y: auto; }
+    /* Sidebar */
+    .brand { padding: 20px 16px 16px; border-bottom: 1px solid var(--border); }
+    .brand h1 { font-size: 16px; font-weight: 700; color: var(--accent2); letter-spacing: 0.05em; }
+    .brand p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    nav { padding: 8px 0; }
+    nav a { display: flex; align-items: center; gap: 8px; padding: 8px 16px; color: var(--muted); font-size: 13px; transition: all 0.15s; border-left: 2px solid transparent; }
+    nav a:hover, nav a.active { color: var(--text); background: var(--surface2); border-left-color: var(--accent2); text-decoration: none; }
+    nav a .icon { width: 16px; text-align: center; }
+    nav .section-label { padding: 12px 16px 4px; font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    /* Header */
+    .page-header { margin-bottom: 24px; }
+    .page-header h2 { font-size: 22px; font-weight: 700; }
+    .page-header p { color: var(--muted); margin-top: 4px; }
+    /* Stats row */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
+    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: var(--accent2); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    /* Cards */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; transition: border-color 0.15s; }
+    .card:hover { border-color: var(--accent); }
+    .card-title { font-weight: 600; font-size: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .card-subtitle { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+    .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-size: 11px; color: var(--muted); }
+    .tag.ai { border-color: #7c3aed44; color: var(--accent2); }
+    .tag.backend { border-color: #3b82f644; color: var(--blue); }
+    .tag.security { border-color: #ef444444; color: var(--red); }
+    .tag.devops { border-color: #22c55e44; color: var(--green); }
+    .tag.frontend { border-color: #eab30844; color: var(--yellow); }
+    /* Badge */
+    .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 500; }
+    .badge.green { background: #22c55e22; color: var(--green); }
+    .badge.purple { background: #7c3aed22; color: var(--accent2); }
+    .badge.yellow { background: #eab30822; color: var(--yellow); }
+    /* Table */
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--surface2); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+    /* Code block */
+    .code { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 13px; overflow-x: auto; white-space: pre; }
+    .code .comment { color: #6b7280; }
+    .code .cmd { color: var(--accent2); }
+    .code .arg { color: var(--green); }
+    /* Section */
+    .section { margin-bottom: 32px; }
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .section-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    /* Page visibility */
+    .page { display: none; }
+    .page.active { display: block; }
+    /* Health indicator */
+    .health-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; background: var(--surface2); margin-bottom: 6px; }
+    .health-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .health-dot.ok { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .health-dot.warn { background: var(--yellow); }
+    .health-label { flex: 1; font-size: 13px; }
+    .health-status { font-size: 12px; font-weight: 500; }
+    .health-status.ok { color: var(--green); }
+    .health-status.warn { color: var(--yellow); }
+    /* Router visualizer */
+    .router-row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 6px; font-size: 13px; margin-bottom: 4px; background: var(--surface2); }
+    .router-keyword { color: var(--text); font-family: monospace; background: var(--border); padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+    .router-arrow { color: var(--muted); }
+    .router-agent { font-weight: 500; }
+    .router-agent.principal { color: var(--accent2); }
+    .router-agent.backend { color: var(--blue); }
+    .router-agent.frontend { color: var(--yellow); }
+    .router-agent.security { color: var(--red); }
+    .router-agent.ai { color: #c084fc; }
+    .router-agent.database { color: #34d399; }
+    .router-agent.devops { color: var(--green); }
+    .router-agent.debugger { color: #fb923c; }
+  </style>
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="brand">
+    <h1>⚡ GOD-OPENCODE</h1>
+    <p>AI Engineering OS v1.0</p>
+  </div>
+  <nav>
+    <div class="section-label">Overview</div>
+    <a href="#" onclick="showPage('dashboard')" class="active" id="nav-dashboard"><span class="icon">◈</span> Dashboard</a>
+    <a href="#" onclick="showPage('health')"    id="nav-health"><span class="icon">♥</span> Health Check</a>
+
+    <div class="section-label">Components</div>
+    <a href="#" onclick="showPage('agents')"    id="nav-agents"><span class="icon">◉</span> Agents</a>
+    <a href="#" onclick="showPage('skills')"    id="nav-skills"><span class="icon">◆</span> Skills</a>
+    <a href="#" onclick="showPage('workflows')" id="nav-workflows"><span class="icon">⇢</span> Workflows</a>
+    <a href="#" onclick="showPage('commands')"  id="nav-commands"><span class="icon">/</span> Commands</a>
+    <a href="#" onclick="showPage('prompts')"   id="nav-prompts"><span class="icon">✦</span> Prompts</a>
+    <a href="#" onclick="showPage('templates')" id="nav-templates"><span class="icon">⬚</span> Templates</a>
+
+    <div class="section-label">Intelligence</div>
+    <a href="#" onclick="showPage('router')"    id="nav-router"><span class="icon">⇌</span> Router</a>
+    <a href="#" onclick="showPage('mcps')"      id="nav-mcps"><span class="icon">⬡</span> MCPs</a>
+    <a href="#" onclick="showPage('quickstart')" id="nav-quickstart"><span class="icon">▶</span> Quick Start</a>
+  </nav>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+<!-- ===== DASHBOARD PAGE ===== -->
+<div id="page-dashboard" class="page active">
+  <div class="page-header">
+    <h2>Dashboard</h2>
+    <p>Your AI engineering operating system — fully loaded and ready.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-value">10</div><div class="stat-label">Agents</div></div>
+    <div class="stat"><div class="stat-value">70+</div><div class="stat-label">Skills</div></div>
+    <div class="stat"><div class="stat-value">10+</div><div class="stat-label">Workflows</div></div>
+    <div class="stat"><div class="stat-value">6</div><div class="stat-label">Commands</div></div>
+    <div class="stat"><div class="stat-value">15+</div><div class="stat-label">Prompts</div></div>
+    <div class="stat"><div class="stat-value">7</div><div class="stat-label">Templates</div></div>
+    <div class="stat"><div class="stat-value">5</div><div class="stat-label">MCPs</div></div>
+    <div class="stat"><div class="stat-value">80+</div><div class="stat-label">Router Rules</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Slash Commands</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">⚡ /build</div>
+        <div class="card-subtitle">Build a complete production application end-to-end. Parses your description, selects workflow, assigns agents, and produces an implementation plan.</div>
+        <div class="card-tags"><span class="tag frontend">principal-engineer</span><span class="tag ai">all agents</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏗 /architect</div>
+        <div class="card-subtitle">Design or review system architecture. Produces ADRs, component diagrams, and scalability analysis.</div>
+        <div class="card-tags"><span class="tag frontend">principal-engineer</span><span class="tag backend">database-architect</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🐛 /debug</div>
+        <div class="card-subtitle">Systematic bug investigation from symptom to root cause to fix. Includes regression test and documentation.</div>
+        <div class="card-tags"><span class="tag devops">debugger</span><span class="tag backend">backend-engineer</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">👁 /review</div>
+        <div class="card-subtitle">Senior-level code review covering correctness, security, performance, and maintainability.</div>
+        <div class="card-tags"><span class="tag frontend">principal-engineer</span><span class="tag security">security-engineer</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔒 /secure</div>
+        <div class="card-subtitle">Full security audit with threat modelling, OWASP checks, dependency scanning, and findings report.</div>
+        <div class="card-tags"><span class="tag security">security-engineer</span><span class="tag devops">devops-engineer</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ /optimize</div>
+        <div class="card-subtitle">Performance optimization driven by measurement. Covers algorithms, database queries, caching, and infrastructure.</div>
+        <div class="card-tags"><span class="tag frontend">principal-engineer</span><span class="tag backend">database-architect</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Quick Install</div>
+    <div class="code"><span class="comment"># Bootstrap the entire framework in one command</span>
+<span class="cmd">.\god-install.ps1</span>
+
+<span class="comment"># Verify installation</span>
+<span class="cmd">.\god-health.ps1</span>
+
+<span class="comment"># Run the router against a request</span>
+<span class="cmd">.\scripts\router.ps1</span> <span class="arg">-Request</span> <span class="arg">"build a fastapi api with postgres"</span>
+
+<span class="comment"># Scan a project and generate an implementation plan</span>
+<span class="cmd">.\tools\project-scan.ps1</span> <span class="arg">-TargetPath</span> <span class="arg">"C:\path\to\your\project"</span></div>
+  </div>
+</div>
+
+
+<!-- ===== AGENTS PAGE ===== -->
+<div id="page-agents" class="page">
+  <div class="page-header">
+    <h2>Agents</h2>
+    <p>10 virtual engineering personas. Each agent coordinates a specific set of skills and can delegate to other agents.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">◉ principal-engineer</div>
+      <div class="card-subtitle">Technical leader. Handles architecture, cross-cutting decisions, and complex task decomposition. The default fallback agent.</div>
+      <div class="card-tags"><span class="tag ai">system-design</span><span class="tag ai">architect</span><span class="tag ai">code-review</span><span class="tag ai">security</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ backend-engineer</div>
+      <div class="card-subtitle">Server-side systems, REST APIs, business logic, database integration, and backend security.</div>
+      <div class="card-tags"><span class="tag backend">api-design</span><span class="tag backend">fastapi</span><span class="tag backend">postgres</span><span class="tag backend">testing</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ frontend-engineer</div>
+      <div class="card-subtitle">React, Next.js, TypeScript UI — performance, accessibility, state management, and component architecture.</div>
+      <div class="card-tags"><span class="tag frontend">react-expert</span><span class="tag frontend">nextjs-expert</span><span class="tag frontend">typescript</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ ai-engineer</div>
+      <div class="card-subtitle">LLM systems, agents, RAG pipelines, embeddings, MCP servers, evals, and prompt engineering.</div>
+      <div class="card-tags"><span class="tag ai">llm-engineer</span><span class="tag ai">rag-engineer</span><span class="tag ai">prompt-engineer</span><span class="tag ai">mcp-builder</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ security-engineer</div>
+      <div class="card-subtitle">Security audits, vulnerability assessment, threat modelling, authentication, and cryptography.</div>
+      <div class="card-tags"><span class="tag security">security-audit</span><span class="tag security">auth</span><span class="tag security">pentest</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ database-architect</div>
+      <div class="card-subtitle">Data modelling, schema design, query optimization, migrations, replication, and sharding.</div>
+      <div class="card-tags"><span class="tag backend">database-design</span><span class="tag backend">postgres</span><span class="tag backend">redis</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ devops-engineer</div>
+      <div class="card-subtitle">CI/CD pipelines, Docker, Kubernetes, Terraform, cloud infrastructure, and monitoring.</div>
+      <div class="card-tags"><span class="tag devops">docker</span><span class="tag devops">kubernetes</span><span class="tag devops">terraform</span><span class="tag devops">ci-cd</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ debugger</div>
+      <div class="card-subtitle">Systematic root-cause analysis. Reproduces bugs, traces execution, fixes root causes, and writes regression tests.</div>
+      <div class="card-tags"><span class="tag devops">bug-hunter</span><span class="tag devops">code-review</span><span class="tag devops">testing</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ researcher</div>
+      <div class="card-subtitle">Technical investigation, option comparison, evidence-based recommendations, and literature synthesis.</div>
+      <div class="card-tags"><span class="tag frontend">documentation</span><span class="tag frontend">architect</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">◉ technical-writer</div>
+      <div class="card-subtitle">READMEs, API docs, ADRs, runbooks, tutorials, and changelogs. Ensures accuracy and developer clarity.</div>
+      <div class="card-tags"><span class="tag frontend">documentation</span><span class="tag frontend">code-review</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== SKILLS PAGE ===== -->
+<div id="page-skills" class="page">
+  <div class="page-header">
+    <h2>Skills</h2>
+    <p>70+ domain-specific knowledge documents. Installed into OpenCode at <code>~/.config/opencode/skills/</code>.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>AI / ML</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-title"><span class="tag ai">ai</span> ai-engineer</div><div class="card-subtitle">LLM system design, model selection, cost/quality tradeoffs</div></div>
+      <div class="card"><div class="card-title"><span class="tag ai">ai</span> llm-engineer</div><div class="card-subtitle">Prompt design, context management, output validation</div></div>
+      <div class="card"><div class="card-title"><span class="tag ai">ai</span> prompt-engineer</div><div class="card-subtitle">System prompts, few-shot examples, chain-of-thought</div></div>
+      <div class="card"><div class="card-title"><span class="tag ai">ai</span> rag-engineer</div><div class="card-subtitle">Chunking, embedding, retrieval, reranking pipelines</div></div>
+      <div class="card"><div class="card-title"><span class="tag ai">ai</span> agent-builder</div><div class="card-subtitle">Tool use, memory, reasoning loops, safety guardrails</div></div>
+      <div class="card"><div class="card-title"><span class="tag ai">ai</span> mcp-builder</div><div class="card-subtitle">MCP server design, tool definitions, resource management</div></div>
+      <div class="card"><div class="card-title"><span class="tag ai">ai</span> embedding-engineer</div><div class="card-subtitle">Vector representations, similarity search, dimensionality</div></div>
+      <div class="card"><div class="card-title"><span class="tag ai">ai</span> evaluation-engineer</div><div class="card-subtitle">Eval datasets, metrics, benchmarks, regression detection</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Backend</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-title"><span class="tag backend">backend</span> api-design</div><div class="card-subtitle">REST/GraphQL design, versioning, error standards</div></div>
+      <div class="card"><div class="card-title"><span class="tag backend">backend</span> fastapi</div><div class="card-subtitle">FastAPI, Pydantic v2, async SQLAlchemy, Alembic</div></div>
+      <div class="card"><div class="card-title"><span class="tag backend">backend</span> express</div><div class="card-subtitle">Express.js middleware, routing, error handling</div></div>
+      <div class="card"><div class="card-title"><span class="tag backend">backend</span> django</div><div class="card-subtitle">Django REST Framework, ORM, migrations, admin</div></div>
+      <div class="card"><div class="card-title"><span class="tag backend">backend</span> postgres</div><div class="card-subtitle">PostgreSQL schemas, indexes, query optimization</div></div>
+      <div class="card"><div class="card-title"><span class="tag backend">backend</span> redis</div><div class="card-subtitle">Caching, pub/sub, queues, session storage</div></div>
+      <div class="card"><div class="card-title"><span class="tag backend">backend</span> graphql</div><div class="card-subtitle">Schema design, resolvers, subscriptions, N+1 prevention</div></div>
+      <div class="card"><div class="card-title"><span class="tag backend">backend</span> mongodb</div><div class="card-subtitle">Document design, aggregation, indexing strategies</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Security</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-title"><span class="tag security">security</span> security-audit</div><div class="card-subtitle">OWASP Top 10, threat modelling, CVE assessment</div></div>
+      <div class="card"><div class="card-title"><span class="tag security">security</span> secure-coding</div><div class="card-subtitle">Input validation, injection prevention, secrets management</div></div>
+      <div class="card"><div class="card-title"><span class="tag security">security</span> authentication</div><div class="card-subtitle">JWT, OAuth2, session management, MFA</div></div>
+      <div class="card"><div class="card-title"><span class="tag security">security</span> cryptography</div><div class="card-subtitle">Key management, hashing, TLS, encryption at rest</div></div>
+      <div class="card"><div class="card-title"><span class="tag security">security</span> penetration-testing</div><div class="card-subtitle">Exploit validation, attack simulation, reporting</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>DevOps</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-title"><span class="tag devops">devops</span> docker</div><div class="card-subtitle">Multi-stage builds, Compose, security hardening</div></div>
+      <div class="card"><div class="card-title"><span class="tag devops">devops</span> kubernetes</div><div class="card-subtitle">Deployments, services, ingress, RBAC, Helm</div></div>
+      <div class="card"><div class="card-title"><span class="tag devops">devops</span> terraform</div><div class="card-subtitle">IaC, state management, modules, drift detection</div></div>
+      <div class="card"><div class="card-title"><span class="tag devops">devops</span> github-actions</div><div class="card-subtitle">CI/CD workflows, secrets, matrix builds, caching</div></div>
+      <div class="card"><div class="card-title"><span class="tag devops">devops</span> cloud</div><div class="card-subtitle">AWS/GCP/Azure patterns, cost optimization, IAM</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Advanced Systems</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-title">⚙ system-design</div><div class="card-subtitle">Distributed systems architecture, CAP theorem, patterns</div></div>
+      <div class="card"><div class="card-title">⚙ algorithm-expert</div><div class="card-subtitle">Complexity analysis, data structures, optimization</div></div>
+      <div class="card"><div class="card-title">⚙ distributed-systems</div><div class="card-subtitle">Consensus, replication, fault tolerance, CQRS/ES</div></div>
+      <div class="card"><div class="card-title">⚙ optimization</div><div class="card-subtitle">Performance profiling, bottleneck identification, tuning</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== WORKFLOWS PAGE ===== -->
+<div id="page-workflows" class="page">
+  <div class="page-header">
+    <h2>Workflows</h2>
+    <p>Parameterized step-by-step processes. Each step specifies the agent, skills, and action required.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Workflow</th><th>Purpose</th><th>Steps</th><th>Key Agents</th></tr></thead>
+      <tbody>
+        <tr><td><strong>build-application</strong></td><td>Full-stack app build from requirements to deployment</td><td>9</td><td>principal-engineer, backend, frontend, devops</td></tr>
+        <tr><td><strong>api-development</strong></td><td>REST/GraphQL API design, implementation, and security</td><td>8</td><td>backend-engineer, security-engineer, database-architect</td></tr>
+        <tr><td><strong>security-audit</strong></td><td>Comprehensive security review with threat modelling</td><td>8</td><td>security-engineer, devops-engineer, technical-writer</td></tr>
+        <tr><td><strong>bug-investigation</strong></td><td>Root-cause analysis from symptom to fix to prevention</td><td>7</td><td>debugger, backend-engineer, technical-writer</td></tr>
+        <tr><td><strong>refactor-codebase</strong></td><td>Incremental refactoring without behavioral changes</td><td>6</td><td>principal-engineer, backend-engineer, technical-writer</td></tr>
+        <tr><td><strong>performance-audit</strong></td><td>Measurement-driven performance optimization</td><td>6</td><td>principal-engineer, database-architect, devops-engineer</td></tr>
+        <tr><td><strong>create-ai-agent</strong></td><td>Design and build a production AI agent</td><td>7</td><td>ai-engineer, backend-engineer</td></tr>
+        <tr><td><strong>create-mcp-server</strong></td><td>Design and implement an MCP server</td><td>6</td><td>ai-engineer, backend-engineer</td></tr>
+        <tr><td><strong>security-review</strong></td><td>Focused security review of code or design</td><td>5</td><td>security-engineer</td></tr>
+        <tr><td><strong>launch-product</strong></td><td>Production readiness and launch checklist</td><td>8</td><td>principal-engineer, devops-engineer, security-engineer</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section" style="margin-top: 24px;">
+    <div class="section-title"><span class="dot"></span>Using a Workflow</div>
+    <div class="code"><span class="comment"># Load and display workflow steps</span>
+<span class="cmd">.\scripts\workflow-engine.ps1</span> <span class="arg">-WorkflowName</span> <span class="arg">"build-application"</span>
+
+<span class="comment"># With parameter substitution</span>
+<span class="cmd">Import-Module</span> .\scripts\workflow-engine.ps1
+<span class="cmd">Invoke-WorkflowSubstitution</span> <span class="arg">-WorkflowName</span> "api-development" <span class="arg">-Params</span> @{
+  API_NAME = "Task Management API"
+  FRAMEWORK = "FastAPI"
+  AUTH_METHOD = "JWT"
+  DATABASE = "PostgreSQL"
+}</span></div>
+  </div>
+</div>
+
+<!-- ===== COMMANDS PAGE ===== -->
+<div id="page-commands" class="page">
+  <div class="page-header">
+    <h2>Commands</h2>
+    <p>Slash commands that trigger coordinated multi-agent workflows. Invoke them directly in OpenCode.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">/ build</div>
+      <div class="card-subtitle">Analyzes your project description, selects the right workflow and agents, and produces a structured implementation plan with full architecture.</div>
+      <div class="card-tags"><span class="tag ai">→ build-application workflow</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">/ architect</div>
+      <div class="card-subtitle">Designs or reviews system architecture. Produces component diagrams, ADRs, scalability analysis, and open questions.</div>
+      <div class="card-tags"><span class="tag backend">→ principal-engineer</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">/ debug</div>
+      <div class="card-subtitle">Systematic bug investigation. From symptom to root cause to targeted fix with a regression test and documentation.</div>
+      <div class="card-tags"><span class="tag devops">→ bug-investigation workflow</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">/ review</div>
+      <div class="card-subtitle">Senior-level code review across correctness, security, performance, and maintainability. Provides severity-rated findings.</div>
+      <div class="card-tags"><span class="tag frontend">→ principal-engineer + security</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">/ secure</div>
+      <div class="card-subtitle">Full security audit with threat modelling, OWASP checks, dependency scanning, and a CVSS-rated findings report.</div>
+      <div class="card-tags"><span class="tag security">→ security-audit workflow</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">/ optimize</div>
+      <div class="card-subtitle">Measurement-driven performance optimization. Covers algorithms, DB queries, caching strategy, and infrastructure tuning.</div>
+      <div class="card-tags"><span class="tag frontend">→ performance-audit workflow</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== PROMPTS PAGE ===== -->
+<div id="page-prompts" class="page">
+  <div class="page-header">
+    <h2>Prompt Library</h2>
+    <p>Reusable prompt templates with <code>{{PARAM_NAME}}</code> substitution. Copy, fill in parameters, and paste into OpenCode.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Prompt</th><th>Category</th><th>Parameters</th><th>Use When</th></tr></thead>
+      <tbody>
+        <tr><td><strong>architecture-review</strong></td><td><span class="badge purple">coding</span></td><td>SYSTEM_NAME, DESCRIPTION, SCALE, CONCERNS</td><td>Reviewing or designing system architecture</td></tr>
+        <tr><td><strong>api-design</strong></td><td><span class="badge purple">coding</span></td><td>API_NAME, DOMAIN, RESOURCES, AUTH_METHOD</td><td>Designing a new REST or GraphQL API</td></tr>
+        <tr><td><strong>code-review</strong></td><td><span class="badge purple">coding</span></td><td>CODE, LANGUAGE, CONTEXT, FOCUS_AREAS</td><td>Getting a thorough code review</td></tr>
+        <tr><td><strong>bug-hunt</strong></td><td><span class="badge purple">coding</span></td><td>BUG_DESCRIPTION, COMPONENT, ERROR_OUTPUT</td><td>Investigating a bug systematically</td></tr>
+        <tr><td><strong>refactoring</strong></td><td><span class="badge purple">coding</span></td><td>CODE, LANGUAGE, PROBLEM, GOAL</td><td>Improving code structure without behavior change</td></tr>
+        <tr><td><strong>security-review</strong></td><td><span class="badge yellow">security</span></td><td>TARGET, TARGET_TYPE, TECH_STACK</td><td>Security review of code or architecture</td></tr>
+        <tr><td><strong>agent-design</strong></td><td><span class="badge green">ai</span></td><td>AGENT_NAME, GOAL, TOOLS, FRAMEWORK</td><td>Designing an AI agent with tool use</td></tr>
+        <tr><td><strong>prompt-engineering</strong></td><td><span class="badge green">ai</span></td><td>TASK, MODEL, INPUT_FORMAT, OUTPUT_FORMAT</td><td>Creating or optimizing LLM prompts</td></tr>
+        <tr><td><strong>technical-research</strong></td><td><span class="badge purple">research</span></td><td>TOPIC, CONTEXT, OPTIONS, CRITERIA</td><td>Comparing technology options</td></tr>
+        <tr><td><strong>product-requirements</strong></td><td><span class="badge yellow">business</span></td><td>PRODUCT_NAME, PROBLEM, TARGET_USERS</td><td>Writing a PRD for a new feature</td></tr>
+        <tr><td><strong>technical-documentation</strong></td><td><span class="badge green">writing</span></td><td>SUBJECT, AUDIENCE, DOC_TYPE, CONTENT</td><td>Producing developer documentation</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TEMPLATES PAGE ===== -->
+<div id="page-templates" class="page">
+  <div class="page-header">
+    <h2>Templates</h2>
+    <p>Project scaffolds with README, dependencies, and working starter code. Copy and rename <code>{{PROJECT_NAME}}</code> placeholders.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">⬚ fastapi-api</div>
+      <div class="card-subtitle">FastAPI + async SQLAlchemy + Pydantic v2 + Alembic + JWT auth + pytest. Production-ready REST API starter.</div>
+      <div class="card-tags"><span class="tag backend">Python</span><span class="tag backend">FastAPI</span><span class="tag backend">PostgreSQL</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⬚ react-app</div>
+      <div class="card-subtitle">React + TypeScript + Vite + TanStack Query + React Router + Tailwind CSS. Full UI starter with testing.</div>
+      <div class="card-tags"><span class="tag frontend">React</span><span class="tag frontend">TypeScript</span><span class="tag frontend">Vite</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⬚ nextjs-saas</div>
+      <div class="card-subtitle">Next.js 14 App Router + NextAuth.js + Prisma + Stripe + shadcn/ui. Full SaaS starter with auth and billing.</div>
+      <div class="card-tags"><span class="tag frontend">Next.js</span><span class="tag frontend">TypeScript</span><span class="tag backend">PostgreSQL</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⬚ ai-agent</div>
+      <div class="card-subtitle">LangGraph AI agent with tool use, memory, and evaluation harness. Supports OpenAI and Anthropic.</div>
+      <div class="card-tags"><span class="tag ai">Python</span><span class="tag ai">LangGraph</span><span class="tag ai">MCP</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⬚ mcp-server</div>
+      <div class="card-subtitle">Model Context Protocol server with sample tool, input schema validation, and stdio transport.</div>
+      <div class="card-tags"><span class="tag ai">Python</span><span class="tag ai">MCP SDK</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⬚ rag-project</div>
+      <div class="card-subtitle">RAG system with ingestion pipeline, ChromaDB vector store, LLM answer generation, and eval harness.</div>
+      <div class="card-tags"><span class="tag ai">Python</span><span class="tag ai">LangChain</span><span class="tag ai">ChromaDB</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⬚ discord-bot</div>
+      <div class="card-subtitle">discord.py bot with slash commands, cog architecture, persistent SQLite storage, and async test suite.</div>
+      <div class="card-tags"><span class="tag backend">Python</span><span class="tag backend">discord.py</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== ROUTER PAGE ===== -->
+<div id="page-router" class="page">
+  <div class="page-header">
+    <h2>Router</h2>
+    <p>80+ keyword-to-agent mappings. Tokenizes your request and returns the top-3 agent candidates by match score.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Router Logic</div>
+    <div class="code"><span class="comment"># Test the router directly</span>
+<span class="cmd">.\scripts\router.ps1</span> <span class="arg">-Request</span> <span class="arg">"build a fastapi api with postgres authentication"</span>
+
+<span class="comment"># Output:</span>
+<span class="comment"># Selected Agent : backend-engineer</span>
+<span class="comment"># Fallback       : False</span>
+<span class="comment"># Top Candidates:</span>
+<span class="comment">#   backend-engineer (score: 3)</span>
+<span class="comment">#   database-architect (score: 1)</span>
+<span class="comment">#   security-engineer (score: 1)</span></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Keyword Map (sample)</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px;">
+      <div class="router-row"><span class="router-keyword">api</span> <span class="router-arrow">→</span> <span class="router-agent backend">backend-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">react</span> <span class="router-arrow">→</span> <span class="router-agent frontend">frontend-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">llm</span> <span class="router-arrow">→</span> <span class="router-agent ai">ai-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">rag</span> <span class="router-arrow">→</span> <span class="router-agent ai">ai-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">postgres</span> <span class="router-arrow">→</span> <span class="router-agent database">database-architect</span></div>
+      <div class="router-row"><span class="router-keyword">security</span> <span class="router-arrow">→</span> <span class="router-agent security">security-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">docker</span> <span class="router-arrow">→</span> <span class="router-agent devops">devops-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">kubernetes</span> <span class="router-arrow">→</span> <span class="router-agent devops">devops-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">debug</span> <span class="router-arrow">→</span> <span class="router-agent debugger">debugger</span></div>
+      <div class="router-row"><span class="router-keyword">bug</span> <span class="router-arrow">→</span> <span class="router-agent debugger">debugger</span></div>
+      <div class="router-row"><span class="router-keyword">owasp</span> <span class="router-arrow">→</span> <span class="router-agent security">security-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">docs</span> <span class="router-arrow">→</span> <span class="router-agent principal">technical-writer</span></div>
+      <div class="router-row"><span class="router-keyword">terraform</span> <span class="router-arrow">→</span> <span class="router-agent devops">devops-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">fastapi</span> <span class="router-arrow">→</span> <span class="router-agent backend">backend-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">jwt</span> <span class="router-arrow">→</span> <span class="router-agent security">security-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">embedding</span> <span class="router-arrow">→</span> <span class="router-agent ai">ai-engineer</span></div>
+    </div>
+    <p style="margin-top: 12px; color: var(--muted); font-size: 12px;">Full map: edit <code>router/agent-router.json</code>. No script changes needed.</p>
+  </div>
+</div>
+
+<!-- ===== MCPS PAGE ===== -->
+<div id="page-mcps" class="page">
+  <div class="page-header">
+    <h2>MCP Servers</h2>
+    <p>Model Context Protocol integrations that extend OpenCode with external capabilities.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>MCP</th><th>Status</th><th>Capability</th></tr></thead>
+      <tbody>
+        <tr><td><strong>filesystem</strong></td><td><span class="badge green">enabled</span></td><td>Read and write files, list directories, manage the file system</td></tr>
+        <tr><td><strong>github</strong></td><td><span class="badge green">enabled</span></td><td>Create PRs, read issues, manage repositories, search code</td></tr>
+        <tr><td><strong>playwright</strong></td><td><span class="badge green">enabled</span></td><td>Browser automation, web scraping, UI testing</td></tr>
+        <tr><td><strong>context7</strong></td><td><span class="badge green">enabled</span></td><td>Up-to-date library documentation and API references</td></tr>
+        <tr><td><strong>tavily</strong></td><td><span class="badge green">enabled</span></td><td>Web search with curated, AI-optimized results</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="section" style="margin-top: 24px;">
+    <div class="section-title"><span class="dot"></span>MCP Config Location</div>
+    <div class="code"><span class="comment"># Registry (enabled/disabled list)</span>
+mcps/registry.json
+
+<span class="comment"># Connection config for each MCP</span>
+mcps/mcp-config.json
+
+<span class="comment"># Process/install all enabled MCPs</span>
+<span class="cmd">.\scripts\install-mcps.ps1</span></div>
+  </div>
+</div>
+
+
+<!-- ===== HEALTH PAGE ===== -->
+<div id="page-health" class="page">
+  <div class="page-header">
+    <h2>Health Check</h2>
+    <p>Run <code>.\god-health.ps1</code> to verify your installation. This page shows what gets checked.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Verification Checks</div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">15 required directories exist</div><div class="health-status ok">CHECK 1</div></div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">70+ SKILL.md files present in repo</div><div class="health-status ok">CHECK 2</div></div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">Skills installed in ~/.config/opencode/skills/</div><div class="health-status ok">CHECK 2b</div></div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">mcps/registry.json is valid JSON with 5 enabled MCPs</div><div class="health-status ok">CHECK 3</div></div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">router/agent-router.json is valid JSON with ≥1 routing rule</div><div class="health-status ok">CHECK 4</div></div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">12 key scripts exist (god-install, router, memory, etc.)</div><div class="health-status ok">CHECK 5</div></div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">All 10 agents have valid AGENT.md with required sections</div><div class="health-status ok">CHECK 6</div></div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">4 required workflows present (build, api, security, bug)</div><div class="health-status ok">CHECK 7</div></div>
+    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">6 required commands present (/build, /architect, etc.)</div><div class="health-status ok">CHECK 8</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>Run Health Check</div>
+    <div class="code"><span class="cmd">.\god-health.ps1</span>
+
+<span class="comment"># Example output:</span>
+<span class="comment"># [OK]   Directory: agents — exists</span>
+<span class="comment"># [OK]   Skills (repo) — 73 SKILL.md files</span>
+<span class="comment"># [OK]   Router Config — valid JSON, 83 routing rules</span>
+<span class="comment"># [OK]   Agent: principal-engineer</span>
+<span class="comment"># ...</span>
+<span class="comment"># All checks passed. 47 components verified.</span></div>
+  </div>
+</div>
+
+<!-- ===== QUICKSTART PAGE ===== -->
+<div id="page-quickstart" class="page">
+  <div class="page-header">
+    <h2>Quick Start</h2>
+    <p>Get up and running with GOD-OPENCODE in under 5 minutes.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>1. Install</div>
+    <div class="code"><span class="comment"># Clone the repo</span>
+<span class="cmd">git clone</span> <span class="arg">https://github.com/your-org/god-opencode</span> C:\AI\GOD-OPENCODE
+<span class="cmd">cd</span> C:\AI\GOD-OPENCODE
+
+<span class="comment"># Run the one-command installer</span>
+<span class="cmd">.\god-install.ps1</span>
+
+<span class="comment"># Verify installation</span>
+<span class="cmd">.\god-health.ps1</span></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>2. Use slash commands in OpenCode</div>
+    <div class="code"><span class="comment"># Build a new application</span>
+<span class="cmd">/build</span> a FastAPI REST API with JWT auth, PostgreSQL, and Alembic migrations
+
+<span class="comment"># Debug a problem</span>
+<span class="cmd">/debug</span> users are getting duplicate emails on registration in auth_service.py
+
+<span class="comment"># Security audit</span>
+<span class="cmd">/secure</span> review the authentication flow in routes/auth.py
+
+<span class="comment"># Architecture review</span>
+<span class="cmd">/architect</span> should I use PostgreSQL or MongoDB for a multi-tenant SaaS?
+
+<span class="comment"># Code review</span>
+<span class="cmd">/review</span> [paste code here]
+
+<span class="comment"># Performance optimization</span>
+<span class="cmd">/optimize</span> the user search endpoint is slow at 1000+ users</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>3. Invoke agents directly</div>
+    <div class="code"><span class="comment"># Direct agent invocation</span>
+As the database-architect, design a schema for a multi-tenant SaaS application
+  where each tenant's data must be isolated.
+
+As the security-engineer, audit this JWT implementation: [paste code]
+
+As the ai-engineer, design a RAG pipeline for a customer support chatbot
+  with 50k support articles.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span>4. Scan a project</div>
+    <div class="code"><span class="comment"># Scan any project and get an implementation plan</span>
+<span class="cmd">.\tools\project-scan.ps1</span> <span class="arg">-TargetPath</span> <span class="arg">"C:\path\to\your\project"</span>
+
+<span class="comment"># The scanner will:</span>
+<span class="comment"># 1. Detect primary languages</span>
+<span class="comment"># 2. Identify project type (api, fullstack, frontend-app, etc.)</span>
+<span class="comment"># 3. Recommend the right workflow and agents</span>
+<span class="comment"># 4. Generate a prioritized improvement list</span>
+<span class="comment"># 5. Save the plan to memory/adr-scan-{project}.md</span></div>
+  </div>
+</div>
+
+
+</main>
+</div>
+
+<script>
+  function showPage(id) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Remove active from all nav links
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    // Show target page
+    const page = document.getElementById('page-' + id);
+    if (page) page.classList.add('active');
+    // Activate nav link
+    const nav = document.getElementById('nav-' + id);
+    if (nav) nav.classList.add('active');
+    return false;
+  }
+
+  // Keyboard shortcut: press / to focus search (future feature placeholder)
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '?' ) {
+      showPage('quickstart');
+    }
+  });
+</script>
+</body>
+</html>
