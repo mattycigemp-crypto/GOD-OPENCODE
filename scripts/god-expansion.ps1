@@ -1,46 +1,21 @@
 ﻿# ============================================
 # GOD-OPENCODE EXPANSION ENGINE
-# Version 1.0
+# Version 2.0
 # ============================================
 # Extends the skill and prompt libraries with
 # additional entries not covered by god-builder.
 
-$ErrorActionPreference = "Continue"
-$Root = Split-Path $PSScriptRoot -Parent
+$ErrorActionPreference = "Stop"
+. (Join-Path $PSScriptRoot "shared-utils.ps1")
+$Root = Get-ProjectRoot
 
-Write-Host ""
-Write-Host "============================================"
-Write-Host "    GOD-OPENCODE EXPANSION ENGINE"
-Write-Host "============================================"
-Write-Host ""
-
-function Ensure-Folder($Path) {
-    if (!(Test-Path $Path)) {
-        New-Item -ItemType Directory -Path $Path -Force | Out-Null
-        Write-Host "[CREATED] $Path"
-    }
-}
-
-function Write-IfChanged($Path, $Content) {
-    if (!(Test-Path $Path)) {
-        Set-Content $Path $Content -Encoding UTF8
-        Write-Host "[NEW]     $Path"
-    } else {
-        $Current = Get-Content $Path -Raw
-        if ($Current -ne $Content) {
-            Set-Content $Path $Content -Encoding UTF8
-            Write-Host "[UPDATED] $Path"
-        } else {
-            Write-Host "[SKIP]    $Path"
-        }
-    }
-}
+Write-Banner "GOD-OPENCODE EXPANSION ENGINE"
 
 # ============================================
-# TESTING SKILL CATEGORY (required by spec)
+# TESTING SKILL CATEGORY
 # ============================================
 
-Ensure-Folder "$Root\skills\testing"
+EnsureFolder "$Root\skills\testing"
 
 $TestingSkills = @(
     "unit-testing",
@@ -51,7 +26,7 @@ $TestingSkills = @(
 )
 
 foreach ($Skill in $TestingSkills) {
-    Ensure-Folder "$Root\skills\testing\$Skill"
+    EnsureFolder "$Root\skills\testing\$Skill"
     $Content = @"
 ---
 name: $Skill
@@ -98,15 +73,15 @@ Never:
 }
 
 # ============================================
-# DATABASE CATEGORY (fill missing skills)
+# DATABASE SKILL CATEGORY
 # ============================================
 
-Ensure-Folder "$Root\skills\database"
+EnsureFolder "$Root\skills\database"
 
 $DbSkills = @("schema-design", "query-optimization", "data-migration", "replication", "sharding")
 
 foreach ($Skill in $DbSkills) {
-    Ensure-Folder "$Root\skills\database\$Skill"
+    EnsureFolder "$Root\skills\database\$Skill"
     $Content = @"
 ---
 name: $Skill
@@ -149,7 +124,7 @@ Never:
 }
 
 # ============================================
-# ADDITIONAL WORKFLOW FILES (spec extras)
+# ADDITIONAL WORKFLOWS
 # ============================================
 
 $ExtraWorkflows = @{
@@ -253,8 +228,7 @@ foreach ($Name in $ExtraWorkflows.Keys) {
 }
 
 Write-Host ""
-Write-Host "============================================"
-Write-Host " EXPANSION ENGINE COMPLETE"
-Write-Host "============================================"
+Write-Host "============================================" -ForegroundColor Green
+Write-Host " EXPANSION ENGINE COMPLETE" -ForegroundColor Green
+Write-Host "============================================" -ForegroundColor Green
 Write-Host ""
-

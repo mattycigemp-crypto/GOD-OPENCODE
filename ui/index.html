@@ -3,200 +3,660 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GOD-OPENCODE Dashboard</title>
+  <title>GOD-OPENCODE | AI Engineering OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    /* ============================================
+       DESIGN TOKENS
+       ============================================ */
     :root {
-      --bg: #0d0d0d;
-      --surface: #141414;
-      --surface2: #1c1c1c;
-      --border: #2a2a2a;
-      --accent: #7c3aed;
-      --accent2: #a855f7;
-      --green: #22c55e;
-      --yellow: #eab308;
-      --red: #ef4444;
-      --blue: #3b82f6;
-      --text: #e5e7eb;
-      --muted: #6b7280;
-      --radius: 8px;
+      --bg:          #09090b;
+      --bg-subtle:   #0f0f12;
+      --surface:     #18181b;
+      --surface-2:   #1e1e22;
+      --surface-3:   #27272a;
+      --border:      #27272a;
+      --border-dim:  #1e1e22;
+
+      --text:        #fafafa;
+      --text-2:      #a1a1aa;
+      --text-3:      #71717a;
+
+      --violet:      #8b5cf6;
+      --violet-dim:  #7c3aed;
+      --violet-glow: rgba(139, 92, 246, 0.15);
+      --cyan:        #06b6d4;
+      --cyan-dim:    #0891b2;
+      --green:       #22c55e;
+      --green-dim:   #16a34a;
+      --yellow:      #eab308;
+      --red:         #ef4444;
+      --blue:        #3b82f6;
+      --orange:      #f97316;
+      --pink:        #ec4899;
+
+      --radius:      12px;
+      --radius-sm:   8px;
+      --radius-xs:   6px;
+
+      --shadow:      0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-lg:   0 10px 40px rgba(0,0,0,0.5);
+
+      --font:        'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono:        'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+
+      --sidebar-w:   260px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5; }
-    a { color: var(--accent2); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    /* Layout */
-    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
-    .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-    .main { padding: 24px; overflow-y: auto; }
-    /* Sidebar */
-    .brand { padding: 20px 16px 16px; border-bottom: 1px solid var(--border); }
-    .brand h1 { font-size: 16px; font-weight: 700; color: var(--accent2); letter-spacing: 0.05em; }
-    .brand p { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    nav { padding: 8px 0; }
-    nav a { display: flex; align-items: center; gap: 8px; padding: 8px 16px; color: var(--muted); font-size: 13px; transition: all 0.15s; border-left: 2px solid transparent; }
-    nav a:hover, nav a.active { color: var(--text); background: var(--surface2); border-left-color: var(--accent2); text-decoration: none; }
-    nav a .icon { width: 16px; text-align: center; }
-    nav .section-label { padding: 12px 16px 4px; font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    /* Header */
-    .page-header { margin-bottom: 24px; }
-    .page-header h2 { font-size: 22px; font-weight: 700; }
-    .page-header p { color: var(--muted); margin-top: 4px; }
-    /* Stats row */
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
-    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
-    .stat-value { font-size: 28px; font-weight: 700; color: var(--accent2); }
-    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    /* Cards */
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; transition: border-color 0.15s; }
-    .card:hover { border-color: var(--accent); }
-    .card-title { font-weight: 600; font-size: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .card-subtitle { color: var(--muted); font-size: 12px; margin-top: 4px; }
-    .card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
-    .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-size: 11px; color: var(--muted); }
-    .tag.ai { border-color: #7c3aed44; color: var(--accent2); }
-    .tag.backend { border-color: #3b82f644; color: var(--blue); }
-    .tag.security { border-color: #ef444444; color: var(--red); }
-    .tag.devops { border-color: #22c55e44; color: var(--green); }
-    .tag.frontend { border-color: #eab30844; color: var(--yellow); }
-    /* Badge */
-    .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 500; }
-    .badge.green { background: #22c55e22; color: var(--green); }
-    .badge.purple { background: #7c3aed22; color: var(--accent2); }
-    .badge.yellow { background: #eab30822; color: var(--yellow); }
-    /* Table */
-    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; }
-    th { background: var(--surface2); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
-    td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: var(--surface2); }
-    /* Code block */
-    .code { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 13px; overflow-x: auto; white-space: pre; }
-    .code .comment { color: #6b7280; }
-    .code .cmd { color: var(--accent2); }
-    .code .arg { color: var(--green); }
-    /* Section */
-    .section { margin-bottom: 32px; }
-    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .section-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-    /* Page visibility */
-    .page { display: none; }
+
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: var(--violet); text-decoration: none; transition: color 0.15s; }
+    a:hover { color: var(--violet-dim); }
+
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      padding: 2px 6px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border);
+    }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    .app {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      min-height: 100vh;
+    }
+
+    /* ============================================
+       SIDEBAR
+       ============================================ */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 1px;
+    }
+
+    .sidebar-nav {
+      padding: 12px 0;
+      flex: 1;
+    }
+
+    .nav-section {
+      padding: 16px 20px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      color: var(--text-2);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .nav-item.active {
+      color: var(--text);
+      background: var(--violet-glow);
+      border-left-color: var(--violet);
+    }
+
+    .nav-item .icon {
+      width: 18px;
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .nav-item.active .icon { opacity: 1; }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-3);
+    }
+
+    /* ============================================
+       MAIN CONTENT
+       ============================================ */
+    .main {
+      padding: 32px 40px;
+      overflow-y: auto;
+      max-width: 1100px;
+    }
+
+    .page { display: none; animation: fadeIn 0.2s ease; }
     .page.active { display: block; }
-    /* Health indicator */
-    .health-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; background: var(--surface2); margin-bottom: 6px; }
-    .health-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .health-dot.ok { background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       PAGE HEADER
+       ============================================ */
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .page-header p {
+      color: var(--text-2);
+      margin-top: 6px;
+      font-size: 14px;
+      max-width: 600px;
+    }
+
+    /* ============================================
+       STATS GRID
+       ============================================ */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .stat:hover { border-color: var(--violet); }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* ============================================
+       SECTIONS
+       ============================================ */
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .section-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--violet);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ============================================
+       CARDS
+       ============================================ */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .card:hover {
+      border-color: var(--violet);
+      box-shadow: 0 0 0 1px var(--violet-glow);
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title .emoji { font-size: 16px; }
+
+    .card-desc {
+      color: var(--text-2);
+      font-size: 13px;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text-3);
+    }
+
+    .tag.violet  { border-color: rgba(139,92,246,0.3); color: var(--violet); }
+    .tag.cyan    { border-color: rgba(6,182,212,0.3); color: var(--cyan); }
+    .tag.green   { border-color: rgba(34,197,94,0.3); color: var(--green); }
+    .tag.yellow  { border-color: rgba(234,179,8,0.3); color: var(--yellow); }
+    .tag.red     { border-color: rgba(239,68,68,0.3); color: var(--red); }
+    .tag.blue    { border-color: rgba(59,130,246,0.3); color: var(--blue); }
+    .tag.orange  { border-color: rgba(249,115,22,0.3); color: var(--orange); }
+    .tag.pink    { border-color: rgba(236,72,153,0.3); color: var(--pink); }
+
+    /* ============================================
+       TABLE
+       ============================================ */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    th {
+      background: var(--surface-2);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-dim);
+      font-size: 13px;
+      color: var(--text-2);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface-2); }
+    td strong { color: var(--text); font-weight: 600; }
+
+    /* ============================================
+       CODE BLOCK
+       ============================================ */
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .code-block .comment { color: var(--text-3); }
+    .code-block .cmd     { color: var(--violet); }
+    .code-block .arg     { color: var(--cyan); }
+    .code-block .flag    { color: var(--green); }
+
+    /* ============================================
+       HEALTH ROW
+       ============================================ */
+    .health-list { display: flex; flex-direction: column; gap: 6px; }
+
+    .health-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .health-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .health-dot.ok   { background: var(--green); box-shadow: 0 0 8px var(--green); }
     .health-dot.warn { background: var(--yellow); }
-    .health-label { flex: 1; font-size: 13px; }
-    .health-status { font-size: 12px; font-weight: 500; }
-    .health-status.ok { color: var(--green); }
-    .health-status.warn { color: var(--yellow); }
-    /* Router visualizer */
-    .router-row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 6px; font-size: 13px; margin-bottom: 4px; background: var(--surface2); }
-    .router-keyword { color: var(--text); font-family: monospace; background: var(--border); padding: 1px 6px; border-radius: 4px; font-size: 12px; }
-    .router-arrow { color: var(--muted); }
-    .router-agent { font-weight: 500; }
-    .router-agent.principal { color: var(--accent2); }
-    .router-agent.backend { color: var(--blue); }
-    .router-agent.frontend { color: var(--yellow); }
-    .router-agent.security { color: var(--red); }
-    .router-agent.ai { color: #c084fc; }
-    .router-agent.database { color: #34d399; }
-    .router-agent.devops { color: var(--green); }
-    .router-agent.debugger { color: #fb923c; }
+
+    .health-label { flex: 1; font-size: 13px; color: var(--text-2); }
+
+    .health-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    .health-badge.ok   { background: rgba(34,197,94,0.15); color: var(--green); }
+    .health-badge.warn { background: rgba(234,179,8,0.15); color: var(--yellow); }
+
+    /* ============================================
+       ROUTER VISUALIZER
+       ============================================ */
+    .router-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 6px;
+    }
+
+    .router-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: var(--radius-xs);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .router-keyword {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: var(--surface-3);
+      padding: 2px 8px;
+      border-radius: var(--radius-xs);
+      color: var(--text-2);
+    }
+
+    .router-arrow { color: var(--text-3); }
+
+    .router-agent { font-weight: 600; font-size: 12px; }
+    .router-agent.principal { color: var(--violet); }
+    .router-agent.backend   { color: var(--blue); }
+    .router-agent.frontend  { color: var(--yellow); }
+    .router-agent.security  { color: var(--red); }
+    .router-agent.ai        { color: var(--pink); }
+    .router-agent.database  { color: var(--cyan); }
+    .router-agent.devops    { color: var(--green); }
+    .router-agent.debugger  { color: var(--orange); }
+
+    /* ============================================
+       BADGES
+       ============================================ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge.green  { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge.violet { background: rgba(139,92,246,0.15); color: var(--violet); }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 20px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================
+       SCROLLBAR
+       ============================================ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
   </style>
-</style>
 </head>
 <body>
-<div class="shell">
+<div class="app">
 
-<!-- ===== SIDEBAR ===== -->
+<!-- ============================================
+     SIDEBAR
+     ============================================ -->
 <aside class="sidebar">
-  <div class="brand">
-    <h1>⚡ GOD-OPENCODE</h1>
-    <p>AI Engineering OS v1.0</p>
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="brand-icon">G</div>
+      <div class="brand-text">
+        <h1>GOD-OPENCODE</h1>
+        <p>AI Engineering OS v2.0</p>
+      </div>
+    </div>
   </div>
-  <nav>
-    <div class="section-label">Overview</div>
-    <a href="#" onclick="showPage('dashboard')" class="active" id="nav-dashboard"><span class="icon">◈</span> Dashboard</a>
-    <a href="#" onclick="showPage('health')"    id="nav-health"><span class="icon">♥</span> Health Check</a>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" data-page="dashboard">
+      <span class="icon">&#9670;</span> Dashboard
+    </div>
+    <div class="nav-item" data-page="health">
+      <span class="icon">&#9829;</span> Health Check
+    </div>
 
-    <div class="section-label">Components</div>
-    <a href="#" onclick="showPage('agents')"    id="nav-agents"><span class="icon">◉</span> Agents</a>
-    <a href="#" onclick="showPage('skills')"    id="nav-skills"><span class="icon">◆</span> Skills</a>
-    <a href="#" onclick="showPage('workflows')" id="nav-workflows"><span class="icon">⇢</span> Workflows</a>
-    <a href="#" onclick="showPage('commands')"  id="nav-commands"><span class="icon">/</span> Commands</a>
-    <a href="#" onclick="showPage('prompts')"   id="nav-prompts"><span class="icon">✦</span> Prompts</a>
-    <a href="#" onclick="showPage('templates')" id="nav-templates"><span class="icon">⬚</span> Templates</a>
+    <div class="nav-section">Components</div>
+    <div class="nav-item" data-page="agents">
+      <span class="icon">&#9673;</span> Agents
+    </div>
+    <div class="nav-item" data-page="skills">
+      <span class="icon">&#9670;</span> Skills
+    </div>
+    <div class="nav-item" data-page="workflows">
+      <span class="icon">&#10222;</span> Workflows
+    </div>
+    <div class="nav-item" data-page="commands">
+      <span class="icon">/</span> Commands
+    </div>
+    <div class="nav-item" data-page="prompts">
+      <span class="icon">&#10038;</span> Prompts
+    </div>
+    <div class="nav-item" data-page="templates">
+      <span class="icon">&#11020;</span> Templates
+    </div>
 
-    <div class="section-label">Intelligence</div>
-    <a href="#" onclick="showPage('router')"    id="nav-router"><span class="icon">⇌</span> Router</a>
-    <a href="#" onclick="showPage('mcps')"      id="nav-mcps"><span class="icon">⬡</span> MCPs</a>
-    <a href="#" onclick="showPage('quickstart')" id="nav-quickstart"><span class="icon">▶</span> Quick Start</a>
+    <div class="nav-section">Intelligence</div>
+    <div class="nav-item" data-page="router">
+      <span class="icon">&#8644;</span> Router
+    </div>
+    <div class="nav-item" data-page="mcps">
+      <span class="icon">&#11071;</span> MCPs
+    </div>
+    <div class="nav-item" data-page="quickstart">
+      <span class="icon">&#9654;</span> Quick Start
+    </div>
   </nav>
+  <div class="sidebar-footer">
+    <div>v2.0 &middot; Built for OpenCode</div>
+  </div>
 </aside>
 
-<!-- ===== MAIN ===== -->
+<!-- ============================================
+     MAIN
+     ============================================ -->
 <main class="main">
 
-<!-- ===== DASHBOARD PAGE ===== -->
+<!-- ===== DASHBOARD ===== -->
 <div id="page-dashboard" class="page active">
   <div class="page-header">
     <h2>Dashboard</h2>
-    <p>Your AI engineering operating system — fully loaded and ready.</p>
+    <p>Your AI engineering operating system &mdash; fully loaded and ready.</p>
   </div>
 
   <div class="stats">
     <div class="stat"><div class="stat-value">10</div><div class="stat-label">Agents</div></div>
     <div class="stat"><div class="stat-value">70+</div><div class="stat-label">Skills</div></div>
-    <div class="stat"><div class="stat-value">10+</div><div class="stat-label">Workflows</div></div>
+    <div class="stat"><div class="stat-value">15</div><div class="stat-label">Workflows</div></div>
     <div class="stat"><div class="stat-value">6</div><div class="stat-label">Commands</div></div>
-    <div class="stat"><div class="stat-value">15+</div><div class="stat-label">Prompts</div></div>
-    <div class="stat"><div class="stat-value">7</div><div class="stat-label">Templates</div></div>
-    <div class="stat"><div class="stat-value">5</div><div class="stat-label">MCPs</div></div>
-    <div class="stat"><div class="stat-value">80+</div><div class="stat-label">Router Rules</div></div>
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>Slash Commands</div>
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Slash Commands</div>
+    </div>
     <div class="card-grid">
       <div class="card">
-        <div class="card-title">⚡ /build</div>
-        <div class="card-subtitle">Build a complete production application end-to-end. Parses your description, selects workflow, assigns agents, and produces an implementation plan.</div>
-        <div class="card-tags"><span class="tag frontend">principal-engineer</span><span class="tag ai">all agents</span></div>
+        <div class="card-title"><span class="emoji">&#9889;</span> /build</div>
+        <div class="card-desc">Build a complete production application. Parses your description, selects workflow, assigns agents, and produces an implementation plan.</div>
+        <div class="card-tags"><span class="tag violet">principal-engineer</span><span class="tag cyan">all agents</span></div>
       </div>
       <div class="card">
-        <div class="card-title">🏗 /architect</div>
-        <div class="card-subtitle">Design or review system architecture. Produces ADRs, component diagrams, and scalability analysis.</div>
-        <div class="card-tags"><span class="tag frontend">principal-engineer</span><span class="tag backend">database-architect</span></div>
+        <div class="card-title"><span class="emoji">&#127959;</span> /architect</div>
+        <div class="card-desc">Design or review system architecture. Produces ADRs, component diagrams, and scalability analysis.</div>
+        <div class="card-tags"><span class="tag violet">principal-engineer</span><span class="tag cyan">database-architect</span></div>
       </div>
       <div class="card">
-        <div class="card-title">🐛 /debug</div>
-        <div class="card-subtitle">Systematic bug investigation from symptom to root cause to fix. Includes regression test and documentation.</div>
-        <div class="card-tags"><span class="tag devops">debugger</span><span class="tag backend">backend-engineer</span></div>
+        <div class="card-title"><span class="emoji">&#128027;</span> /debug</div>
+        <div class="card-desc">Systematic bug investigation from symptom to root cause to fix. Includes regression test and documentation.</div>
+        <div class="card-tags"><span class="tag orange">debugger</span><span class="tag blue">backend-engineer</span></div>
       </div>
       <div class="card">
-        <div class="card-title">👁 /review</div>
-        <div class="card-subtitle">Senior-level code review covering correctness, security, performance, and maintainability.</div>
-        <div class="card-tags"><span class="tag frontend">principal-engineer</span><span class="tag security">security-engineer</span></div>
+        <div class="card-title"><span class="emoji">&#128065;</span> /review</div>
+        <div class="card-desc">Senior-level code review covering correctness, security, performance, and maintainability.</div>
+        <div class="card-tags"><span class="tag violet">principal-engineer</span><span class="tag red">security-engineer</span></div>
       </div>
       <div class="card">
-        <div class="card-title">🔒 /secure</div>
-        <div class="card-subtitle">Full security audit with threat modelling, OWASP checks, dependency scanning, and findings report.</div>
-        <div class="card-tags"><span class="tag security">security-engineer</span><span class="tag devops">devops-engineer</span></div>
+        <div class="card-title"><span class="emoji">&#128274;</span> /secure</div>
+        <div class="card-desc">Full security audit with threat modelling, OWASP checks, dependency scanning, and findings report.</div>
+        <div class="card-tags"><span class="tag red">security-engineer</span><span class="tag green">devops-engineer</span></div>
       </div>
       <div class="card">
-        <div class="card-title">⚡ /optimize</div>
-        <div class="card-subtitle">Performance optimization driven by measurement. Covers algorithms, database queries, caching, and infrastructure.</div>
-        <div class="card-tags"><span class="tag frontend">principal-engineer</span><span class="tag backend">database-architect</span></div>
+        <div class="card-title"><span class="emoji">&#9889;</span> /optimize</div>
+        <div class="card-desc">Performance optimization driven by measurement. Covers algorithms, database queries, caching, and infrastructure.</div>
+        <div class="card-tags"><span class="tag violet">principal-engineer</span><span class="tag cyan">database-architect</span></div>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>Quick Install</div>
-    <div class="code"><span class="comment"># Bootstrap the entire framework in one command</span>
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Quick Install</div>
+    </div>
+    <div class="code-block"><span class="comment"># Bootstrap the entire framework in one command</span>
 <span class="cmd">.\god-install.ps1</span>
 
 <span class="comment"># Verify installation</span>
@@ -210,69 +670,67 @@
   </div>
 </div>
 
-
-<!-- ===== AGENTS PAGE ===== -->
+<!-- ===== AGENTS ===== -->
 <div id="page-agents" class="page">
   <div class="page-header">
     <h2>Agents</h2>
-    <p>10 virtual engineering personas. Each agent coordinates a specific set of skills and can delegate to other agents.</p>
+    <p>10 virtual engineering personas. Each coordinates a specific set of skills and can delegate to other agents.</p>
   </div>
   <div class="card-grid">
     <div class="card">
-      <div class="card-title">◉ principal-engineer</div>
-      <div class="card-subtitle">Technical leader. Handles architecture, cross-cutting decisions, and complex task decomposition. The default fallback agent.</div>
-      <div class="card-tags"><span class="tag ai">system-design</span><span class="tag ai">architect</span><span class="tag ai">code-review</span><span class="tag ai">security</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> principal-engineer</div>
+      <div class="card-desc">Technical leader. Handles architecture, cross-cutting decisions, and complex task decomposition. The default fallback agent.</div>
+      <div class="card-tags"><span class="tag violet">system-design</span><span class="tag violet">architect</span><span class="tag violet">code-review</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ backend-engineer</div>
-      <div class="card-subtitle">Server-side systems, REST APIs, business logic, database integration, and backend security.</div>
-      <div class="card-tags"><span class="tag backend">api-design</span><span class="tag backend">fastapi</span><span class="tag backend">postgres</span><span class="tag backend">testing</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> backend-engineer</div>
+      <div class="card-desc">Server-side systems, REST APIs, business logic, database integration, and backend security.</div>
+      <div class="card-tags"><span class="tag blue">api-design</span><span class="tag blue">fastapi</span><span class="tag blue">postgres</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ frontend-engineer</div>
-      <div class="card-subtitle">React, Next.js, TypeScript UI — performance, accessibility, state management, and component architecture.</div>
-      <div class="card-tags"><span class="tag frontend">react-expert</span><span class="tag frontend">nextjs-expert</span><span class="tag frontend">typescript</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> frontend-engineer</div>
+      <div class="card-desc">React, Next.js, TypeScript UI &mdash; performance, accessibility, state management, and component architecture.</div>
+      <div class="card-tags"><span class="tag yellow">react</span><span class="tag yellow">nextjs</span><span class="tag yellow">typescript</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ ai-engineer</div>
-      <div class="card-subtitle">LLM systems, agents, RAG pipelines, embeddings, MCP servers, evals, and prompt engineering.</div>
-      <div class="card-tags"><span class="tag ai">llm-engineer</span><span class="tag ai">rag-engineer</span><span class="tag ai">prompt-engineer</span><span class="tag ai">mcp-builder</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> ai-engineer</div>
+      <div class="card-desc">LLM systems, agents, RAG pipelines, embeddings, MCP servers, evals, and prompt engineering.</div>
+      <div class="card-tags"><span class="tag pink">llm-engineer</span><span class="tag pink">rag-engineer</span><span class="tag pink">prompt-engineer</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ security-engineer</div>
-      <div class="card-subtitle">Security audits, vulnerability assessment, threat modelling, authentication, and cryptography.</div>
-      <div class="card-tags"><span class="tag security">security-audit</span><span class="tag security">auth</span><span class="tag security">pentest</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> security-engineer</div>
+      <div class="card-desc">Security audits, vulnerability assessment, threat modelling, authentication, and cryptography.</div>
+      <div class="card-tags"><span class="tag red">security-audit</span><span class="tag red">pentest</span><span class="tag red">auth</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ database-architect</div>
-      <div class="card-subtitle">Data modelling, schema design, query optimization, migrations, replication, and sharding.</div>
-      <div class="card-tags"><span class="tag backend">database-design</span><span class="tag backend">postgres</span><span class="tag backend">redis</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> database-architect</div>
+      <div class="card-desc">Data modelling, schema design, query optimization, migrations, replication, and sharding.</div>
+      <div class="card-tags"><span class="tag cyan">database-design</span><span class="tag cyan">postgres</span><span class="tag cyan">redis</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ devops-engineer</div>
-      <div class="card-subtitle">CI/CD pipelines, Docker, Kubernetes, Terraform, cloud infrastructure, and monitoring.</div>
-      <div class="card-tags"><span class="tag devops">docker</span><span class="tag devops">kubernetes</span><span class="tag devops">terraform</span><span class="tag devops">ci-cd</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> devops-engineer</div>
+      <div class="card-desc">CI/CD pipelines, Docker, Kubernetes, Terraform, cloud infrastructure, and monitoring.</div>
+      <div class="card-tags"><span class="tag green">docker</span><span class="tag green">kubernetes</span><span class="tag green">terraform</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ debugger</div>
-      <div class="card-subtitle">Systematic root-cause analysis. Reproduces bugs, traces execution, fixes root causes, and writes regression tests.</div>
-      <div class="card-tags"><span class="tag devops">bug-hunter</span><span class="tag devops">code-review</span><span class="tag devops">testing</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> debugger</div>
+      <div class="card-desc">Systematic root-cause analysis. Reproduces bugs, traces execution, fixes root causes, and writes regression tests.</div>
+      <div class="card-tags"><span class="tag orange">bug-hunter</span><span class="tag orange">code-review</span><span class="tag orange">testing</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ researcher</div>
-      <div class="card-subtitle">Technical investigation, option comparison, evidence-based recommendations, and literature synthesis.</div>
-      <div class="card-tags"><span class="tag frontend">documentation</span><span class="tag frontend">architect</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> researcher</div>
+      <div class="card-desc">Technical investigation, option comparison, evidence-based recommendations, and literature synthesis.</div>
+      <div class="card-tags"><span class="tag violet">documentation</span><span class="tag violet">architect</span></div>
     </div>
     <div class="card">
-      <div class="card-title">◉ technical-writer</div>
-      <div class="card-subtitle">READMEs, API docs, ADRs, runbooks, tutorials, and changelogs. Ensures accuracy and developer clarity.</div>
-      <div class="card-tags"><span class="tag frontend">documentation</span><span class="tag frontend">code-review</span></div>
+      <div class="card-title"><span class="emoji">&#9673;</span> technical-writer</div>
+      <div class="card-desc">READMEs, API docs, ADRs, runbooks, tutorials, and changelogs. Ensures accuracy and developer clarity.</div>
+      <div class="card-tags"><span class="tag cyan">documentation</span><span class="tag cyan">code-review</span></div>
     </div>
   </div>
 </div>
 
-
-<!-- ===== SKILLS PAGE ===== -->
+<!-- ===== SKILLS ===== -->
 <div id="page-skills" class="page">
   <div class="page-header">
     <h2>Skills</h2>
@@ -280,68 +738,49 @@
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>AI / ML</div>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">AI / ML</div></div>
     <div class="card-grid">
-      <div class="card"><div class="card-title"><span class="tag ai">ai</span> ai-engineer</div><div class="card-subtitle">LLM system design, model selection, cost/quality tradeoffs</div></div>
-      <div class="card"><div class="card-title"><span class="tag ai">ai</span> llm-engineer</div><div class="card-subtitle">Prompt design, context management, output validation</div></div>
-      <div class="card"><div class="card-title"><span class="tag ai">ai</span> prompt-engineer</div><div class="card-subtitle">System prompts, few-shot examples, chain-of-thought</div></div>
-      <div class="card"><div class="card-title"><span class="tag ai">ai</span> rag-engineer</div><div class="card-subtitle">Chunking, embedding, retrieval, reranking pipelines</div></div>
-      <div class="card"><div class="card-title"><span class="tag ai">ai</span> agent-builder</div><div class="card-subtitle">Tool use, memory, reasoning loops, safety guardrails</div></div>
-      <div class="card"><div class="card-title"><span class="tag ai">ai</span> mcp-builder</div><div class="card-subtitle">MCP server design, tool definitions, resource management</div></div>
-      <div class="card"><div class="card-title"><span class="tag ai">ai</span> embedding-engineer</div><div class="card-subtitle">Vector representations, similarity search, dimensionality</div></div>
-      <div class="card"><div class="card-title"><span class="tag ai">ai</span> evaluation-engineer</div><div class="card-subtitle">Eval datasets, metrics, benchmarks, regression detection</div></div>
+      <div class="card"><div class="card-title"><span class="tag pink">ai</span> ai-engineer</div><div class="card-desc">LLM system design, model selection, cost/quality tradeoffs</div></div>
+      <div class="card"><div class="card-title"><span class="tag pink">ai</span> llm-engineer</div><div class="card-desc">Prompt design, context management, output validation</div></div>
+      <div class="card"><div class="card-title"><span class="tag pink">ai</span> prompt-engineer</div><div class="card-desc">System prompts, few-shot examples, chain-of-thought</div></div>
+      <div class="card"><div class="card-title"><span class="tag pink">ai</span> rag-engineer</div><div class="card-desc">Chunking, embedding, retrieval, reranking pipelines</div></div>
+      <div class="card"><div class="card-title"><span class="tag pink">ai</span> agent-builder</div><div class="card-desc">Tool use, memory, reasoning loops, safety guardrails</div></div>
+      <div class="card"><div class="card-title"><span class="tag pink">ai</span> mcp-builder</div><div class="card-desc">MCP server design, tool definitions, resource management</div></div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>Backend</div>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">Backend</div></div>
     <div class="card-grid">
-      <div class="card"><div class="card-title"><span class="tag backend">backend</span> api-design</div><div class="card-subtitle">REST/GraphQL design, versioning, error standards</div></div>
-      <div class="card"><div class="card-title"><span class="tag backend">backend</span> fastapi</div><div class="card-subtitle">FastAPI, Pydantic v2, async SQLAlchemy, Alembic</div></div>
-      <div class="card"><div class="card-title"><span class="tag backend">backend</span> express</div><div class="card-subtitle">Express.js middleware, routing, error handling</div></div>
-      <div class="card"><div class="card-title"><span class="tag backend">backend</span> django</div><div class="card-subtitle">Django REST Framework, ORM, migrations, admin</div></div>
-      <div class="card"><div class="card-title"><span class="tag backend">backend</span> postgres</div><div class="card-subtitle">PostgreSQL schemas, indexes, query optimization</div></div>
-      <div class="card"><div class="card-title"><span class="tag backend">backend</span> redis</div><div class="card-subtitle">Caching, pub/sub, queues, session storage</div></div>
-      <div class="card"><div class="card-title"><span class="tag backend">backend</span> graphql</div><div class="card-subtitle">Schema design, resolvers, subscriptions, N+1 prevention</div></div>
-      <div class="card"><div class="card-title"><span class="tag backend">backend</span> mongodb</div><div class="card-subtitle">Document design, aggregation, indexing strategies</div></div>
+      <div class="card"><div class="card-title"><span class="tag blue">backend</span> api-design</div><div class="card-desc">REST/GraphQL design, versioning, error standards</div></div>
+      <div class="card"><div class="card-title"><span class="tag blue">backend</span> fastapi</div><div class="card-desc">FastAPI, Pydantic v2, async SQLAlchemy, Alembic</div></div>
+      <div class="card"><div class="card-title"><span class="tag blue">backend</span> postgres</div><div class="card-desc">PostgreSQL schemas, indexes, query optimization</div></div>
+      <div class="card"><div class="card-title"><span class="tag blue">backend</span> redis</div><div class="card-desc">Caching, pub/sub, queues, session storage</div></div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>Security</div>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">Security</div></div>
     <div class="card-grid">
-      <div class="card"><div class="card-title"><span class="tag security">security</span> security-audit</div><div class="card-subtitle">OWASP Top 10, threat modelling, CVE assessment</div></div>
-      <div class="card"><div class="card-title"><span class="tag security">security</span> secure-coding</div><div class="card-subtitle">Input validation, injection prevention, secrets management</div></div>
-      <div class="card"><div class="card-title"><span class="tag security">security</span> authentication</div><div class="card-subtitle">JWT, OAuth2, session management, MFA</div></div>
-      <div class="card"><div class="card-title"><span class="tag security">security</span> cryptography</div><div class="card-subtitle">Key management, hashing, TLS, encryption at rest</div></div>
-      <div class="card"><div class="card-title"><span class="tag security">security</span> penetration-testing</div><div class="card-subtitle">Exploit validation, attack simulation, reporting</div></div>
+      <div class="card"><div class="card-title"><span class="tag red">security</span> security-audit</div><div class="card-desc">OWASP Top 10, threat modelling, CVE assessment</div></div>
+      <div class="card"><div class="card-title"><span class="tag red">security</span> secure-coding</div><div class="card-desc">Input validation, injection prevention, secrets management</div></div>
+      <div class="card"><div class="card-title"><span class="tag red">security</span> authentication</div><div class="card-desc">JWT, OAuth2, session management, MFA</div></div>
+      <div class="card"><div class="card-title"><span class="tag red">security</span> penetration-testing</div><div class="card-desc">Exploit validation, attack simulation, reporting</div></div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>DevOps</div>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">DevOps</div></div>
     <div class="card-grid">
-      <div class="card"><div class="card-title"><span class="tag devops">devops</span> docker</div><div class="card-subtitle">Multi-stage builds, Compose, security hardening</div></div>
-      <div class="card"><div class="card-title"><span class="tag devops">devops</span> kubernetes</div><div class="card-subtitle">Deployments, services, ingress, RBAC, Helm</div></div>
-      <div class="card"><div class="card-title"><span class="tag devops">devops</span> terraform</div><div class="card-subtitle">IaC, state management, modules, drift detection</div></div>
-      <div class="card"><div class="card-title"><span class="tag devops">devops</span> github-actions</div><div class="card-subtitle">CI/CD workflows, secrets, matrix builds, caching</div></div>
-      <div class="card"><div class="card-title"><span class="tag devops">devops</span> cloud</div><div class="card-subtitle">AWS/GCP/Azure patterns, cost optimization, IAM</div></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title"><span class="dot"></span>Advanced Systems</div>
-    <div class="card-grid">
-      <div class="card"><div class="card-title">⚙ system-design</div><div class="card-subtitle">Distributed systems architecture, CAP theorem, patterns</div></div>
-      <div class="card"><div class="card-title">⚙ algorithm-expert</div><div class="card-subtitle">Complexity analysis, data structures, optimization</div></div>
-      <div class="card"><div class="card-title">⚙ distributed-systems</div><div class="card-subtitle">Consensus, replication, fault tolerance, CQRS/ES</div></div>
-      <div class="card"><div class="card-title">⚙ optimization</div><div class="card-subtitle">Performance profiling, bottleneck identification, tuning</div></div>
+      <div class="card"><div class="card-title"><span class="tag green">devops</span> docker</div><div class="card-desc">Multi-stage builds, Compose, security hardening</div></div>
+      <div class="card"><div class="card-title"><span class="tag green">devops</span> kubernetes</div><div class="card-desc">Deployments, services, ingress, RBAC, Helm</div></div>
+      <div class="card"><div class="card-title"><span class="tag green">devops</span> terraform</div><div class="card-desc">IaC, state management, modules, drift detection</div></div>
+      <div class="card"><div class="card-title"><span class="tag green">devops</span> github-actions</div><div class="card-desc">CI/CD workflows, secrets, matrix builds, caching</div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ===== WORKFLOWS PAGE ===== -->
+<!-- ===== WORKFLOWS ===== -->
 <div id="page-workflows" class="page">
   <div class="page-header">
     <h2>Workflows</h2>
@@ -359,142 +798,121 @@
         <tr><td><strong>performance-audit</strong></td><td>Measurement-driven performance optimization</td><td>6</td><td>principal-engineer, database-architect, devops-engineer</td></tr>
         <tr><td><strong>create-ai-agent</strong></td><td>Design and build a production AI agent</td><td>7</td><td>ai-engineer, backend-engineer</td></tr>
         <tr><td><strong>create-mcp-server</strong></td><td>Design and implement an MCP server</td><td>6</td><td>ai-engineer, backend-engineer</td></tr>
-        <tr><td><strong>security-review</strong></td><td>Focused security review of code or design</td><td>5</td><td>security-engineer</td></tr>
         <tr><td><strong>launch-product</strong></td><td>Production readiness and launch checklist</td><td>8</td><td>principal-engineer, devops-engineer, security-engineer</td></tr>
       </tbody>
     </table>
   </div>
-
-  <div class="section" style="margin-top: 24px;">
-    <div class="section-title"><span class="dot"></span>Using a Workflow</div>
-    <div class="code"><span class="comment"># Load and display workflow steps</span>
-<span class="cmd">.\scripts\workflow-engine.ps1</span> <span class="arg">-WorkflowName</span> <span class="arg">"build-application"</span>
-
-<span class="comment"># With parameter substitution</span>
-<span class="cmd">Import-Module</span> .\scripts\workflow-engine.ps1
-<span class="cmd">Invoke-WorkflowSubstitution</span> <span class="arg">-WorkflowName</span> "api-development" <span class="arg">-Params</span> @{
-  API_NAME = "Task Management API"
-  FRAMEWORK = "FastAPI"
-  AUTH_METHOD = "JWT"
-  DATABASE = "PostgreSQL"
-}</span></div>
-  </div>
 </div>
 
-<!-- ===== COMMANDS PAGE ===== -->
+<!-- ===== COMMANDS ===== -->
 <div id="page-commands" class="page">
   <div class="page-header">
     <h2>Commands</h2>
-    <p>Slash commands that trigger coordinated multi-agent workflows. Invoke them directly in OpenCode.</p>
+    <p>Slash commands that trigger coordinated multi-agent workflows.</p>
   </div>
   <div class="card-grid">
     <div class="card">
       <div class="card-title">/ build</div>
-      <div class="card-subtitle">Analyzes your project description, selects the right workflow and agents, and produces a structured implementation plan with full architecture.</div>
-      <div class="card-tags"><span class="tag ai">→ build-application workflow</span></div>
+      <div class="card-desc">Analyzes your project description, selects the right workflow and agents, and produces a structured implementation plan.</div>
+      <div class="card-tags"><span class="tag violet">&rarr; build-application workflow</span></div>
     </div>
     <div class="card">
       <div class="card-title">/ architect</div>
-      <div class="card-subtitle">Designs or reviews system architecture. Produces component diagrams, ADRs, scalability analysis, and open questions.</div>
-      <div class="card-tags"><span class="tag backend">→ principal-engineer</span></div>
+      <div class="card-desc">Designs or reviews system architecture. Produces component diagrams, ADRs, scalability analysis, and open questions.</div>
+      <div class="card-tags"><span class="tag violet">&rarr; principal-engineer</span></div>
     </div>
     <div class="card">
       <div class="card-title">/ debug</div>
-      <div class="card-subtitle">Systematic bug investigation. From symptom to root cause to targeted fix with a regression test and documentation.</div>
-      <div class="card-tags"><span class="tag devops">→ bug-investigation workflow</span></div>
+      <div class="card-desc">Systematic bug investigation. From symptom to root cause to targeted fix with a regression test.</div>
+      <div class="card-tags"><span class="tag orange">&rarr; bug-investigation workflow</span></div>
     </div>
     <div class="card">
       <div class="card-title">/ review</div>
-      <div class="card-subtitle">Senior-level code review across correctness, security, performance, and maintainability. Provides severity-rated findings.</div>
-      <div class="card-tags"><span class="tag frontend">→ principal-engineer + security</span></div>
+      <div class="card-desc">Senior-level code review across correctness, security, performance, and maintainability.</div>
+      <div class="card-tags"><span class="tag violet">&rarr; principal-engineer + security</span></div>
     </div>
     <div class="card">
       <div class="card-title">/ secure</div>
-      <div class="card-subtitle">Full security audit with threat modelling, OWASP checks, dependency scanning, and a CVSS-rated findings report.</div>
-      <div class="card-tags"><span class="tag security">→ security-audit workflow</span></div>
+      <div class="card-desc">Full security audit with threat modelling, OWASP checks, dependency scanning, and a CVSS-rated findings report.</div>
+      <div class="card-tags"><span class="tag red">&rarr; security-audit workflow</span></div>
     </div>
     <div class="card">
       <div class="card-title">/ optimize</div>
-      <div class="card-subtitle">Measurement-driven performance optimization. Covers algorithms, DB queries, caching strategy, and infrastructure tuning.</div>
-      <div class="card-tags"><span class="tag frontend">→ performance-audit workflow</span></div>
+      <div class="card-desc">Measurement-driven performance optimization. Covers algorithms, DB queries, caching, and infrastructure tuning.</div>
+      <div class="card-tags"><span class="tag violet">&rarr; performance-audit workflow</span></div>
     </div>
   </div>
 </div>
 
-
-<!-- ===== PROMPTS PAGE ===== -->
+<!-- ===== PROMPTS ===== -->
 <div id="page-prompts" class="page">
   <div class="page-header">
     <h2>Prompt Library</h2>
-    <p>Reusable prompt templates with <code>{{PARAM_NAME}}</code> substitution. Copy, fill in parameters, and paste into OpenCode.</p>
+    <p>Reusable prompt templates with <code>{{PARAM_NAME}}</code> substitution.</p>
   </div>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Prompt</th><th>Category</th><th>Parameters</th><th>Use When</th></tr></thead>
       <tbody>
-        <tr><td><strong>architecture-review</strong></td><td><span class="badge purple">coding</span></td><td>SYSTEM_NAME, DESCRIPTION, SCALE, CONCERNS</td><td>Reviewing or designing system architecture</td></tr>
-        <tr><td><strong>api-design</strong></td><td><span class="badge purple">coding</span></td><td>API_NAME, DOMAIN, RESOURCES, AUTH_METHOD</td><td>Designing a new REST or GraphQL API</td></tr>
-        <tr><td><strong>code-review</strong></td><td><span class="badge purple">coding</span></td><td>CODE, LANGUAGE, CONTEXT, FOCUS_AREAS</td><td>Getting a thorough code review</td></tr>
-        <tr><td><strong>bug-hunt</strong></td><td><span class="badge purple">coding</span></td><td>BUG_DESCRIPTION, COMPONENT, ERROR_OUTPUT</td><td>Investigating a bug systematically</td></tr>
-        <tr><td><strong>refactoring</strong></td><td><span class="badge purple">coding</span></td><td>CODE, LANGUAGE, PROBLEM, GOAL</td><td>Improving code structure without behavior change</td></tr>
-        <tr><td><strong>security-review</strong></td><td><span class="badge yellow">security</span></td><td>TARGET, TARGET_TYPE, TECH_STACK</td><td>Security review of code or architecture</td></tr>
-        <tr><td><strong>agent-design</strong></td><td><span class="badge green">ai</span></td><td>AGENT_NAME, GOAL, TOOLS, FRAMEWORK</td><td>Designing an AI agent with tool use</td></tr>
-        <tr><td><strong>prompt-engineering</strong></td><td><span class="badge green">ai</span></td><td>TASK, MODEL, INPUT_FORMAT, OUTPUT_FORMAT</td><td>Creating or optimizing LLM prompts</td></tr>
-        <tr><td><strong>technical-research</strong></td><td><span class="badge purple">research</span></td><td>TOPIC, CONTEXT, OPTIONS, CRITERIA</td><td>Comparing technology options</td></tr>
-        <tr><td><strong>product-requirements</strong></td><td><span class="badge yellow">business</span></td><td>PRODUCT_NAME, PROBLEM, TARGET_USERS</td><td>Writing a PRD for a new feature</td></tr>
-        <tr><td><strong>technical-documentation</strong></td><td><span class="badge green">writing</span></td><td>SUBJECT, AUDIENCE, DOC_TYPE, CONTENT</td><td>Producing developer documentation</td></tr>
+        <tr><td><strong>architecture-review</strong></td><td><span class="badge violet">coding</span></td><td>SYSTEM_NAME, DESCRIPTION, SCALE</td><td>Reviewing or designing system architecture</td></tr>
+        <tr><td><strong>api-design</strong></td><td><span class="badge violet">coding</span></td><td>API_NAME, DOMAIN, RESOURCES</td><td>Designing a new REST or GraphQL API</td></tr>
+        <tr><td><strong>code-review</strong></td><td><span class="badge violet">coding</span></td><td>CODE, LANGUAGE, FOCUS_AREAS</td><td>Getting a thorough code review</td></tr>
+        <tr><td><strong>bug-hunt</strong></td><td><span class="badge violet">coding</span></td><td>BUG_DESCRIPTION, COMPONENT</td><td>Investigating a bug systematically</td></tr>
+        <tr><td><strong>security-review</strong></td><td><span class="badge green">security</span></td><td>TARGET, TECH_STACK</td><td>Security review of code or architecture</td></tr>
+        <tr><td><strong>agent-design</strong></td><td><span class="badge violet">ai</span></td><td>AGENT_NAME, GOAL, TOOLS</td><td>Designing an AI agent with tool use</td></tr>
+        <tr><td><strong>prompt-engineering</strong></td><td><span class="badge violet">ai</span></td><td>TASK, MODEL, OUTPUT_FORMAT</td><td>Creating or optimizing LLM prompts</td></tr>
+        <tr><td><strong>technical-research</strong></td><td><span class="badge violet">research</span></td><td>TOPIC, OPTIONS, CRITERIA</td><td>Comparing technology options</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- ===== TEMPLATES PAGE ===== -->
+<!-- ===== TEMPLATES ===== -->
 <div id="page-templates" class="page">
   <div class="page-header">
     <h2>Templates</h2>
-    <p>Project scaffolds with README, dependencies, and working starter code. Copy and rename <code>{{PROJECT_NAME}}</code> placeholders.</p>
+    <p>Project scaffolds with README, dependencies, and working starter code.</p>
   </div>
   <div class="card-grid">
     <div class="card">
-      <div class="card-title">⬚ fastapi-api</div>
-      <div class="card-subtitle">FastAPI + async SQLAlchemy + Pydantic v2 + Alembic + JWT auth + pytest. Production-ready REST API starter.</div>
-      <div class="card-tags"><span class="tag backend">Python</span><span class="tag backend">FastAPI</span><span class="tag backend">PostgreSQL</span></div>
+      <div class="card-title"><span class="emoji">&#11020;</span> fastapi-api</div>
+      <div class="card-desc">FastAPI + async SQLAlchemy + Pydantic v2 + Alembic + JWT auth + pytest.</div>
+      <div class="card-tags"><span class="tag blue">Python</span><span class="tag blue">FastAPI</span><span class="tag blue">PostgreSQL</span></div>
     </div>
     <div class="card">
-      <div class="card-title">⬚ react-app</div>
-      <div class="card-subtitle">React + TypeScript + Vite + TanStack Query + React Router + Tailwind CSS. Full UI starter with testing.</div>
-      <div class="card-tags"><span class="tag frontend">React</span><span class="tag frontend">TypeScript</span><span class="tag frontend">Vite</span></div>
+      <div class="card-title"><span class="emoji">&#11020;</span> react-app</div>
+      <div class="card-desc">React + TypeScript + Vite + TanStack Query + React Router + Tailwind CSS.</div>
+      <div class="card-tags"><span class="tag yellow">React</span><span class="tag yellow">TypeScript</span><span class="tag yellow">Vite</span></div>
     </div>
     <div class="card">
-      <div class="card-title">⬚ nextjs-saas</div>
-      <div class="card-subtitle">Next.js 14 App Router + NextAuth.js + Prisma + Stripe + shadcn/ui. Full SaaS starter with auth and billing.</div>
-      <div class="card-tags"><span class="tag frontend">Next.js</span><span class="tag frontend">TypeScript</span><span class="tag backend">PostgreSQL</span></div>
+      <div class="card-title"><span class="emoji">&#11020;</span> nextjs-saas</div>
+      <div class="card-desc">Next.js 14 App Router + NextAuth.js + Prisma + Stripe + shadcn/ui.</div>
+      <div class="card-tags"><span class="tag yellow">Next.js</span><span class="tag yellow">TypeScript</span><span class="tag blue">PostgreSQL</span></div>
     </div>
     <div class="card">
-      <div class="card-title">⬚ ai-agent</div>
-      <div class="card-subtitle">LangGraph AI agent with tool use, memory, and evaluation harness. Supports OpenAI and Anthropic.</div>
-      <div class="card-tags"><span class="tag ai">Python</span><span class="tag ai">LangGraph</span><span class="tag ai">MCP</span></div>
+      <div class="card-title"><span class="emoji">&#11020;</span> ai-agent</div>
+      <div class="card-desc">LangGraph AI agent with tool use, memory, and evaluation harness.</div>
+      <div class="card-tags"><span class="tag pink">Python</span><span class="tag pink">LangGraph</span><span class="tag pink">MCP</span></div>
     </div>
     <div class="card">
-      <div class="card-title">⬚ mcp-server</div>
-      <div class="card-subtitle">Model Context Protocol server with sample tool, input schema validation, and stdio transport.</div>
-      <div class="card-tags"><span class="tag ai">Python</span><span class="tag ai">MCP SDK</span></div>
+      <div class="card-title"><span class="emoji">&#11020;</span> mcp-server</div>
+      <div class="card-desc">Model Context Protocol server with sample tool, input schema, and stdio transport.</div>
+      <div class="card-tags"><span class="tag pink">Python</span><span class="tag pink">MCP SDK</span></div>
     </div>
     <div class="card">
-      <div class="card-title">⬚ rag-project</div>
-      <div class="card-subtitle">RAG system with ingestion pipeline, ChromaDB vector store, LLM answer generation, and eval harness.</div>
-      <div class="card-tags"><span class="tag ai">Python</span><span class="tag ai">LangChain</span><span class="tag ai">ChromaDB</span></div>
+      <div class="card-title"><span class="emoji">&#11020;</span> rag-project</div>
+      <div class="card-desc">RAG system with ingestion pipeline, ChromaDB vector store, LLM generation, and eval harness.</div>
+      <div class="card-tags"><span class="tag pink">Python</span><span class="tag pink">LangChain</span><span class="tag pink">ChromaDB</span></div>
     </div>
     <div class="card">
-      <div class="card-title">⬚ discord-bot</div>
-      <div class="card-subtitle">discord.py bot with slash commands, cog architecture, persistent SQLite storage, and async test suite.</div>
-      <div class="card-tags"><span class="tag backend">Python</span><span class="tag backend">discord.py</span></div>
+      <div class="card-title"><span class="emoji">&#11020;</span> discord-bot</div>
+      <div class="card-desc">discord.py bot with slash commands, cog architecture, persistent SQLite storage.</div>
+      <div class="card-tags"><span class="tag blue">Python</span><span class="tag blue">discord.py</span></div>
     </div>
   </div>
 </div>
 
-
-<!-- ===== ROUTER PAGE ===== -->
+<!-- ===== ROUTER ===== -->
 <div id="page-router" class="page">
   <div class="page-header">
     <h2>Router</h2>
@@ -502,8 +920,8 @@
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>Router Logic</div>
-    <div class="code"><span class="comment"># Test the router directly</span>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">Router Logic</div></div>
+    <div class="code-block"><span class="comment"># Test the router directly</span>
 <span class="cmd">.\scripts\router.ps1</span> <span class="arg">-Request</span> <span class="arg">"build a fastapi api with postgres authentication"</span>
 
 <span class="comment"># Output:</span>
@@ -516,30 +934,29 @@
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>Keyword Map (sample)</div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px;">
-      <div class="router-row"><span class="router-keyword">api</span> <span class="router-arrow">→</span> <span class="router-agent backend">backend-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">react</span> <span class="router-arrow">→</span> <span class="router-agent frontend">frontend-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">llm</span> <span class="router-arrow">→</span> <span class="router-agent ai">ai-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">rag</span> <span class="router-arrow">→</span> <span class="router-agent ai">ai-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">postgres</span> <span class="router-arrow">→</span> <span class="router-agent database">database-architect</span></div>
-      <div class="router-row"><span class="router-keyword">security</span> <span class="router-arrow">→</span> <span class="router-agent security">security-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">docker</span> <span class="router-arrow">→</span> <span class="router-agent devops">devops-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">kubernetes</span> <span class="router-arrow">→</span> <span class="router-agent devops">devops-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">debug</span> <span class="router-arrow">→</span> <span class="router-agent debugger">debugger</span></div>
-      <div class="router-row"><span class="router-keyword">bug</span> <span class="router-arrow">→</span> <span class="router-agent debugger">debugger</span></div>
-      <div class="router-row"><span class="router-keyword">owasp</span> <span class="router-arrow">→</span> <span class="router-agent security">security-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">docs</span> <span class="router-arrow">→</span> <span class="router-agent principal">technical-writer</span></div>
-      <div class="router-row"><span class="router-keyword">terraform</span> <span class="router-arrow">→</span> <span class="router-agent devops">devops-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">fastapi</span> <span class="router-arrow">→</span> <span class="router-agent backend">backend-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">jwt</span> <span class="router-arrow">→</span> <span class="router-agent security">security-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">embedding</span> <span class="router-arrow">→</span> <span class="router-agent ai">ai-engineer</span></div>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">Keyword Map</div></div>
+    <div class="router-grid">
+      <div class="router-row"><span class="router-keyword">api</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">react</span> <span class="router-arrow">&rarr;</span> <span class="router-agent frontend">frontend-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">llm</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">rag</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">postgres</span> <span class="router-arrow">&rarr;</span> <span class="router-agent database">database-architect</span></div>
+      <div class="router-row"><span class="router-keyword">security</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">docker</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">kubernetes</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">debug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
+      <div class="router-row"><span class="router-keyword">bug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
+      <div class="router-row"><span class="router-keyword">owasp</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">docs</span> <span class="router-arrow">&rarr;</span> <span class="router-agent principal">technical-writer</span></div>
+      <div class="router-row"><span class="router-keyword">terraform</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">fastapi</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">jwt</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+      <div class="router-row"><span class="router-keyword">embedding</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
     </div>
-    <p style="margin-top: 12px; color: var(--muted); font-size: 12px;">Full map: edit <code>router/agent-router.json</code>. No script changes needed.</p>
   </div>
 </div>
 
-<!-- ===== MCPS PAGE ===== -->
+<!-- ===== MCPS ===== -->
 <div id="page-mcps" class="page">
   <div class="page-header">
     <h2>MCP Servers</h2>
@@ -557,55 +974,32 @@
       </tbody>
     </table>
   </div>
-  <div class="section" style="margin-top: 24px;">
-    <div class="section-title"><span class="dot"></span>MCP Config Location</div>
-    <div class="code"><span class="comment"># Registry (enabled/disabled list)</span>
-mcps/registry.json
-
-<span class="comment"># Connection config for each MCP</span>
-mcps/mcp-config.json
-
-<span class="comment"># Process/install all enabled MCPs</span>
-<span class="cmd">.\scripts\install-mcps.ps1</span></div>
-  </div>
 </div>
 
-
-<!-- ===== HEALTH PAGE ===== -->
+<!-- ===== HEALTH ===== -->
 <div id="page-health" class="page">
   <div class="page-header">
     <h2>Health Check</h2>
-    <p>Run <code>.\god-health.ps1</code> to verify your installation. This page shows what gets checked.</p>
+    <p>Run <code>.\god-health.ps1</code> to verify your installation.</p>
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>Verification Checks</div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">15 required directories exist</div><div class="health-status ok">CHECK 1</div></div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">70+ SKILL.md files present in repo</div><div class="health-status ok">CHECK 2</div></div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">Skills installed in ~/.config/opencode/skills/</div><div class="health-status ok">CHECK 2b</div></div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">mcps/registry.json is valid JSON with 5 enabled MCPs</div><div class="health-status ok">CHECK 3</div></div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">router/agent-router.json is valid JSON with ≥1 routing rule</div><div class="health-status ok">CHECK 4</div></div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">12 key scripts exist (god-install, router, memory, etc.)</div><div class="health-status ok">CHECK 5</div></div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">All 10 agents have valid AGENT.md with required sections</div><div class="health-status ok">CHECK 6</div></div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">4 required workflows present (build, api, security, bug)</div><div class="health-status ok">CHECK 7</div></div>
-    <div class="health-row"><div class="health-dot ok"></div><div class="health-label">6 required commands present (/build, /architect, etc.)</div><div class="health-status ok">CHECK 8</div></div>
-  </div>
-
-  <div class="section">
-    <div class="section-title"><span class="dot"></span>Run Health Check</div>
-    <div class="code"><span class="cmd">.\god-health.ps1</span>
-
-<span class="comment"># Example output:</span>
-<span class="comment"># [OK]   Directory: agents — exists</span>
-<span class="comment"># [OK]   Skills (repo) — 73 SKILL.md files</span>
-<span class="comment"># [OK]   Router Config — valid JSON, 83 routing rules</span>
-<span class="comment"># [OK]   Agent: principal-engineer</span>
-<span class="comment"># ...</span>
-<span class="comment"># All checks passed. 47 components verified.</span></div>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">Verification Checks</div></div>
+    <div class="health-list">
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">15 required directories exist</div><div class="health-badge ok">CHECK 1</div></div>
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">70+ SKILL.md files present in repo</div><div class="health-badge ok">CHECK 2</div></div>
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">Skills installed in ~/.config/opencode/skills/</div><div class="health-badge ok">CHECK 2b</div></div>
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">mcps/registry.json is valid JSON with 5 enabled MCPs</div><div class="health-badge ok">CHECK 3</div></div>
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">router/agent-router.json is valid JSON with routing rules</div><div class="health-badge ok">CHECK 4</div></div>
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">12 key scripts exist</div><div class="health-badge ok">CHECK 5</div></div>
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">All 10 agents have valid AGENT.md with required sections</div><div class="health-badge ok">CHECK 6</div></div>
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">4 required workflows present</div><div class="health-badge ok">CHECK 7</div></div>
+      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">6 required commands present</div><div class="health-badge ok">CHECK 8</div></div>
+    </div>
   </div>
 </div>
 
-<!-- ===== QUICKSTART PAGE ===== -->
+<!-- ===== QUICKSTART ===== -->
 <div id="page-quickstart" class="page">
   <div class="page-header">
     <h2>Quick Start</h2>
@@ -613,10 +1007,10 @@ mcps/mcp-config.json
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>1. Install</div>
-    <div class="code"><span class="comment"># Clone the repo</span>
-<span class="cmd">git clone</span> <span class="arg">https://github.com/your-org/god-opencode</span> C:\AI\GOD-OPENCODE
-<span class="cmd">cd</span> C:\AI\GOD-OPENCODE
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">1. Install</div></div>
+    <div class="code-block"><span class="comment"># Clone the repo</span>
+<span class="cmd">git clone</span> <span class="arg">https://github.com/mattycigemp-crypto/GOD-OPENCODE</span>
+<span class="cmd">cd</span> GOD-OPENCODE
 
 <span class="comment"># Run the one-command installer</span>
 <span class="cmd">.\god-install.ps1</span>
@@ -626,75 +1020,69 @@ mcps/mcp-config.json
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>2. Use slash commands in OpenCode</div>
-    <div class="code"><span class="comment"># Build a new application</span>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">2. Use slash commands in OpenCode</div></div>
+    <div class="code-block"><span class="comment"># Build a new application</span>
 <span class="cmd">/build</span> a FastAPI REST API with JWT auth, PostgreSQL, and Alembic migrations
 
 <span class="comment"># Debug a problem</span>
-<span class="cmd">/debug</span> users are getting duplicate emails on registration in auth_service.py
+<span class="cmd">/debug</span> users are getting duplicate emails on registration
 
 <span class="comment"># Security audit</span>
-<span class="cmd">/secure</span> review the authentication flow in routes/auth.py
+<span class="cmd">/secure</span> review the authentication flow
 
 <span class="comment"># Architecture review</span>
-<span class="cmd">/architect</span> should I use PostgreSQL or MongoDB for a multi-tenant SaaS?
-
-<span class="comment"># Code review</span>
-<span class="cmd">/review</span> [paste code here]
-
-<span class="comment"># Performance optimization</span>
-<span class="cmd">/optimize</span> the user search endpoint is slow at 1000+ users</div>
+<span class="cmd">/architect</span> should I use PostgreSQL or MongoDB for a multi-tenant SaaS?</div>
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>3. Invoke agents directly</div>
-    <div class="code"><span class="comment"># Direct agent invocation</span>
-As the database-architect, design a schema for a multi-tenant SaaS application
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">3. Invoke agents directly</div></div>
+    <div class="code-block"><span class="comment"># Direct agent invocation</span>
+As the <span class="arg">database-architect</span>, design a schema for a multi-tenant SaaS application
   where each tenant's data must be isolated.
 
-As the security-engineer, audit this JWT implementation: [paste code]
+As the <span class="arg">security-engineer</span>, audit this JWT implementation: [paste code]
 
-As the ai-engineer, design a RAG pipeline for a customer support chatbot
+As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a customer support chatbot
   with 50k support articles.</div>
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="dot"></span>4. Scan a project</div>
-    <div class="code"><span class="comment"># Scan any project and get an implementation plan</span>
+    <div class="section-header"><div class="section-dot"></div><div class="section-title">4. Scan a project</div></div>
+    <div class="code-block"><span class="comment"># Scan any project and get an implementation plan</span>
 <span class="cmd">.\tools\project-scan.ps1</span> <span class="arg">-TargetPath</span> <span class="arg">"C:\path\to\your\project"</span>
 
 <span class="comment"># The scanner will:</span>
 <span class="comment"># 1. Detect primary languages</span>
 <span class="comment"># 2. Identify project type (api, fullstack, frontend-app, etc.)</span>
 <span class="comment"># 3. Recommend the right workflow and agents</span>
-<span class="comment"># 4. Generate a prioritized improvement list</span>
-<span class="comment"># 5. Save the plan to memory/adr-scan-{project}.md</span></div>
+<span class="comment"># 4. Generate a prioritized improvement list</span></div>
   </div>
 </div>
-
 
 </main>
 </div>
 
+<!-- ============================================
+     NAVIGATION JS
+     ============================================ -->
 <script>
-  function showPage(id) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    // Remove active from all nav links
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-    // Show target page
-    const page = document.getElementById('page-' + id);
-    if (page) page.classList.add('active');
-    // Activate nav link
-    const nav = document.getElementById('nav-' + id);
-    if (nav) nav.classList.add('active');
-    return false;
-  }
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const page = item.dataset.page;
+      if (!page) return;
 
-  // Keyboard shortcut: press / to focus search (future feature placeholder)
-  document.addEventListener('keydown', function(e) {
-    if (e.key === '?' ) {
-      showPage('quickstart');
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+      const target = document.getElementById('page-' + page);
+      if (target) target.classList.add('active');
+      item.classList.add('active');
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '?') {
+      document.querySelector('[data-page="quickstart"]').click();
     }
   });
 </script>
