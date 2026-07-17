@@ -1,0 +1,5 @@
+# GOD-OPENCODE Skills Registry — seed sources
+# Loaded by scripts/install-skill.ps1 to enumerate available registry sources.
+# Format: source|label|default-version|description (one per line, # comments ok)
+
+mattycigemp-crypto/god-opencode|Canonical GOD-OPENCODE skills (peer-reviewed)|v1.2.0|The bundled skills shipped with the main GOD-OPENCODE release. Always compatible with the installer that wrote this file.

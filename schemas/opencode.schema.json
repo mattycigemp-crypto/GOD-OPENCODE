@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/mattycigemp-crypto/GOD-OPENCODE/HEAD/schemas/opencode.schema.json",
+  "title": "GOD-OPENCODE opencode.json",
+  "description": "Schema for the opencode.json file at the root of a GOD-OPENCODE project. Validates the agent roster, slash commands, instruction glob patterns, permission rules, and (v1.3+) MCP server registrations.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema URL for editor autocomplete + validation."
+    },
+
+    "instructions": {
+      "type": "array",
+      "description": "Files or glob patterns loaded into agent context at startup.",
+      "items": {
+        "type": "string",
+        "examples": ["AGENTS.md", "docs/**/*.md", "README.md"]
+      },
+      "uniqueItems": true
+    },
+
+    "permission": {
+      "type": "object",
+      "description": "Per-tool permission rules merged into global ~/.config/opencode/opencode.jsonc on install.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "allow": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "deny": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      },
+      "examples": [
+        {
+          "bash": {
+            "deny": ["rm -rf /", "git push --force origin master"]
+          }
+        }
+      ]
+    },
+
+    "agent": {
+      "type": "object",
+      "description": "Map of agent name -> agent definition. Each name must match agents/<name>/AGENT.md in the project tree. Keys must be lowercase letters, digits, and hyphens (start with letter).",
+      "patternProperties": {
+        "^[a-z][a-z0-9-]*$": { "$ref": "#/$defs/agentEntry" }
+      },
+      "additionalProperties": false
+    },
+
+    "command": {
+      "type": "object",
+      "description": "Map of slash command name -> command definition. Each name must match commands/<name>.md in the project tree. Keys must be lowercase letters, digits, and hyphens (start with letter).",
+      "patternProperties": {
+        "^[a-z][a-z0-9-]*$": { "$ref": "#/$defs/commandEntry" }
+      },
+      "additionalProperties": false
+    },
+
+    "mcp_servers": {
+      "type": "object",
+      "description": "Map of MCP server name -> server config. Each registered server is wrapped as skills/<category>/mcp-<name>/SKILL.md by scripts/mcp-to-skill.ps1. Note: top-level key uses snake_case to match OpenCode's host spec; other top-level keys use lowercase-only.",
+      "patternProperties": {
+        "^[a-z][a-z0-9-]*$": { "$ref": "#/$defs/mcpServerEntry" }
+      },
+      "additionalProperties": false
+    }
+  },
+
+  "$defs": {
+    "agentEntry": {
+      "type": "object",
+      "required": ["prompt"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["subagent", "primary", "all"],
+          "default": "subagent"
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Persona prompt for the agent. Concatenated with skills listed in agents/<name>/AGENT.md at runtime."
+        },
+        "tools": {
+          "type": "array",
+          "description": "OpenCode tool allowlist. If absent, all standard tools are available.",
+          "items": {
+            "type": "string",
+            "enum": ["read", "write", "edit", "bash", "glob", "grep", "webfetch"]
+          },
+          "uniqueItems": true
+        },
+        "skills": {
+          "type": "array",
+          "description": "Skills this agent can call. Optional; the agent-router derives defaults from the auto-router skill if absent.",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "uniqueItems": true
+        }
+      }
+    },
+
+    "commandEntry": {
+      "type": "object",
+      "required": ["prompt"],
+      "additionalProperties": false,
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "agent": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Agent invoked when the command is run. If absent, auto-router selects."
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+
+    "mcpServerEntry": {
+      "type": "object",
+      "required": ["transport"],
+      "additionalProperties": false,
+      "properties": {
+        "transport": {
+          "type": "string",
+          "enum": ["stdio", "http", "sse"],
+          "description": "MCP transport. stdio runs a subprocess, http/sse are remote endpoints."
+        },
+        "command": {
+          "type": "string",
+          "description": "Executable to spawn for stdio transport (e.g. 'npx', 'uvx', '~/.local/bin/foo'). Required only when transport=stdio."
+        },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Endpoint URL for http/sse transports. Required when transport is http or sse."
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "category": {
+          "type": "string",
+          "description": "Skills category under which the generated wrapper SKILL.md is placed by scripts/mcp-to-skill.ps1.",
+          "enum": ["orchestration", "backend", "frontend", "security", "devops", "database", "testing", "ai", "languages", "core", "advanced"],
+          "default": "ai"
+        },
+        "skills_description": {
+          "type": "string",
+          "description": "One-line summary used in the generated SKILL.md wrapper body."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "transport": { "const": "stdio" } } },
+          "then": { "required": ["command"] }
+        },
+        {
+          "if": { "properties": { "transport": { "enum": ["http", "sse"] } } },
+          "then": { "required": ["url"] }
+        }
+      ]
+    }
+  },
+
+  "examples": [
+    {
+      "$schema": "./schemas/opencode.schema.json",
+      "instructions": ["AGENTS.md", "docs/**/*.md"],
+      "agent": {
+        "backend-engineer": {
+          "mode": "subagent",
+          "prompt": "You are a senior backend engineer...",
+          "tools": ["read", "write", "edit", "bash", "glob", "grep"]
+        }
+      },
+      "command": {
+        "security-audit": {
+          "agent": "security-engineer",
+          "prompt": "Load the auto-router skill and execute the security-audit workflow."
+        }
+      },
+      "mcp_servers": {
+        "filesystem": {
+          "transport": "stdio",
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+          "category": "core",
+          "skills_description": "Read/write files in the project tree."
+        },
+        "context7": {
+          "transport": "http",
+          "url": "https://mcp.context7.com/mcp",
+          "category": "ai",
+          "skills_description": "Pull up-to-date third-party library documentation."
+        }
+      }
+    }
+  ]
+}

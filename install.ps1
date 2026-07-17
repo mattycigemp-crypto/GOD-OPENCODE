@@ -334,9 +334,52 @@ if (Test-Path $GlobalConfig) {
         } else {
             Write-Host "[UNCHANGED] Agent configs already present" -ForegroundColor Yellow
         }
+
+        # Merge mcp_servers - append only new server names (never overwrite user's existing servers).
+        if ($Source.mcp_servers) {
+            $McpMerged = $false
+            if (-not $Global.mcp_servers) {
+                $Global | Add-Member -NotePropertyName "mcp_servers" -NotePropertyValue $Source.mcp_servers
+                $McpMerged = $true
+            } else {
+                foreach ($Prop in $Source.mcp_servers.PSObject.Properties) {
+                    if (-not $Global.mcp_servers.PSObject.Properties[$Prop.Name]) {
+                        $Global.mcp_servers | Add-Member -NotePropertyName $Prop.Name -NotePropertyValue $Prop.Value
+                        $McpMerged = $true
+                    }
+                }
+            }
+            if ($McpMerged) {
+                $Merged = $true
+                Write-Host "[MERGED] MCP server configs added to $GlobalConfig" -ForegroundColor Green
+            } else {
+                Write-Host "[UNCHANGED] MCP server configs already present" -ForegroundColor Yellow
+            }
+        }
     }
 } else {
     Write-Host "[SKIP] Global config not found at $GlobalConfig" -ForegroundColor Yellow
+}
+
+# ============================================
+# GENERATE MCP SKILL WRAPPERS
+# ============================================
+# After merging mcp_servers, generate a SKILL.md wrapper for each so any
+# GOD-OPENCODE skill installer pulls them as regular skills.
+
+Write-Host ""
+Write-Host "--- Generating MCP Skill Wrappers ---"
+Write-Host ""
+
+$McpToSkill = Join-Path $PSScriptRoot "scripts\mcp-to-skill.ps1"
+if (Test-Path $McpToSkill) {
+    try {
+        & $McpToSkill
+    } catch {
+        Write-Host "[WARN] scripts/mcp-to-skill.ps1 failed: $_" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "[SKIP] scripts/mcp-to-skill.ps1 not found" -ForegroundColor Yellow
 }
 
 Write-Host ""
