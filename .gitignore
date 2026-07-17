@@ -17,6 +17,14 @@
 memory/*
 !memory/AGENT_PREFERENCES.md
 
+# Freebuff Desktop app local state (desktop.db is an app-private SQLite
+# database the assistant writes at runtime; never track it)
+.freebuff/
+
+# Generated code-graph data (emitted by scripts/code-graph.ps1). Regenerate
+# locally with the script; do not commit the JSON output.
+docs/wiki/_data/
+
 # Backups
 backups/
 
