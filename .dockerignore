@@ -1,0 +1,34 @@
+# VCS
+.git
+.github
+
+# Release artifacts (on-repo for direct download but NOT for container)
+release
+*.zip
+*.log
+*.tmp
+
+# Dev-only directories
+tests
+docs
+brand
+ui
+.opencode
+.freebuff
+.qodo
+.kiro
+node_modules
+
+# IDE / OS junk
+.vscode
+.idea
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+*.swo
+
+# Backups
+backups
+memory
+logs

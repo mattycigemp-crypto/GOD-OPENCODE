@@ -51,6 +51,22 @@ opencode
 
 Now GOD-OPENCODE works from **any directory** on your machine.
 
+### Alternative: Container
+
+```bash
+# Pull the published image (no PowerShell host required)
+docker pull ghcr.io/mattycigemp-crypto/god-opencode:latest
+
+# Drop into a PowerShell session with GOD-OPENCODE ready
+docker run --rm -it ghcr.io/mattycigemp-crypto/god-opencode:latest
+
+# Or one-shot: run the installer
+docker run --rm ghcr.io/mattycigemp-crypto/god-opencode:latest \
+  pwsh -File ./install.ps1
+```
+
+Each `v*` tag publish a versioned image (`ghcr.io/.../god-opencode:v1.1.5`) plus `latest`. The image bundles PowerShell 7.4 + the installable project so it works identically on Linux, macOS, and Windows hosts.
+
 ---
 
 ## 🧠 How It Works
