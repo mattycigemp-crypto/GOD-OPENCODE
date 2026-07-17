@@ -5,21 +5,18 @@
 
 FROM mcr.microsoft.com/powershell:7.4-ubuntu-22.04
 
-# Least-privilege: run as a non-root user inside the container.
-RUN useradd -m -s /bin/bash goduser
+# Least-privilege: non-root user with no login shell (entrypoint is pwsh only).
+RUN useradd -m -s /bin/false -u 1001 goduser
 
 WORKDIR /god-opencode
 
-# Selective COPY mirrors package-release.ps1's $Include list.
-# Excludes docs/ brand/ ui/ tests/ which are developer-only / not runtime-required.
-COPY skills/      ./skills/
-COPY workflows/   ./workflows/
-COPY agents/      ./agents/
-COPY commands/    ./commands/
-COPY scripts/     ./scripts/
-COPY install.ps1  opencode.json AGENTS.md README.md CHANGELOG.md LICENSE ./
+# Single COPY layer with --chown so we don't need a follow-up chown -R layer.
+# Mirrors package-release.ps1's runtime-required include list.
+COPY --chown=goduser:goduser \
+    skills/ workflows/ agents/ commands/ scripts/ \
+    install.ps1 opencode.json AGENTS.md README.md CHANGELOG.md LICENSE \
+    ./
 
-RUN chown -R goduser:goduser /god-opencode
 USER goduser
 
 # Fast, clean PowerShell that drops you inside /god-opencode.
