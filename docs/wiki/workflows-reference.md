@@ -6,8 +6,8 @@ _Auto-generated from workflows/ by build-wiki.ps1. Do not edit manually._
 
 | Metric | Value |
 |--------|-------|
-| Total Workflows | 15 |
-| Last Updated | 2026-07-17 19:23 |
+| Total Workflows | 16 |
+| Last Updated | 2026-07-17 19:57 |
 
 ---
 
@@ -29,6 +29,7 @@ _Auto-generated from workflows/ by build-wiki.ps1. Do not edit manually._
 | **review-code** |  | 6 |
 | **security-audit** |  | 8 |
 | **security-review** |  | 5 |
+| **test-driven-ai** |  | 7 |
 
 ---
 
@@ -234,6 +235,20 @@ _Auto-generated from workflows/ by build-wiki.ps1. Do not edit manually._
 3. Exploit Validation
 4. Remediation Guidance
 5. Verification
+
+---
+
+### test-driven-ai
+
+**Steps (7):**
+
+1. Requirements Analysis
+2. Test Generation
+3. Implementation
+4. Test Execution
+5. Failure Analysis
+6. Fix and Retry
+7. Validation
 
 ---
 

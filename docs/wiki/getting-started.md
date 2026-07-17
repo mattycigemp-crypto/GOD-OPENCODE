@@ -25,10 +25,10 @@ After install, your `~/.config/opencode/` looks like:
 
 ```
 ~/.config/opencode/
-├── skills/                # 84 SKILL.md files
+├── skills/                # 88 SKILL.md files
 ├── god-opencode/
 │   ├── agents/            # 10 AGENT.md files
-│   ├── workflows/         # 15 workflow .md files
+│   ├── workflows/         # 16 workflow .md files
 │   └── commands/          # 6 command .md files
 └── opencode.jsonc         # opencode.json merged in
 ```
@@ -61,6 +61,18 @@ start ui/index.html         # Windows
 open ui/index.html          # macOS
 xdg-open ui/index.html      # Linux
 ```
+
+## v1.6.0 Features
+
+New in v1.6.0 — five features from deep research on developer needs:
+
+| Feature | Command | Purpose |
+|---------|---------|--------|
+| Security Scanner | `.\scripts\security-scan.ps1` | Pre-commit secret/vulnerability scan |
+| Agent Orchestrator | `.\scripts\agent-orchestrator.ps1` | Multi-agent task delegation |
+| MCP Connectors | `.\scripts\mcp-connect.ps1` | Chrome/DB/Jira/Monitoring integration |
+| Smart Git | `.\scripts\smart-git.ps1` | Atomic commits, save points, rollback |
+| Test-Driven AI | `workflows/test-driven-ai.md` | Generate tests before code |
 
 ## Next
 

@@ -6,25 +6,32 @@ An AI engineering OS built on OpenCode. Provides specialized agents, domain skil
 
 ```
 GOD-OPENCODE/
-├── agents/           # Agent definitions (AGENT.md files)
-├── skills/           # Skill source files (SKILL.md in categories)
-├── workflows/        # Step-by-step workflow definitions
-├── commands/         # Command definitions (build, debug, review, etc.)
-├── router/           # Intent detection and routing config
-├── scripts/          # PowerShell utilities (shared-utils, god-builder, etc.)
-├── config/           # Configuration files
-├── mcps/             # MCP server registry
-├── models/           # Model routing config
-├── templates/        # Templates for scaffolding
-├── tools/            # Custom tools
-├── brand/            # Logo assets and brand guidelines
-└── ui/               # Dashboard (HTML/Canvas2D)
+├── opencode.json              # OpenCode config (agents, commands)
+├── AGENTS.md                  # Project context for OpenCode
+├── god-cli.ps1                # Non-interactive CLI
+├── god-ui.ps1                 # Interactive terminal UI (TUI)
+├── install.ps1                # Global installer (skills, workflows, agents, commands)
+├── install.sh                 # Native bash installer (no PowerShell needed)
+├── .opencode/skills/          # Project-local skills (auto-discovered)
+├── agents/                    # 10 agent personas (AGENT.md each)
+├── skills/                    # 88 skill definitions (SKILL.md each, 12 categories)
+├── workflows/                 # 16 parameterized workflows
+├── commands/                  # 6 slash command definitions
+├── router/                    # Intent detection and routing config
+├── scripts/                   # PowerShell engines (builder, expansion, health)
+├── mcps/                      # MCP server configs
+├── templates/                 # Project scaffolds
+├── tests/                     # Pester test suite
+├── docs/                      # Documentation and wiki
+├── memory/                    # Long-term memory store
+└── ui/                        # Browser dashboard
 ```
 
 ## Coding Standards
 
-- PowerShell 5.1 compatible (no Unicode box-drawing, no `char * int`, use `;` not `&&`)
-- All scripts dot-source `scripts/shared-utils.ps1` for common functions
+- PowerShell 5.1 compatible (use `;` not `&&`, `Join-Path` for paths)
+- Unicode box-drawing characters use `[char]0xXXXX` variables (not literal strings in hashtables)
+- All scripts use `$ErrorActionPreference = "Stop"` explicitly
 - Skills use YAML frontmatter with `name` and `description` fields
 - Workflows use `{{PARAM}}` syntax for parameter substitution
 - Markdown for all documentation and definitions
@@ -33,12 +40,58 @@ GOD-OPENCODE/
 
 | Command | Purpose |
 |---------|---------|
+| `.\god-ui.ps1` | Launch interactive TUI (main entry point) |
+| `.\god-cli.ps1` | Non-interactive CLI |
 | `.\install.ps1` | Install skills, workflows, agents, commands to OpenCode |
 | `.\god-install.ps1` | Full installation with build and health check |
-| `.\scripts\god-builder.ps1` | Build/scaffold components |
-| `.\scripts\god-expansion.ps1` | Expand existing components |
-| `.\scripts\god-health.ps1` | Health check |
-| `.\scripts\auto-router.ps1` | Test intent detection routing |
+| `.\god-health.ps1` | Health check |
+
+## CLI Commands
+
+```powershell
+.\god-cli.ps1 install             # install globally
+.\god-cli.ps1 health              # health check
+.\god-cli.ps1 test                # run tests
+.\god-cli.ps1 status              # show install status
+.\god-cli.ps1 code-graph          # build code graph
+.\god-cli.ps1 skill-fragment -Query "auth jwt"
+.\god-cli.ps1 smart-load -Query "fastapi" -Context "backend"
+.\god-cli.ps1 session -Init       # init session memory
+.\god-cli.ps1 wiki-build          # generate wiki pages
+.\god-cli.ps1 cursor-export       # export .cursorrules
+.\god-cli.ps1 security-scan       # scan for secrets/vulns
+.\god-cli.ps1 agent-orch -Task "Build API"  # multi-agent task
+.\god-cli.ps1 mcp-connect -Tool chrome -Action screenshot
+.\god-cli.ps1 smart-git commit    # smart commit staged
+.\god-cli.ps1 -Help               # show all commands
+```
+
+## TUI Menu
+
+The terminal UI (`god-ui.ps1`) provides an interactive menu:
+
+| Key | Action |
+|-----|--------|
+| Enter / `1` | Install Globally (default) |
+| `2` | Health Check |
+| `3` | Code Graph |
+| `4` | Skill Fragment |
+| `5` | Memory |
+| `6` | Cross-Platform |
+| `7` | Tests |
+| `8` | Wiki |
+| `9` | Dashboard |
+| `S` | Session Memory |
+| `W` | Wiki Builder |
+| `L` | Live Architecture |
+| `R` | Skills Registry |
+| `C` | Cursor Export |
+| `T` | Security Scanner |
+| `A` | Agent Orchestrator |
+| `M` | MCP Connectors |
+| `G` | Smart Git |
+| `N` | What's New |
+| `Q` | Exit |
 
 ## Architecture
 
@@ -47,6 +100,13 @@ GOD-OPENCODE extends OpenCode with three layers:
 1. **Agents** — Specialized AI personas (backend-engineer, security-engineer, etc.)
 2. **Skills** — Domain knowledge loaded on-demand (fastapi, react, security-audit, etc.)
 3. **Workflows** — Step-by-step processes (security-audit, api-design, etc.)
+
+Plus utility scripts:
+
+4. **Security Scanner** — Pre-commit scanning for secrets and vulnerabilities
+5. **Agent Orchestrator** — Multi-agent task delegation with verification
+6. **MCP Connectors** — External tool integration (Chrome, DB, Jira, Monitoring)
+7. **Smart Git** — AI-powered commits, save points, and rollback
 
 ## Build / Test / Health Commands
 

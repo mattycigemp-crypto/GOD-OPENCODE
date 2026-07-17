@@ -14,7 +14,7 @@
 │                      GOD-OPENCODE Layer                         │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐   │
 │  │    Agents    │  │    Skills    │  │      Workflows       │   │
-│  │  (10 roles)  │  │  (84 skills) │  │     (15 processes)   │   │
+│  │  (10 roles)  │  │  (88 skills) │  │     (16 processes)   │   │
 │  └──────┬───────┘  └──────┬───────┘  └──────────┬───────────┘   │
 │         │                │                     │               │
 │         └────────────────┴─────────────────────┘               │
@@ -58,6 +58,7 @@ Domain knowledge modules loaded on-demand via `skill(name="...")`.
 - Stored as `SKILL.md` files under `skills/<category>/<name>/`
 - YAML frontmatter with `name` and `description`
 - Provide standards, workflows, and expert guidance for a domain
+- 12 categories: ai, backend, frontend, devops, security, database, advanced, testing, languages, core, orchestration, writing
 
 ### 3. Workflows
 

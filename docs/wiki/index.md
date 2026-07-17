@@ -12,11 +12,12 @@ architectural concerns we're actively working on (see [Roadmap](roadmap.md)).
 |------|---------------|
 | [Getting Started](getting-started.md) | 5 minutes: clone to first slash command |
 | [Architecture](architecture.md) | Agents / skills / workflows + OpenCode integration |
-| [Code Graph](graph.md) | Structural codebase mapping (new in 1.2) |
-| [Dynamic Skills](dynamic-skills.md) | Per-request context pruning for skills (new in 1.2) |
+| [Code Graph](graph.md) | Structural codebase mapping (6 languages) |
+| [Dynamic Skills](dynamic-skills.md) | Per-request context pruning for skills |
 | [Cross-Platform](cross-platform.md) | Linux / macOS / Windows / Docker install matrix |
-| [Memory System](memory.md) | Long-term session + project memory (new in 1.2) |
+| [Memory System](memory.md) | Long-term session + project memory |
 | [Roadmap](roadmap.md) | Four open architectural concerns and how we're addressing them |
+| [v1.6.0 Features](#v160-features) | Security Scanner, Agent Orchestrator, MCP Connectors, Smart Git |
 
 ## How this wiki is built
 

@@ -12,10 +12,11 @@ All PowerShell scripts in GOD-OPENCODE must be compatible with **Windows PowerSh
 - Use `Test-Path` before creating files or directories.
 - Use `Out-Null` to suppress unwanted output.
 - Use `$ErrorActionPreference = "Stop"` or `"Continue"` explicitly.
+- Use Unicode box-drawing characters via `[char]0xXXXX` variables (not literal strings in hashtables).
 
 ### Don't
 
-- Use Unicode box-drawing characters (`─`, `│`, `┌`, `┐`, etc.).
+- Use Unicode box-drawing characters directly in hashtable literals (parser issue).
 - Use `char * int` multiplication (e.g., `"=" * 50`).
 - Use `&&` or `||` operators.
 - Assume PowerShell 7+ features are available.

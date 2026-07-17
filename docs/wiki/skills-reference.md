@@ -6,9 +6,9 @@ _Auto-generated from skills/ by build-wiki.ps1. Do not edit manually._
 
 | Metric | Value |
 |--------|-------|
-| Total Skills | 87 |
-| Categories | 87 |
-| Last Updated | 2026-07-17 19:23 |
+| Total Skills | 88 |
+| Categories | 88 |
+| Last Updated | 2026-07-17 19:57 |
 
 ---
 
@@ -493,6 +493,12 @@ _Auto-generated from skills/ by build-wiki.ps1. Do not edit manually._
 | Skill | Description |
 |-------|-------------|
 | **security-audit** | Professional expert workflow for security-audit. |
+
+### security\security-scanner\SKILL.md (1)
+
+| Skill | Description |
+|-------|-------------|
+| **security-scanner** | Pre-commit security scanning for secrets, vulnerabilities, and license compli... |
 
 ### testing\e2e-testing\SKILL.md (1)
 
@@ -1177,6 +1183,14 @@ _Auto-generated from skills/ by build-wiki.ps1. Do not edit manually._
 - **Category:** security\security-audit\SKILL.md
 - **Path:** `security\security-audit\SKILL.md`
 - **Description:** Professional expert workflow for security-audit.
+
+---
+
+### security-scanner
+
+- **Category:** security\security-scanner\SKILL.md
+- **Path:** `security\security-scanner\SKILL.md`
+- **Description:** Pre-commit security scanning for secrets, vulnerabilities, and license compliance. Use when reviewing AI-generated code or before committing changes.
 
 ---
 
