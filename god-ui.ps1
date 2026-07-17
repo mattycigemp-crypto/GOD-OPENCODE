@@ -219,6 +219,10 @@ function Show-Dashboard {
     Write-MenuItem "7"     "Tests"                 "Run Pester suite"
     Write-MenuItem "8"     "Wiki"                  "Open local wiki in browser"
     Write-MenuItem "9"     "Dashboard"             "Open browser dashboard"
+    Write-MenuItem "L"     "Live Architecture"     "Regenerate wiki skill/agent/workflow graph"
+    Write-MenuItem "R"     "Skills Registry"       "Bulk-fetch top-N from registry-sources.txt"
+    Write-MenuItem "C"     "Cursor Export"         "Generate .cursorrules for every agent"
+    Write-MenuItem "N"     "What's new in v1.3.0"  "Current release notes from CHANGELOG.md"
     Write-MenuItem "Q"     "Exit"                  "Close the interface"
 
     Write-Divider
@@ -384,6 +388,87 @@ function Show-BrowserDashboard {
 }
 
 # ============================================
+# v1.3.0 PAGES — Live Graph, Skills Sync, Cursor Export, What's New
+# ============================================
+
+function Show-LiveGraph {
+    Clear-Screen
+    Write-Header "Live Architecture Graph  (v1.3.0)"
+    Write-Host ""
+    $script = Join-Path $Root "scripts/build-skill-graph.ps1"
+    if (!(Test-Path $script)) {
+        Write-Host "  scripts/build-skill-graph.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    Write-Host "  Scanning agents/, skills/, workflows/..." -ForegroundColor $Colors.Accent
+    Write-Host ""
+    & $script
+    Write-Host ""
+    Write-Host "  Output: docs\wiki\_data\architecture.mmd  (Mermaid graph)" -ForegroundColor $Colors.Muted
+    Write-Host "  Rendered in the wiki at: docs\wiki\architecture.md" -ForegroundColor $Colors.Muted
+}
+
+function Show-SkillsSync {
+    Clear-Screen
+    Write-Header "Skills Registry Mirror Sync  (v1.3.0)"
+    Write-Host ""
+    Write-Host "  Shallow-clones top 5 entries from registry-sources.txt" -ForegroundColor $Colors.Muted
+    Write-Host "  into skills-mirror/. Use .\scripts\install-skill.ps1 -Sync -TopN N" -ForegroundColor $Colors.Muted
+    Write-Host "  for any N. Ctrl+C here aborts before any network call." -ForegroundColor $Colors.Muted
+    Write-Host ""
+    $ans = Get-Input "Proceed with sync? (Y/N)"
+    if ($ans.ToUpper() -ne "Y") { Write-Host "  Cancelled." -ForegroundColor $Colors.Warning ; return }
+    & (Join-Path $Root "scripts\install-skill.ps1") -Sync -TopN 5
+}
+
+function Show-CursorExport {
+    Clear-Screen
+    Write-Header "Cursor / Windsurf Drop-in Export  (v1.3.0)"
+    Write-Host ""
+    Write-Host "  Generates a .cursorrules per agent into dist\cursorrules\" -ForegroundColor $Colors.Muted
+    Write-Host "  using the cursor rule schema (YAML frontmatter + sections)." -ForegroundColor $Colors.Muted
+    Write-Host ""
+    $ans = Get-Input "Generate now? (Y/N)"
+    if ($ans.ToUpper() -ne "Y") { Write-Host "  Cancelled." -ForegroundColor $Colors.Warning ; return }
+    & (Join-Path $Root "scripts\install-skill.ps1") -Use cursorrules
+}
+
+function Show-WhatsNew {
+    Clear-Screen
+    Write-Header "What's New in v1.3.0"
+    Write-Host ""
+    Write-Host "  Five new capabilities for AI engineering portability." -ForegroundColor $Colors.Accent
+    Write-Host ""
+    Write-Section "Live Skill Graph"
+    Write-Host "  scripts\build-skill-graph.ps1 emits docs\wiki\_data\architecture.mmd" -ForegroundColor $Colors.Text
+    Write-Host "  from the agents/ + skills/ + workflows/ tree on every wiki build." -ForegroundColor $Colors.Text
+    Write-Host ""
+    Write-Section "Cursor / Windsurf Drop-in"
+    Write-Host "  scripts\install-skill.ps1 -Use cursorrules" -ForegroundColor $Colors.Text
+    Write-Host "  Generates a .cursorrules per agent into dist\cursorrules\" -ForegroundColor $Colors.Text
+    Write-Host "  One command -> open in Cursor / Windsurf / Aider immediately." -ForegroundColor $Colors.Text
+    Write-Host ""
+    Write-Section "Skills Registry Mirror"
+    Write-Host "  scripts\install-skill.ps1 -Sync [-TopN N]" -ForegroundColor $Colors.Text
+    Write-Host "  Shallow-clones the top-N sources from registry-sources.txt" -ForegroundColor $Colors.Text
+    Write-Host "  into skills-mirror\. Copy or symlink into your own skills\." -ForegroundColor $Colors.Text
+    Write-Host ""
+    Write-Section "JSON Schema Validation"
+    Write-Host "  schemas\opencode.schema.json validates opencode.json" -ForegroundColor $Colors.Text
+    Write-Host "  Editor auto-lints via the file's \$schema reference." -ForegroundColor $Colors.Text
+    Write-Host ""
+    Write-Section "MCP-to-Skill Bridge"
+    Write-Host "  scripts\mcp-to-skill.ps1 reads opencode.json#mcp_servers" -ForegroundColor $Colors.Text
+    Write-Host "  and emits skills\<category>\mcp-<name>\SKILL.md wrappers." -ForegroundColor $Colors.Text
+    Write-Host "  Run by install.ps1 automatically." -ForegroundColor $Colors.Text
+    Write-Host ""
+    Write-Divider
+    Write-Host "  Canonical release notes: CHANGELOG.md  ([1.3.0] section)" -ForegroundColor $Colors.Muted
+    Write-Host "  Wiki page:              docs\wiki\index.md" -ForegroundColor $Colors.Muted
+    Write-Divider
+}
+
+# ============================================
 # MAIN LOOP
 # ============================================
 
@@ -404,6 +489,10 @@ while ($true) {
         "8" { Clear-Screen ; Show-WikiPage      ; Wait-Key }
         "9" { Clear-Screen ; Show-BrowserDashboard ; Wait-Key }
         "W" { Clear-Screen ; Show-WikiPage      ; Wait-Key }
+        "L" { Clear-Screen ; Show-LiveGraph     ; Wait-Key }
+        "R" { Clear-Screen ; Show-SkillsSync    ; Wait-Key }
+        "C" { Clear-Screen ; Show-CursorExport  ; Wait-Key }
+        "N" { Clear-Screen ; Show-WhatsNew      ; Wait-Key }
         "Q" {
             Clear-Screen
             Write-Host "" ; Write-Host "  GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""

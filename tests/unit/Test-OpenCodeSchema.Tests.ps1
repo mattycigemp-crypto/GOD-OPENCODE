@@ -3,8 +3,11 @@
 
 BeforeAll {
     $Root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
-    $script:SchemaPath = Join-Path $Root "schemas\opencode.schema.json"
-    $script:ConfigPath = Join-Path $Root "opencode.json"
+    $script:Root          = $Root
+    $script:SchemaPath    = Join-Path $Root "schemas\opencode.schema.json"
+    $script:ConfigPath    = Join-Path $Root "opencode.json"
+    $script:AgentsRoot    = Join-Path $Root "agents"
+    $script:CommandsRoot  = Join-Path $Root "commands"
 }
 
 Describe "opencode.json schema validation" {
@@ -50,7 +53,7 @@ Describe "opencode.json schema validation" {
         if (-not $config.agent) { return }
         foreach ($name in $config.agent.PSObject.Properties.Name) {
             $name | Should -Match '^[a-z][a-z0-9-]*$'
-            $agentMd = Join-Path (Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..\..")) "agents") "$name\AGENT.md"
+            $agentMd = Join-Path $AgentsRoot "$name\AGENT.md"
             Test-Path $agentMd | Should -BeTrue -Because "agent name '$name' must have agents/$name/AGENT.md in the tree"
         }
     }
@@ -60,7 +63,7 @@ Describe "opencode.json schema validation" {
         if (-not $config.command) { return }
         foreach ($name in $config.command.PSObject.Properties.Name) {
             $name | Should -Match '^[a-z][a-z0-9-]*$'
-            $cmdMd = Join-Path (Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..\..")) "commands") "$name.md"
+            $cmdMd = Join-Path $CommandsRoot "$name.md"
             Test-Path $cmdMd | Should -BeTrue -Because "command name '$name' must have commands/$name.md in the tree"
         }
     }

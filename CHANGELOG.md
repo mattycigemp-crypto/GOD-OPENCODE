@@ -6,6 +6,32 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.0] - 2026-07-17
+
+### Added
+
+- **JSON Schema for `opencode.json`** ([`schemas/opencode.schema.json`](schemas/opencode.schema.json)) — Draft 2020-12 with `patternProperties` for agent / command / mcp_servers keys, `additionalProperties: false` at the top, conditional `then:` clauses for MCP transport, and `mcp_servers.snippets` examples. Editors (Cursor, VS Code) auto-lint `opencode.json` against it via the `$schema` reference.
+- **MCP-to-skill bridge** ([`scripts/mcp-to-skill.ps1`](scripts/mcp-to-skill.ps1)) — reads `opencode.json#mcp_servers`, emits `skills/<category>/mcp-<name>/SKILL.md` wrappers, and is invoked at the end of `install.ps1`. Five MCP servers (filesystem, github, playwright, context7, tavily) ship out of the box as both MCP clients and skills.
+- **Skills Registry spec + CLI** ([`skills-REGISTRY.md`](skills-REGISTRY.md), [`registry-sources.txt`](registry-sources.txt), [`scripts/install-skill.ps1`](scripts/install-skill.ps1) `-Sync`) — canonical cross-repo skill registry. `install-skill.ps1 -Sync` shallow-clones the top-N entries from `registry-sources.txt` into `skills-mirror/`.
+- **Workflow shape tests** ([`tests/unit/Test-Workflows.Tests.ps1`](tests/unit/Test-Workflows.Tests.ps1)) — first-run Pester assertions: every `workflows/*.md` must have an H1 matching its filename, `## Purpose`, `## Parameters`, and `### Step N` sections. Cross-references each step's `Agent:` against `agents/` and `Skills:` against `skills/` (category-aware fallback).
+- **Cursor / Windsurf / Aider drop-in exporter** ([`scripts/export-cursorrules.ps1`](scripts/export-cursorrules.ps1), `install-skill.ps1 -Use cursorrules`) — converts `agents/<name>/AGENT.md` into the `.cursorrules` YAML frontmatter schema. One command writes a `.cursorrules` per agent into `dist/cursorrules/`; copy one into your project and any Cursor/Windsurf/Aider session picks up the persona.
+- **Live skill/agent/workflow graph** ([`scripts/build-skill-graph.ps1`](scripts/build-skill-graph.ps1)) — emits `docs/wiki/_data/architecture.mmd` (Mermaid) on every wiki CI run. Edges reflect the actual `## Skills` blocks in each agent and the `### Step N: Agent / Skills` blocks in each workflow. Wiki auto-renders the graph.
+
+### Changed
+
+- **Terminal UI** ([`god-ui.ps1`](god-ui.ps1)) — added `[L] Live Architecture`, `[R] Skills Registry`, `[C] Cursor Export`, `[N] What's new in v1.3.0` menu items. Updated the architecture features status block.
+- **Browser dashboard** ([`ui/index.html`](ui/index.html)) — added a v1.3.0 announcement banner / card and section anchors linking to the new features.
+- **`install-skill.ps1`** — added `-Sync`, `-TopN`, `-Use` dispatchers; existing `-Path`/`-Source`/`-Version` behaviour preserved verbatim.
+- **`install.ps1`** — `mcp_servers` merge uses a local `$McpMerged` flag (no longer re-serializes the global config on every install when nothing changed).
+- **README** — added "🆕 What's New in v1.3.0" section, "Use with Cursor", "Aggregate skills from anywhere" subsections, and a release badge linking to the v1.3.0 GitHub release.
+
+### Notes
+
+- Releases ship via `git tag v1.3.0 && git push origin v1.3.0`. The `release.yml` workflow runs `scripts/package-release.ps1 -Version 1.3.0` and attaches `release/god-opencode-v1.3.0.zip` + SHA256SUMS to a GitHub Release.
+- Schema validator is not invoked in CI yet — `tests/unit/Test-OpenCodeSchema.Tests.ps1` ships the Pester suite but does not call `jsonschema` (lives outside PowerShell). Future work.
+
+---
+
 ## [1.2.0] - 2026-07-17
 
 *(Backfilled — the underlying commit `3f1160d` shipped on the date above but the changelog entry was authored in commit `eb06e71` to keep the README self-consistent.)*

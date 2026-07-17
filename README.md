@@ -8,6 +8,14 @@
   One command bootstraps a complete, production-grade AI engineering environment — with the right experts, skills, workflows, and tools already loaded.
 </p>
 
+<p align="center">
+  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.3.0"><img alt="v1.3.0" src="https://img.shields.io/badge/release-v1.3.0-8b5cf6?style=for-the-badge"/></a>
+</p>
+
+<p align="center">
+  <strong>🆕 v1.3.0 — five new features:</strong> <a href="docs/wiki/architecture.md#live-skill-graph">live skill graph</a> · <a href="#use-with-cursor">Cursor drop-in</a> · <a href="#aggregate-skills-from-anywhere">skills mirror sync</a> · <a href="schemas/opencode.schema.json">JSON Schema</a> · <a href="#use-with-cursor">MCP-to-skill bridge</a>
+</p>
+
 ---
 
 ## Purpose
@@ -70,6 +78,48 @@ Each `v*` tag push publishes a versioned image (`ghcr.io/.../god-opencode:v<vers
 **Cross-platform shims:** `bash install.sh` (requires `pwsh`) on Linux/macOS/WSL; `install.cmd` on Windows cmd.exe. See [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md).
 
 **Wiki:** the eight-page reference at `docs/wiki/` is built and published automatically to **GitHub Pages** on every push to `master` — see [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/). One-time setup: repo **Settings → Pages → Build and deployment → Source: GitHub Actions → workflow: `Build and Deploy Wiki`**, then Save.
+
+---
+
+## 🆕 What's New in v1.3.0
+
+Five new capabilities — schema, MCP bridge, registry, workflow tests, Cursor export — and a major UX unlock for non-OpenCode hosts. See [CHANGELOG.md](CHANGELOG.md) and the [wiki](docs/wiki/index.md) for the canonical record.
+
+### Use with Cursor (or Windsurf / Aider)
+
+```powershell
+# One command writes .cursorrules for every agent into dist/cursorrules/
+.\scripts\install-skill.ps1 -Use cursorrules
+
+# Drop into your project and Cursor picks up the persona immediately
+cp dist\cursorrules\backend-engineer.cursorrules <your-project>\.cursorrules
+```
+
+Each `.cursorrules` includes the agent's role, responsibilities, standards, and skill allowlist — same persona you would see inside OpenCode. See [`scripts/export-cursorrules.ps1`](scripts/export-cursorrules.ps1).
+
+### Aggregate skills from anywhere
+
+```powershell
+# Shallow-clone the top 20 sources from registry-sources.txt into skills-mirror/
+.\scripts\install-skill.ps1 -Sync
+
+# Or just the top 5 for a quick start
+.\scripts\install-skill.ps1 -Sync -TopN 5
+```
+
+Then copy `skills-mirror/<source>/skills/<category>/<name>` into your own `skills/` and re-run `.\install.ps1`. See [`registry-sources.txt`](registry-sources.txt) for the curated upstream list.
+
+### Live skill graph
+
+Every wiki build now re-emits `docs/wiki/_data/architecture.mmd` from the actual `agents/` + `skills/` + `workflows/` tree. The wiki architecture page renders it as a live Mermaid graph — never stale. Generator: [`scripts/build-skill-graph.ps1`](scripts/build-skill-graph.ps1).
+
+### Schema-validated opencode.json
+
+[`schemas/opencode.schema.json`](schemas/opencode.schema.json) is now a JSON Schema 2020-12 that any editor (Cursor, VS Code) auto-lints against. Conditional `then:` rules ensure MCP servers carry `command` (stdio) or `url` (http/sse) — never neither, never both.
+
+### Cross-host MCP bridge
+
+Every entry in `opencode.json#mcp_servers` is wrapped as `skills/<category>/mcp-<name>/SKILL.md` by `scripts/mcp-to-skill.ps1` and shipped through the global installer — any OpenCode agent can now opt in to any registered MCP server as if it were a regular skill.
 
 ---
 

@@ -713,6 +713,50 @@
   </div>
 </div>
 
+<!-- v1.3.0 RELEASE BANNER -->
+<section class="section" id="page-whats-new">
+  <div class="section-header">
+    <p class="section-eyebrow reveal">November 2026 Release</p>
+    <h2 class="section-title reveal reveal-d1">v1.3.0 — Agent OS unlocked</h2>
+    <p class="section-desc reveal reveal-d2">Five new capabilities landed: live skill graph, Cursor drop-in exporter, skills registry mirror sync, JSON Schema, MCP bridge. Pick a card to dive in.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card reveal">
+      <div class="card-eyebrow">Visual</div>
+      <h3>Live Skill Graph</h3>
+      <p>scripts/build-skill-graph.ps1 regenerates <code>docs/wiki/_data/architecture.mmd</code> on every wiki build from the actual agents/, skills/, workflows/ filesystem. No manual diagram maintenance.</p>
+      <div class="card-tags"><span class="tag violet">wiki</span><span class="tag cyan">auto-generated</span></div>
+    </div>
+    <div class="card reveal reveal-d1">
+      <div class="card-eyebrow">Cross-host</div>
+      <h3>Cursor Drop-in</h3>
+      <p><code>scripts/install-skill.ps1 -Use cursorrules</code> writes a .cursorrules per agent into <code>dist/cursorrules/</code>. Drop one into your project root and Cursor / Windsurf / Aider pick up the persona instantly.</p>
+      <div class="card-tags"><span class="tag yellow">cursor</span><span class="tag yellow">windsurf</span><span class="tag yellow">aider</span></div>
+    </div>
+    <div class="card reveal reveal-d2">
+      <div class="card-eyebrow">Registry</div>
+      <h3>Skills Mirror Sync</h3>
+      <p><code>scripts/install-skill.ps1 -Sync -TopN 20</code> shallow-clones the top 20 entries from <code>registry-sources.txt</code> into <code>skills-mirror/</code>. Aggregate skill bundles across repos with one command.</p>
+      <div class="card-tags"><span class="tag cyan">git</span><span class="tag cyan">aggregator</span></div>
+    </div>
+    <div class="card reveal reveal-d3">
+      <div class="card-eyebrow">Validation</div>
+      <h3>JSON Schema</h3>
+      <p><code>schemas/opencode.schema.json</code> is Draft 2020-12. Editors (Cursor, VS Code) auto-lint <code>opencode.json</code> against it via the <code>$schema</code> reference.</p>
+      <div class="card-tags"><span class="tag green">schema</span><span class="tag green">draft-2020-12</span></div>
+    </div>
+    <div class="card reveal">
+      <div class="card-eyebrow">Bridge</div>
+      <h3>MCP-to-Skill</h3>
+      <p><code>scripts/mcp-to-skill.ps1</code> wraps each <code>opencode.json#mcp_servers</code> entry as a regular skill. One install, both MCP client and skill discoverability.</p>
+      <div class="card-tags"><span class="tag pink">mcp</span><span class="tag pink">bridge</span></div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:32px; font-size:13px; color:var(--text-3);">
+    Full release notes: <a href="CHANGELOG.md" style="color:var(--violet); text-decoration:underline;">CHANGELOG.md</a> · <a href="docs/wiki/index.md" style="color:var(--violet); text-decoration:underline;">Wiki</a>
+  </div>
+</section>
+
 <!-- AGENTS -->
 <section class="section page-section active" id="page-agents">
   <div class="section-header">
