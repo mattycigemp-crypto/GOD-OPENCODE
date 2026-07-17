@@ -1,8 +1,12 @@
-﻿# GOD-OPENCODE
+﻿<p align="center">
+  <img src="brand/wordmark.png" alt="GOD-OPENCODE" width="600">
+</p>
 
-**An AI engineering operating system built on top of OpenCode.**
+<h3 align="center">An AI engineering operating system built on top of OpenCode.</h3>
 
-One command bootstraps a complete, production-grade AI engineering environment — with the right experts, skills, workflows, and tools already loaded.
+<p align="center">
+  One command bootstraps a complete, production-grade AI engineering environment — with the right experts, skills, workflows, and tools already loaded.
+</p>
 
 ---
 
