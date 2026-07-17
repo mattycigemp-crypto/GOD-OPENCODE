@@ -50,6 +50,57 @@
 
     a { color: inherit; text-decoration: none; }
 
+    /* LOADING SCREEN */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-ring {
+      width: 40px; height: 40px;
+      border: 2px solid var(--surface-3);
+      border-top-color: var(--violet);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* CUSTOM CURSOR */
+    #cursor {
+      position: fixed; width: 20px; height: 20px;
+      border: 1.5px solid var(--violet); border-radius: 50%;
+      pointer-events: none; z-index: 10000;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      mix-blend-mode: difference; will-change: transform;
+    }
+    #cursor-dot {
+      position: fixed; width: 4px; height: 4px;
+      background: var(--violet); border-radius: 50%;
+      pointer-events: none; z-index: 10001;
+      transform: translate(-50%, -50%); will-change: transform;
+    }
+    #cursor.hover {
+      width: 48px; height: 48px;
+      background: rgba(139, 92, 246, 0.06);
+      border-color: var(--text);
+    }
+    @media (hover: none) { #cursor, #cursor-dot { display: none; } }
+
+    /* WebGL canvas */
+    #webgl-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+    .hero > * { position: relative; z-index: 1; }
+
     /* HEADER */
     .site-header {
       position: fixed;
@@ -183,7 +234,17 @@
       cursor: pointer;
       border: none;
       font-family: var(--font);
+      position: relative;
+      overflow: hidden;
     }
+
+    .btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.12) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.2s ease; pointer-events: none;
+    }
+    .btn:hover::after { opacity: 1; }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--violet), var(--cyan));
@@ -307,13 +368,23 @@
       border: 1px solid var(--border-dim);
       padding: 28px;
       border-radius: 12px;
-      transition: border-color 0.2s ease, background 0.2s ease;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+      position: relative;
+      overflow: hidden;
     }
 
-    .card:hover {
-      border-color: var(--border);
-      background: var(--surface-2);
+    .card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(139,92,246,0.04) 0%, transparent 60%);
+      pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
+      border-radius: 12px;
     }
+
+    .card:hover { border-color: var(--border); background: var(--surface-2); }
+    .card:hover::after { opacity: 1; }
 
     .card-eyebrow {
       font-size: 10px;
@@ -428,10 +499,10 @@
       padding: 14px 20px;
       background: var(--surface);
       border-radius: 8px;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease, transform 0.2s ease;
     }
 
-    .health-row:hover { background: var(--surface-2); }
+    .health-row:hover { background: var(--surface-2); transform: translateX(4px); }
 
     .health-dot {
       width: 6px;
@@ -469,10 +540,10 @@
       background: var(--surface);
       border-radius: 6px;
       font-size: 13px;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease, transform 0.2s ease;
     }
 
-    .router-row:hover { background: var(--surface-2); }
+    .router-row:hover { background: var(--surface-2); transform: translateX(3px); }
 
     .router-keyword {
       font-family: var(--mono);
@@ -588,6 +659,15 @@
 </head>
 <body>
 
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-ring"></div>
+</div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
+
 <!-- HEADER -->
 <header class="site-header" id="siteHeader">
   <div class="header-inner">
@@ -610,6 +690,7 @@
 
 <!-- HERO -->
 <section class="hero" id="page-hero">
+  <canvas id="webgl-canvas"></canvas>
   <img src="../brand/icon.png" alt="" class="hero-logo">
   <img src="../brand/wordmark.png" alt="GOD-OPENCODE" class="hero-wordmark">
   <p class="hero-sub">10 specialist agents, 70+ skills, 15 workflows — one command bootstraps a production-grade AI engineering environment.</p>
@@ -973,30 +1054,78 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
     </div>
     <div class="footer-bottom">
       <span>&copy; 2026 GOD-OPENCODE. MIT License.</span>
-      <span>Built for OpenCode</span>
+      <span>Built for <a href="https://opencode.ai/" target="_blank" style="color: var(--violet);">OpenCode</a></span>
     </div>
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function() {
   'use strict';
 
-  /* Header scroll */
-  var header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', function() {
-    header.classList.toggle('scrolled', window.scrollY > 20);
+  /* ===== LOADER ===== */
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      document.getElementById('loader').classList.add('hidden');
+    }, 300);
   });
 
-  /* Scroll reveal */
+  /* ===== CUSTOM CURSOR ===== */
+  var cursor = document.getElementById('cursor');
+  var cursorDot = document.getElementById('cursor-dot');
+  var cx = 0, cy = 0, dx = 0, dy = 0;
+
+  document.addEventListener('mousemove', function(e) { cx = e.clientX; cy = e.clientY; });
+
+  function animCursor() {
+    dx += (cx - dx) * 0.15;
+    dy += (cy - dy) * 0.15;
+    cursor.style.left = dx + 'px';
+    cursor.style.top = dy + 'px';
+    cursorDot.style.left = cx + 'px';
+    cursorDot.style.top = cy + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  var hoverEls = document.querySelectorAll('a, button, .card, .btn, .nav-links a, .logo, .router-row, .health-row, .tag');
+  for (var i = 0; i < hoverEls.length; i++) {
+    hoverEls[i].addEventListener('mouseenter', function() { cursor.classList.add('hover'); });
+    hoverEls[i].addEventListener('mouseleave', function() { cursor.classList.remove('hover'); });
+  }
+
+  /* ===== CARD 3D TILT ===== */
+  var cards = document.querySelectorAll('.card');
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].addEventListener('mousemove', function(e) {
+      var r = this.getBoundingClientRect();
+      var x = e.clientX - r.left, y = e.clientY - r.top;
+      var rx = ((y - r.height / 2) / (r.height / 2)) * -5;
+      var ry = ((x - r.width / 2) / (r.width / 2)) * 5;
+      this.style.transform = 'perspective(600px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) scale(1.01)';
+      this.style.setProperty('--mx', (x / r.width * 100) + '%');
+      this.style.setProperty('--my', (y / r.height * 100) + '%');
+    });
+    cards[i].addEventListener('mouseleave', function() { this.style.transform = ''; });
+  }
+
+  /* ===== BUTTON SPOTLIGHT ===== */
+  var btns = document.querySelectorAll('.btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('mousemove', function(e) {
+      var r = this.getBoundingClientRect();
+      this.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      this.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  }
+
+  /* ===== SCROLL REVEAL ===== */
   var reveals = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          obs.unobserve(e.target);
-        }
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
     reveals.forEach(function(el) { obs.observe(el); });
@@ -1004,52 +1133,166 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
     reveals.forEach(function(el) { el.classList.add('visible'); });
   }
 
-  /* Page navigation */
+  /* ===== HEADER SCROLL ===== */
+  var header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', function() {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  /* ===== PAGE NAVIGATION ===== */
   window.showPage = function(page) {
     var hero = document.getElementById('page-hero');
     var statsBar = hero.nextElementSibling;
-
     if (page === 'hero') {
-      hero.style.display = '';
-      statsBar.style.display = '';
+      hero.style.display = ''; statsBar.style.display = '';
       document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
       document.querySelectorAll('.nav-links a').forEach(function(a) { a.classList.remove('active'); });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
+      window.scrollTo({ top: 0, behavior: 'smooth' }); return;
     }
-
-    hero.style.display = 'none';
-    statsBar.style.display = 'none';
-
+    hero.style.display = 'none'; statsBar.style.display = 'none';
     document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
     var target = document.getElementById('page-' + page);
-    if (target) {
-      target.classList.add('active');
-    }
-
-    document.querySelectorAll('.nav-links a').forEach(function(a) {
-      a.classList.toggle('active', a.dataset.nav === page);
-    });
-
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(function(a) { a.classList.toggle('active', a.dataset.nav === page); });
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    /* Re-observe reveals in new section */
     if (target && 'IntersectionObserver' in window) {
-      var newReveals = target.querySelectorAll('.reveal:not(.visible)');
-      var secObs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            secObs.unobserve(e.target);
-          }
-        });
+      var nr = target.querySelectorAll('.reveal:not(.visible)');
+      var so = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); so.unobserve(e.target); } });
       }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-      newReveals.forEach(function(el) { secObs.observe(el); });
+      nr.forEach(function(el) { so.observe(el); });
     }
   };
-
   showPage('hero');
-})();
+
+  /* ===== WebGL PARTICLES (brand violet/cyan) ===== */
+  var canvas = document.getElementById('webgl-canvas');
+  if (canvas && typeof THREE !== 'undefined') {
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 300;
+
+    var COUNT = 800;
+    var geo = new THREE.BufferGeometry();
+    var pos = new Float32Array(COUNT * 3);
+    var sizes = new Float32Array(COUNT);
+    var vel = new Float32Array(COUNT * 3);
+    var opa = new Float32Array(COUNT);
+
+    for (var i = 0; i < COUNT; i++) {
+      var i3 = i * 3;
+      pos[i3] = (Math.random() - 0.5) * 700;
+      pos[i3+1] = (Math.random() - 0.5) * 700;
+      pos[i3+2] = (Math.random() - 0.5) * 350;
+      sizes[i] = Math.random() * 2 + 0.5;
+      vel[i3] = (Math.random() - 0.5) * 0.2;
+      vel[i3+1] = (Math.random() - 0.5) * 0.2;
+      vel[i3+2] = (Math.random() - 0.5) * 0.08;
+      opa[i] = Math.random() * 0.4 + 0.15;
+    }
+
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+    geo.setAttribute('aOpacity', new THREE.BufferAttribute(opa, 1));
+
+    var vsh = [
+      'attribute float aSize;', 'attribute float aOpacity;', 'varying float vOpacity;',
+      'void main() {', '  vOpacity = aOpacity;',
+      '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+      '  gl_PointSize = aSize * (280.0 / -mv.z);', '  gl_Position = projectionMatrix * mv;',
+      '}'
+    ].join('\n');
+
+    var fsh = [
+      'varying float vOpacity;', 'void main() {',
+      '  float d = length(gl_PointCoord - vec2(0.5));', '  if (d > 0.5) discard;',
+      '  float a = smoothstep(0.5, 0.15, d) * vOpacity;',
+      '  vec3 col = mix(vec3(0.545, 0.361, 0.965), vec3(0.024, 0.714, 0.831), gl_PointCoord.x);',
+      '  gl_FragColor = vec4(col, a);',
+      '}'
+    ].join('\n');
+
+    var mat = new THREE.ShaderMaterial({
+      vertexShader: vsh, fragmentShader: fsh,
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+    });
+
+    var particles = new THREE.Points(geo, mat);
+    scene.add(particles);
+
+    // Connection lines
+    var MAX_LINES = 150;
+    var lp = new Float32Array(MAX_LINES * 6);
+    var lineGeo = new THREE.BufferGeometry();
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(lp, 3));
+    var lineMat = new THREE.LineBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.04 });
+    var lines = new THREE.LineSegments(lineGeo, lineMat);
+    scene.add(lines);
+
+    var mouseX = 0, mouseY = 0, tMX = 0, tMY = 0, scrollP = 0;
+    document.addEventListener('mousemove', function(e) {
+      tMX = (e.clientX / window.innerWidth - 0.5) * 2;
+      tMY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+    window.addEventListener('scroll', function() { scrollP = window.scrollY / window.innerHeight; });
+    window.addEventListener('resize', function() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    var clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      var t = clock.getElapsedTime();
+      mouseX += (tMX - mouseX) * 0.03;
+      mouseY += (tMY - mouseY) * 0.03;
+
+      camera.position.x = mouseX * 25;
+      camera.position.y = -mouseY * 18 - scrollP * 80;
+      camera.lookAt(0, -scrollP * 60, 0);
+
+      var p = geo.attributes.position.array;
+      for (var i = 0; i < COUNT; i++) {
+        var i3 = i * 3;
+        p[i3] += vel[i3]; p[i3+1] += vel[i3+1]; p[i3+2] += vel[i3+2];
+        if (p[i3] > 350) p[i3] = -350; if (p[i3] < -350) p[i3] = 350;
+        if (p[i3+1] > 350) p[i3+1] = -350; if (p[i3+1] < -350) p[i3+1] = 350;
+        if (p[i3+2] > 175) p[i3+2] = -175; if (p[i3+2] < -175) p[i3+2] = 175;
+        p[i3+1] += Math.sin(t * 0.4 + i * 0.012) * 0.04;
+      }
+      geo.attributes.position.needsUpdate = true;
+
+      var li = 0, lpp = lines.geometry.attributes.position.array;
+      for (var a = 0; a < COUNT && li < MAX_LINES; a++) {
+        for (var b = a + 1; b < COUNT && li < MAX_LINES; b++) {
+          var a3 = a*3, b3 = b*3;
+          var dx = p[a3]-p[b3], dy = p[a3+1]-p[b3+1], dz = p[a3+2]-p[b3+2];
+          if (dx*dx + dy*dy + dz*dz < 5400) {
+            var ii = li*6;
+            lpp[ii]=p[a3]; lpp[ii+1]=p[a3+1]; lpp[ii+2]=p[a3+2];
+            lpp[ii+3]=p[b3]; lpp[ii+4]=p[b3+1]; lpp[ii+5]=p[b3+2];
+            li++;
+          }
+        }
+      }
+      for (var i = li*6; i < MAX_LINES*6; i++) lpp[i] = 0;
+      lines.geometry.attributes.position.needsUpdate = true;
+
+      particles.rotation.y = t * 0.025;
+      particles.rotation.x = Math.sin(t * 0.018) * 0.08;
+      lines.rotation.y = particles.rotation.y;
+      lines.rotation.x = particles.rotation.x;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  }
+});
 </script>
 
 </body>
