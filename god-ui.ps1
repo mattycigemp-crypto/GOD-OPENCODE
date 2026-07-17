@@ -1,6 +1,6 @@
 # ============================================
 # GOD-OPENCODE TERMINAL INTERFACE
-# Version 3.0 - Global Install as primary action
+# Version 6.0 - Global Install as primary action
 # ============================================
 # Usage: .\god-ui.ps1
 # Default action: Install globally to ~/.config/opencode/
