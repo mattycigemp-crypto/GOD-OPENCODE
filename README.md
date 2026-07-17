@@ -65,7 +65,7 @@ docker run --rm ghcr.io/mattycigemp-crypto/god-opencode:latest \
   pwsh -File ./install.ps1
 ```
 
-Each `v*` tag publish a versioned image (`ghcr.io/.../god-opencode:v1.1.5`) plus `latest`. The image bundles PowerShell 7.4 + the installable project so it works identically on Linux, macOS, and Windows hosts.
+Each `v*` tag push publishes a versioned image (`ghcr.io/.../god-opencode:v<version>`) plus `latest`. The image bundles PowerShell 7.4 + the installable project so it works identically on Linux, macOS, and Windows hosts.
 
 **Cross-platform shims:** `bash install.sh` (requires `pwsh`) on Linux/macOS/WSL; `install.cmd` on Windows cmd.exe. See [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md).
 
@@ -165,23 +165,23 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 ### Orchestration (4)
 `auto-router` · `workflow-engine` · `agent-orchestrator` · `command-builder`
 
-### Backend (9)
-`api-design` · `fastapi` · `express` · `graphql` · `database-design` · `postgres` · `mongodb` · `redis` · `sqlite`
+### Backend (10)
+`api-design` · `fastapi` · `express` · `graphql` · `django` · `database-design` · `postgres` · `mongodb` · `redis` · `sqlite`
 
 ### Frontend (10)
 `react` · `nextjs` · `typescript` · `css-architecture` · `state-management` · `component-design` · `web-performance` · `testing-frontend` · `accessibility` · `bundling`
 
-### Security (6)
-`security` · `authentication` · `cryptography` · `penetration-testing` · `secure-coding` · `security-audit`
+### Security (5)
+`authentication` · `cryptography` · `penetration-testing` · `secure-coding` · `security-audit`
 
 ### DevOps (8)
 `docker` · `kubernetes` · `ci-cd` · `terraform` · `cloud` · `linux` · `networking` · `github-actions`
 
-### Database (10)
-`database-design` · `postgres` · `mongodb` · `sqlite` · `query-optimization` · `schema-design` · `redis` · `replication` · `sharding` · `data-migration`
+### Database (5)
+`query-optimization` · `schema-design` · `replication` · `sharding` · `data-migration`
 
-### Testing (6)
-`testing` · `unit-testing` · `integration-testing` · `e2e-testing` · `test-driven-development` · `property-based-testing`
+### Testing (5)
+`unit-testing` · `integration-testing` · `e2e-testing` · `test-driven-development` · `property-based-testing`
 
 ### AI (10)
 `ai-engineer` · `llm-engineer` · `rag-engineer` · `embedding-engineer` · `evaluation-engineer` · `prompt-engineer` · `mcp-builder` · `agent-builder` · `tool-builder` · `workflow-designer`
@@ -195,6 +195,8 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 ### Advanced (7)
 `algorithm-expert` · `compiler-design` · `distributed-systems` · `operating-systems` · `optimization` · `reverse-engineering` · `system-design`
 
+> Each skill lives in exactly one category folder under `skills/`, and the per-category counts above sum to exactly **84** — same as the headline.
+
 ---
 
 ## 📁 Project Structure
@@ -206,7 +208,7 @@ GOD-OPENCODE/
 ├── install.ps1                # Global installer (skills, workflows, agents, commands)
 ├── .opencode/skills/          # Project-local skills (auto-discovered)
 ├── agents/                    # 10 agent personas (AGENT.md each)
-├── skills/                    # 84 skill definitions (SKILL.md each)
+├── skills/                    # 84 skill definitions (SKILL.md each, 11 categories)
 ├── workflows/                 # 15 parameterized workflows
 ├── commands/                  # 6 slash command definitions
 ├── router/                    # Intent detection and routing config
@@ -260,13 +262,22 @@ Verifies:
 .\god-ui.ps1
 ```
 
-Interactive terminal interface with:
-- System overview (agents, skills, workflows, global status)
-- One-click install/update
-- Health check
-- Test runner
-- Router tester
-- **Launch browser dashboard** (option 7)
+Interactive terminal interface (v3.0) with the following menu (Enter = the default action):
+
+| Key | Action |
+|-----|--------|
+| Enter / `1` | **Install Globally** — default; installs skills/agents/workflows into `~/.config/opencode/` |
+| `2` | Health Check |
+| `3` | Code Graph — build/refresh the call-graph index |
+| `4` | Skill Fragment — dynamic context lookup for a topic |
+| `5` | Memory — recall / append session memory |
+| `6` | Cross-Platform — show bash / cmd / PowerShell install paths |
+| `7` | Tests — Pester suite |
+| `8` | Wiki — open the local wiki |
+| `9` | Dashboard — open the browser dashboard |
+| `Q` | Exit |
+
+The dashboard (option 9) was previously option 7 and the install was previously option 1; the new menu elevates global install to the default action and adds Code Graph, Skill Fragment, Memory, Cross-Platform, and Wiki pages.
 
 ### Browser Dashboard
 
@@ -274,7 +285,7 @@ Interactive terminal interface with:
 start ui\index.html
 ```
 
-Dark-themed, responsive dashboard showing all agents, skills, workflows, commands, and quick start guide. Launch from TUI (option 7) or directly.
+Dark-themed, responsive dashboard showing all agents, skills, workflows, commands, the Architectural Features roadmap, and the Wiki landing page. Launch from TUI (option 9) or directly.
 
 ---
 

@@ -6,6 +6,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.2.0] - 2026-07-17
+
+### Added
+
+- **Architectural feature pack** addressing the four open concerns documented in `docs/wiki/roadmap.md`:
+  - **Code Graph** (`scripts/code-graph.ps1`) — PowerShell call-graph extractor that scans `*.ps1`/`*.psm1` and emits `docs/wiki/_data/code-graph.json` (nodes + edges + per-file references). Render in `docs/wiki/graph.md`.
+  - **Dynamic Skills** (`scripts/skill-fragment.ps1`) — query-time skill selector that returns matching `##` sections per request instead of injecting whole SKILL.md files.
+  - **Cross-Platform install matrix** — `install.sh` (bash, delegates to `install.ps1` via `pwsh`) + `install.cmd` (cmd.exe shim) so Linux/macOS/WSL/Windows hosts all reach the same installer.
+  - **Long-term Memory** (`scripts/memory.ps1` v1.2) — added `New-MemoryRecall` (top-N token-overlap across `memory/*.md`) and `Get-MemoryPreferences`; convention file `memory/AGENT_PREFERENCES.md` for persistent agent preferences.
+- **Wiki** (`docs/wiki/`) — 8 markdown pages: `index.md`, `getting-started.md`, `architecture.md`, `graph.md`, `dynamic-skills.md`, `cross-platform.md`, `memory.md`, `roadmap.md`. Single source of truth for the architectural roadmap.
+- **Browser dashboard update** (`ui/index.html`) — added Wiki landing grid, Architecture Features status section, and Wiki nav link.
+
+### Changed
+
+- **Terminal UI** (`god-ui.ps1` v3.0) — global install (`.\install.ps1`) elevated to the default action (Enter keypress). New menu pages: Code Graph (3), Skill Fragment (4), Memory (5), Cross-Platform (6), Wiki (8). Adds an Architecture Features status section that surfaces code-graph / dynamic-skills / cross-platform / memory health. PowerShell 5.1 compatible (no PS7-only constructs).
+- **README** — added the **Architectural features (1.2)** section + wiki link table, Project Structure entries for `docs/wiki/` and `memory/`, and a "Press Enter to install globally" quick-start note.
+- **`.gitignore`** — excludes local memory artifacts (`memory/*`) while keeping `memory/AGENT_PREFERENCES.md` tracked (whitelist pattern).
+
+### Notes
+
+- No new agents, workflows, or commands — all additions are tooling + docs.
+- The skill headline count stays at **84 unique** across 11 topical categories — each skill lives in exactly one category folder, so per-category counts sum to 84 exactly.
+
 ## [1.1.0] - 2026-07-17
 
 ### Added
