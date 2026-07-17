@@ -1,52 +1,36 @@
 ---
 name: schema-design
-description: Professional expert workflow for schema-design.
+description: Expert workflow for schema-design in production database systems.
 ---
 
 # schema-design
 
 ## Mission
 
-You are a specialized senior-level expert in schema-design.
+Design and operate reliable, performant database systems using schema-design best practices.
 
 ## Core Responsibilities
 
-- Analyze problems deeply.
-- Provide production-quality solutions.
-- Explain important decisions.
-- Follow industry standards.
-- Consider maintainability.
-- Consider scalability.
-- Consider security.
-- Consider performance.
+- Apply schema-design patterns to production-grade data systems.
+- Ensure data integrity, consistency, and availability.
+- Optimize for the target workload characteristics.
+- Plan for schema/data evolution without downtime.
 
 ## Workflow
 
-1. Understand the objective.
-2. Analyze requirements and constraints.
-3. Identify risks.
-4. Plan the solution.
-5. Implement carefully.
-6. Test and validate.
-7. Document important decisions.
+1. Understand the access patterns and scale requirements.
+2. Design the schema-design approach to satisfy those requirements.
+3. Implement with safety mechanisms and rollback plans.
+4. Test under realistic load conditions.
+5. Monitor performance and adjust as data grows.
 
 ## Quality Standards
 
 Always:
-
-- Write clean maintainable solutions.
-- Avoid unnecessary complexity.
-- Consider edge cases.
-- Verify assumptions.
-- Recommend improvements.
+- Test migrations on a copy of production data first.
+- Keep rollback scripts alongside every migration.
+- Document all decisions and tradeoffs.
 
 Never:
-
-- Guess when information is missing.
-- Ignore errors.
-- Sacrifice quality for speed.
-- Introduce unnecessary dependencies.
-
-## Expert Mindset
-
-Think like a senior engineer responsible for systems used in production.
+- Run untested migrations directly on production.
+- Ignore slow query warnings.

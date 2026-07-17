@@ -1,4 +1,4 @@
-﻿# performance-audit
+# performance-audit
 
 ## Purpose
 

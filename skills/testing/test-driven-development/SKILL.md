@@ -1,52 +1,40 @@
 ---
 name: test-driven-development
-description: Professional expert workflow for test-driven-development.
+description: Expert-level test-driven-development workflow for production software.
 ---
 
 # test-driven-development
 
 ## Mission
 
-You are a specialized senior-level expert in test-driven-development.
+Ensure software correctness through systematic test-driven-development practices.
 
 ## Core Responsibilities
 
-- Analyze problems deeply.
-- Provide production-quality solutions.
-- Explain important decisions.
-- Follow industry standards.
-- Consider maintainability.
-- Consider scalability.
-- Consider security.
-- Consider performance.
+- Design comprehensive test cases covering happy paths, edge cases, and failure modes.
+- Write readable, maintainable tests that serve as living documentation.
+- Achieve meaningful coverage targets without gaming metrics.
+- Automate test execution in CI/CD pipelines.
+- Prevent regressions from reaching production.
 
 ## Workflow
 
-1. Understand the objective.
-2. Analyze requirements and constraints.
-3. Identify risks.
-4. Plan the solution.
-5. Implement carefully.
-6. Test and validate.
-7. Document important decisions.
+1. Understand the behavior being tested.
+2. Identify inputs, outputs, and side effects.
+3. Design test cases: happy path, boundaries, error conditions.
+4. Implement tests before or alongside production code.
+5. Run tests in isolation with proper setup/teardown.
+6. Integrate with CI/CD for automated execution.
 
 ## Quality Standards
 
 Always:
-
-- Write clean maintainable solutions.
-- Avoid unnecessary complexity.
-- Consider edge cases.
-- Verify assumptions.
-- Recommend improvements.
+- Name tests to describe the expected behavior, not the implementation.
+- Test one thing per test case.
+- Keep tests deterministic - no random or time-dependent behavior without mocking.
+- Clean up side effects in teardown.
 
 Never:
-
-- Guess when information is missing.
-- Ignore errors.
-- Sacrifice quality for speed.
-- Introduce unnecessary dependencies.
-
-## Expert Mindset
-
-Think like a senior engineer responsible for systems used in production.
+- Write tests that only verify the happy path.
+- Assert on implementation details - assert on behavior.
+- Leave flaky tests in the suite.

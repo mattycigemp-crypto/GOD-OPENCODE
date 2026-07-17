@@ -1,4 +1,4 @@
-﻿# refactor-codebase
+# refactor-codebase
 
 ## Purpose
 
