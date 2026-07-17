@@ -6,6 +6,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.6.0] - 2026-07-17
+
+### Added
+
+- **Security Scanner** ([`scripts/security-scan.ps1`](scripts/security-scan.ps1)) — pre-commit security scanning for secrets (API keys, passwords, tokens), vulnerability patterns (SQL injection, XSS, code injection), and license compatibility. Detects AWS keys, GitHub PATs, OpenAI keys, and more.
+- **Agent Orchestrator** ([`scripts/agent-orchestrator.ps1`](scripts/agent-orchestrator.ps1)) — hierarchical multi-agent task delegation with automatic agent selection based on task keywords. Includes verification at handoff points to prevent hallucination propagation.
+- **MCP Connectors** ([`scripts/mcp-connect.ps1`](scripts/mcp-connect.ps1)) — connect to external tools via MCP: Chrome DevTools, Database explorers, Jira issue trackers, and Monitoring/Observability systems.
+- **Smart Git** ([`scripts/smart-git.ps1`](scripts/smart-git.ps1)) — AI-powered git integration with atomic commits, auto-generated commit messages, save points for rollback, and diff visualization.
+- **Security Scanner Skill** ([`skills/security/security-scanner/SKILL.md`](skills/security/security-scanner/SKILL.md)) — comprehensive security scanning skill with banned word dictionary and anti-slop checklist.
+- **Test-Driven AI Workflow** ([`workflows/test-driven-ai.md`](workflows/test-driven-ai.md)) — automated test generation workflow that generates tests before code, then implements to pass.
+
+### Changed
+
+- **Terminal UI** ([`god-ui.ps1`](god-ui.ps1) v6.0) — added Security Scanner (T), Agent Orchestrator (A), MCP Connectors (M), Smart Git (G) menu items.
+- **CLI** ([`god-cli.ps1`](god-cli.ps1) v1.1) — added `security-scan`, `agent-orch`, `mcp-connect`, `smart-git` commands.
+- **README** — updated skill count to 88, added Security category, added v1.6.0 features, updated TUI menu table.
+
 ## [1.5.0] - 2026-07-17
 
 ### Added

@@ -241,7 +241,11 @@ function Show-Dashboard {
     Write-MenuItem "L"     "Live Architecture"     "Regenerate wiki skill/agent/workflow graph"
     Write-MenuItem "R"     "Skills Registry"       "Bulk-fetch top-N from registry-sources.txt"
     Write-MenuItem "C"     "Cursor Export"         "Generate .cursorrules for every agent"
-    Write-MenuItem "N"     "What's new in v1.4.0"  "Current release notes from CHANGELOG.md"
+    Write-MenuItem "T"     "Security Scanner"      "Pre-commit secret/vulnerability/license scan"
+    Write-MenuItem "A"     "Agent Orchestrator"    "Multi-agent task delegation"
+    Write-MenuItem "M"     "MCP Connectors"        "Connect to Chrome/DB/Jira/Monitoring"
+    Write-MenuItem "G"     "Smart Git"             "Atomic commits, save points, rollback"
+    Write-MenuItem "N"     "What's new in v1.6.0"  "Current release notes from CHANGELOG.md"
     Write-MenuItem "Q"     "Exit"                  "Close the interface"
 
     Write-Divider
@@ -258,7 +262,7 @@ function Show-InstallGlobally {
     Write-Header "Install Globally -> ~/.config/opencode/"
     Write-Host ""
     Write-Host "  This will:" -ForegroundColor $Colors.Accent
-    Write-Host "    - Copy 84 SKILL.md files into ~/.config/opencode/skills/"
+    Write-Host "    - Copy 88 SKILL.md files into ~/.config/opencode/skills/"
     Write-Host "    - Merge 10 agent configs into ~/.config/opencode/opencode.jsonc"
     Write-Host "    - Copy workflows/agents/commands into ~/.config/opencode/god-opencode/"
     Write-Host "    - Update opencode.jsonc instructions glob (idempotent)"
@@ -515,36 +519,136 @@ function Show-WikiBuilder {
     }
 }
 
+function Show-SecurityScan {
+    Clear-Screen
+    Write-Header "Security Scanner  (v1.6.0)"
+    Write-Host ""
+    $script = Join-Path $Root "scripts/security-scan.ps1"
+    if (!(Test-Path $script)) {
+        Write-Host "  scripts/security-scan.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    Write-Host "  1 - Scan Staged Files (git diff --cached)" -ForegroundColor $Colors.Muted
+    Write-Host "  2 - Scan All Files" -ForegroundColor $Colors.Muted
+    Write-Host "  3 - Scan Specific File" -ForegroundColor $Colors.Muted
+    Write-Host "  B - Back" -ForegroundColor $Colors.Muted
+    $choice = Get-Input "Security Scanner"
+    switch ($choice.ToUpper()) {
+        "1" { & $script -Staged }
+        "2" { & $script }
+        "3" {
+            $file = Get-Input "  File path"
+            if ($file) { & $script -Path $file }
+        }
+        "B" { return }
+    }
+}
+
+function Show-AgentOrch {
+    Clear-Screen
+    Write-Header "Agent Orchestrator  (v1.6.0)"
+    Write-Host ""
+    $script = Join-Path $Root "scripts/agent-orchestrator.ps1"
+    if (!(Test-Path $script)) {
+        Write-Host "  scripts/agent-orchestrator.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    Write-Host "  Multi-agent task delegation with verification." -ForegroundColor $Colors.Muted
+    Write-Host ""
+    $task = Get-Input "  Task description"
+    if ([string]::IsNullOrWhiteSpace($task)) { return }
+    $agents = Get-Input "  Agents (comma-separated, or empty for auto-select)"
+    if ($agents) {
+        & $script -Task $task -Agents $agents
+    } else {
+        & $script -Task $task
+    }
+}
+
+function Show-MCPConnect {
+    Clear-Screen
+    Write-Header "MCP Connectors  (v1.6.0)"
+    Write-Host ""
+    $script = Join-Path $Root "scripts/mcp-connect.ps1"
+    if (!(Test-Path $script)) {
+        Write-Host "  scripts/mcp-connect.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    Write-Host "  Connect to external tools via MCP." -ForegroundColor $Colors.Muted
+    Write-Host ""
+    Write-Host "  1 - Chrome DevTools (screenshot/console/network)" -ForegroundColor $Colors.Muted
+    Write-Host "  2 - Database Explorer (schema/query/tables)" -ForegroundColor $Colors.Muted
+    Write-Host "  3 - Jira Issue Tracker (list/get/create)" -ForegroundColor $Colors.Muted
+    Write-Host "  4 - Monitoring (errors/metrics/logs)" -ForegroundColor $Colors.Muted
+    Write-Host "  B - Back" -ForegroundColor $Colors.Muted
+    $choice = Get-Input "MCP Tool"
+    switch ($choice.ToUpper()) {
+        "1" { $act = Get-Input "  Action (screenshot/console/network)"; if ($act) { & $script -Tool "chrome" -Action $act } }
+        "2" { $act = Get-Input "  Action (schema/query/tables)"; $tgt = Get-Input "  Target (database name)"; if ($act) { & $script -Tool "database" -Action $act -Target $tgt } }
+        "3" { $act = Get-Input "  Action (list/get/create)"; $proj = Get-Input "  Project key"; if ($act) { & $script -Tool "jira" -Action $act -Project $proj } }
+        "4" { $act = Get-Input "  Action (errors/metrics/logs)"; $svc = Get-Input "  Service name"; if ($act) { & $script -Tool "monitoring" -Action $act -Service $svc } }
+        "B" { return }
+    }
+}
+
+function Show-SmartGit {
+    Clear-Screen
+    Write-Header "Smart Git  (v1.6.0)"
+    Write-Host ""
+    $script = Join-Path $Root "scripts/smart-git.ps1"
+    if (!(Test-Path $script)) {
+        Write-Host "  scripts/smart-git.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    Write-Host "  Atomic commits, save points, and rollback." -ForegroundColor $Colors.Muted
+    Write-Host ""
+    Write-Host "  1 - Smart Commit (auto-generate message)" -ForegroundColor $Colors.Muted
+    Write-Host "  2 - Create Save Point" -ForegroundColor $Colors.Muted
+    Write-Host "  3 - Rollback to Last Save Point" -ForegroundColor $Colors.Muted
+    Write-Host "  4 - Show Diff" -ForegroundColor $Colors.Muted
+    Write-Host "  5 - Show Recent Commits" -ForegroundColor $Colors.Muted
+    Write-Host "  6 - Git Status" -ForegroundColor $Colors.Muted
+    Write-Host "  B - Back" -ForegroundColor $Colors.Muted
+    $choice = Get-Input "Smart Git"
+    switch ($choice.ToUpper()) {
+        "1" { $msg = Get-Input "  Commit message (or empty for auto)"; if ($msg) { & $script commit -Message $msg } else { & $script commit } }
+        "2" { & $script savepoint }
+        "3" { & $script rollback }
+        "4" { & $script diff }
+        "5" { & $script log }
+        "6" { & $script status }
+        "B" { return }
+    }
+}
+
 function Show-WhatsNew {
     Clear-Screen
-    Write-Header "What's New in v1.4.0"
+    Write-Header "What's New in v1.6.0"
     Write-Host ""
-    Write-Host "  Five new features addressing the full roadmap." -ForegroundColor $Colors.Accent
+    Write-Host "  Five new features from deep research on what developers want." -ForegroundColor $Colors.Accent
     Write-Host ""
-    Write-Section "Persistent Session Memory"
-    Write-Host "  scripts\session-memory.ps1 -Init/-Track/-Save/-Recall/-Prefs" -ForegroundColor $Colors.Text
-    Write-Host "  Cross-session learning, preference tracking, usage analytics." -ForegroundColor $Colors.Text
+    Write-Section "Security Scanner"
+    Write-Host "  scripts\security-scan.ps1 - Pre-commit secret/vulnerability scan" -ForegroundColor $Colors.Text
+    Write-Host "  Detects API keys, passwords, SQL injection, XSS, and more." -ForegroundColor $Colors.Text
     Write-Host ""
-    Write-Section "Wiki Auto-Builder"
-    Write-Host "  scripts\build-wiki.ps1" -ForegroundColor $Colors.Text
-    Write-Host "  Generates skills-reference.md, agents-reference.md, workflows-reference.md" -ForegroundColor $Colors.Text
-    Write-Host "  from actual content. Wired into wiki CI pipeline." -ForegroundColor $Colors.Text
+    Write-Section "Agent Orchestrator"
+    Write-Host "  scripts\agent-orchestrator.ps1 - Multi-agent task delegation" -ForegroundColor $Colors.Text
+    Write-Host "  Automatically selects agents based on task keywords." -ForegroundColor $Colors.Text
     Write-Host ""
-    Write-Section "Native Bash Installer"
-    Write-Host "  install.sh  (v2.0 - pure bash, no PowerShell needed)" -ForegroundColor $Colors.Text
-    Write-Host "  Supports --yes, --status, --uninstall flags." -ForegroundColor $Colors.Text
+    Write-Section "MCP Connectors"
+    Write-Host "  scripts\mcp-connect.ps1 - Connect to Chrome/DB/Jira/Monitoring" -ForegroundColor $Colors.Text
+    Write-Host "  See UI, schemas, tickets, and errors from external tools." -ForegroundColor $Colors.Text
     Write-Host ""
-    Write-Section "Multi-Language Code Graph"
-    Write-Host "  scripts\code-graph.ps1 now supports PS, Python, JS, TS, Go, Rust" -ForegroundColor $Colors.Text
-    Write-Host "  Use -Languages \"py,js,ts\" to scan specific languages." -ForegroundColor $Colors.Text
+    Write-Section "Smart Git"
+    Write-Host "  scripts\smart-git.ps1 - Atomic commits, save points, rollback" -ForegroundColor $Colors.Text
+    Write-Host "  AI-generated commit messages and safe rollback points." -ForegroundColor $Colors.Text
     Write-Host ""
-    Write-Section "Smart Skill Loader"
-    Write-Host "  scripts\smart-loader.ps1 -Query \"auth jwt\" -Context \"backend\"" -ForegroundColor $Colors.Text
-    Write-Host "  TF-IDF scoring, exact-phrase bonuses, LRU cache." -ForegroundColor $Colors.Text
+    Write-Section "Test-Driven AI Workflow"
+    Write-Host "  workflows\test-driven-ai.md - Automated test generation" -ForegroundColor $Colors.Text
+    Write-Host "  Generate tests before code, then implement to pass." -ForegroundColor $Colors.Text
     Write-Host ""
     Write-Divider
-    Write-Host "  Canonical release notes: CHANGELOG.md  ([1.4.0] section)" -ForegroundColor $Colors.Muted
-    Write-Host "  Wiki page:              docs\wiki\index.md" -ForegroundColor $Colors.Muted
+    Write-Host "  Canonical release notes: CHANGELOG.md  ([1.6.0] section)" -ForegroundColor $Colors.Muted
     Write-Divider
 }
 
@@ -573,6 +677,10 @@ while ($true) {
         "L" { Clear-Screen ; Show-LiveGraph       ; Wait-Key }
         "R" { Clear-Screen ; Show-SkillsSync      ; Wait-Key }
         "C" { Clear-Screen ; Show-CursorExport    ; Wait-Key }
+        "T" { Clear-Screen ; Show-SecurityScan   ; Wait-Key }
+        "A" { Clear-Screen ; Show-AgentOrch       ; Wait-Key }
+        "M" { Clear-Screen ; Show-MCPConnect     ; Wait-Key }
+        "G" { Clear-Screen ; Show-SmartGit       ; Wait-Key }
         "N" { Clear-Screen ; Show-WhatsNew        ; Wait-Key }
         "Q" {
             Clear-Screen

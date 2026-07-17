@@ -9,11 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.4.0"><img alt="v1.4.0" src="https://img.shields.io/badge/release-v1.4.0-8b5cf6?style=for-the-badge"/></a>
+  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.6.0"><img alt="v1.6.0" src="https://img.shields.io/badge/release-v1.6.0-8b5cf6?style=for-the-badge"/></a>
 </p>
 
 <p align="center">
-  <strong>🆕 v1.4.0 — five more features:</strong> <a href="#persistent-session-memory">session memory</a> · <a href="#wiki-auto-builder">wiki auto-builder</a> · <a href="#native-bash-installer">native bash installer</a> · <a href="#multi-language-code-graph">multi-lang code graph</a> · <a href="#smart-skill-loader">smart skill loader</a>
+  <strong>🆕 v1.6.0 — five more features:</strong> <a href="#security-scanner">security scanner</a> · <a href="#agent-orchestrator">agent orchestrator</a> · <a href="#mcp-connectors">MCP connectors</a> · <a href="#smart-git">smart git</a> · <a href="#test-driven-ai-workflow">test-driven AI</a>
 </p>
 
 ---
@@ -78,6 +78,69 @@ Each `v*` tag push publishes a versioned image (`ghcr.io/.../god-opencode:v<vers
 **Cross-platform shims:** `bash install.sh` (requires `pwsh`) on Linux/macOS/WSL; `install.cmd` on Windows cmd.exe. See [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md).
 
 **Wiki:** the eight-page reference at `docs/wiki/` is built and published automatically to **GitHub Pages** on every push to `master` — see [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/). One-time setup: repo **Settings → Pages → Build and deployment → Source: GitHub Actions → workflow: `Build and Deploy Wiki`**, then Save.
+
+---
+
+## 🆕 What's New in v1.6.0
+
+Five new capabilities addressing the latest research on what developers want from AI coding tools. See [CHANGELOG.md](CHANGELOG.md) for the full record.
+
+### Security Scanner
+
+Pre-commit security scanning for secrets, vulnerabilities, and license compliance:
+
+```powershell
+.\scripts\security-scan.ps1                    # scan staged files
+.\scripts\security-scan.ps1 -Path "file.py"   # scan specific file
+.\scripts\security-scan.ps1 -Severity "High"   # filter by severity
+```
+
+Detects API keys, passwords, AWS credentials, GitHub tokens, SQL injection, XSS risks, and more.
+
+### Agent Orchestrator
+
+Multi-agent task delegation with automatic agent selection:
+
+```powershell
+.\scripts\agent-orchestrator.ps1 -Task "Build a REST API with auth"
+.\scripts\agent-orchestrator.ps1 -Task "Fix bug in login" -Agents "backend-engineer,security-engineer"
+```
+
+Automatically analyzes task keywords and selects the right specialist agents.
+
+### MCP Connectors
+
+Connect to external tools via MCP:
+
+```powershell
+.\scripts\mcp-connect.ps1 -Tool "chrome" -Action "screenshot"
+.\scripts\mcp-connect.ps1 -Tool "database" -Action "schema" -Target "mydb"
+.\scripts\mcp-connect.ps1 -Tool "jira" -Action "list" -Project "PROJ"
+.\scripts\mcp-connect.ps1 -Tool "monitoring" -Action "errors" -Service "api"
+```
+
+### Smart Git
+
+AI-powered git integration with atomic commits and save points:
+
+```powershell
+.\scripts\smart-git.ps1 commit                   # smart commit all staged
+.\scripts\smart-git.ps1 commit -Message "fix auth" # custom message
+.\scripts\smart-git.ps1 savepoint                 # create save point
+.\scripts\smart-git.ps1 rollback                  # rollback to last save point
+```
+
+### Test-Driven AI Workflow
+
+Automated test generation workflow:
+
+```powershell
+# Workflow: test-driven-ai
+# 1. Analyze requirements
+# 2. Generate test cases
+# 3. Implement code to pass tests
+# 4. Refactor and optimize
+```
 
 ---
 
@@ -237,10 +300,11 @@ agent-orchestrator switches agents when needed
 | Component | Count | Purpose |
 |-----------|-------|---------|
 | 🤖 Agents | 10 | Specialized AI personas |
-| 🧩 Skills | 87 | Domain knowledge loaded on-demand |
-| 📋 Workflows | 15 | Step-by-step processes |
+| 🧩 Skills | 88 | Domain knowledge loaded on-demand |
+| 📋 Workflows | 16 | Step-by-step processes |
 | ⚡ Commands | 6 | Slash commands for common tasks |
 | 🔧 CLI | 1 | Non-interactive command-line interface |
+| 🛡️ Security | 1 | Pre-commit scanning for secrets/vulns |
 
 ---
 
@@ -276,7 +340,7 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 
 ---
 
-## 🧩 Skills (87 Total)
+## 🧩 Skills (88 Total)
 
 ### Orchestration (4)
 `auto-router` · `workflow-engine` · `agent-orchestrator` · `command-builder`
@@ -287,8 +351,8 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 ### Frontend (10)
 `react` · `nextjs` · `typescript` · `css-architecture` · `state-management` · `component-design` · `web-performance` · `testing-frontend` · `accessibility` · `bundling`
 
-### Security (5)
-`authentication` · `cryptography` · `penetration-testing` · `secure-coding` · `security-audit`
+### Security (6)
+`authentication` · `cryptography` · `penetration-testing` · `secure-coding` · `security-audit` · `security-scanner`
 
 ### DevOps (8)
 `docker` · `kubernetes` · `ci-cd` · `terraform` · `cloud` · `linux` · `networking` · `github-actions`
@@ -314,7 +378,7 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 ### Writing (2)
 `no-ai-slop` · `technical-documentation`
 
-> Each skill lives in exactly one category folder under `skills/`, and the per-category counts above sum to exactly **87** — same as the headline.
+> Each skill lives in exactly one category folder under `skills/`, and the per-category counts above sum to exactly **88** — same as the headline.
 
 ---
 
@@ -325,12 +389,13 @@ GOD-OPENCODE/
 ├── opencode.json              # OpenCode config (agents, commands)
 ├── AGENTS.md                  # Project context for OpenCode
 ├── god-cli.ps1                # Non-interactive CLI
+├── god-ui.ps1                 # Interactive terminal UI (TUI)
 ├── install.ps1                # Global installer (skills, workflows, agents, commands)
 ├── install.sh                 # Native bash installer (no PowerShell needed)
 ├── .opencode/skills/          # Project-local skills (auto-discovered)
 ├── agents/                    # 10 agent personas (AGENT.md each)
-├── skills/                    # 84 skill definitions (SKILL.md each, 11 categories)
-├── workflows/                 # 15 parameterized workflows
+├── skills/                    # 88 skill definitions (SKILL.md each, 12 categories)
+├── workflows/                 # 16 parameterized workflows
 ├── commands/                  # 6 slash command definitions
 ├── router/                    # Intent detection and routing config
 ├── scripts/                   # PowerShell engines (builder, expansion, health)
@@ -391,6 +456,10 @@ Verifies:
 .\god-cli.ps1 session -Track -Agent "backend-engineer"
 .\god-cli.ps1 wiki-build                # generate wiki pages
 .\god-cli.ps1 cursor-export             # export .cursorrules
+.\god-cli.ps1 security-scan             # scan staged files for secrets
+.\god-cli.ps1 agent-orch -Query "Build API" # multi-agent task
+.\god-cli.ps1 mcp-connect -Query chrome -Context screenshot
+.\god-cli.ps1 smart-git commit          # smart commit staged
 .\god-cli.ps1 -Help                     # show all commands
 ```
 
@@ -400,7 +469,7 @@ Verifies:
 .\god-ui.ps1
 ```
 
-Interactive terminal interface (v5.0) with Unicode box-drawing and the following menu (Enter = the default action):
+Interactive terminal interface (v6.0) with Unicode box-drawing and the following menu (Enter = the default action):
 
 | Key | Action |
 |-----|--------|
@@ -418,6 +487,10 @@ Interactive terminal interface (v5.0) with Unicode box-drawing and the following
 | `L` | Live Architecture — regenerate wiki skill/agent/workflow graph |
 | `R` | Skills Registry — bulk-fetch top-N from registry-sources.txt |
 | `C` | Cursor Export — generate .cursorrules for every agent |
+| `T` | Security Scanner — pre-commit secret/vulnerability scan |
+| `A` | Agent Orchestrator — multi-agent task delegation |
+| `M` | MCP Connectors — connect to Chrome/DB/Jira/Monitoring |
+| `G` | Smart Git — atomic commits, save points, rollback |
 | `N` | What's new — current release notes from CHANGELOG.md |
 | `Q` | Exit |
 

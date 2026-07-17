@@ -70,6 +70,10 @@ function Show-Help {
     Write-Host "    wiki-build       Auto-generate wiki reference pages" -ForegroundColor White
     Write-Host "    cursor-export    Export .cursorrules for all agents" -ForegroundColor White
     Write-Host "    skills-sync      Sync skills from registry" -ForegroundColor White
+    Write-Host "    security-scan    Pre-commit security scanning" -ForegroundColor White
+    Write-Host "    agent-orch       Multi-agent task delegation" -ForegroundColor White
+    Write-Host "    mcp-connect      Connect to external tools via MCP" -ForegroundColor White
+    Write-Host "    smart-git        AI-powered git integration" -ForegroundColor White
     Write-Host "    status           Show install status" -ForegroundColor White
     Write-Host "    ui               Launch interactive TUI" -ForegroundColor White
     Write-Host ""
@@ -81,6 +85,11 @@ function Show-Help {
     Write-Host "    -Agent <name>     Agent name for session tracking" -ForegroundColor $C.Dim
     Write-Host "    -Skill <name>     Skill name for session tracking" -ForegroundColor $C.Dim
     Write-Host "    -Languages <list> Languages for code-graph (e.g. ps1,py,js)" -ForegroundColor $C.Dim
+    Write-Host "    -Task <text>      Task description for agent-orch" -ForegroundColor $C.Dim
+    Write-Host "    -Tool <name>      Tool name for mcp-connect (chrome/database/jira/monitoring)" -ForegroundColor $C.Dim
+    Write-Host "    -Action <name>    Action for mcp-connect" -ForegroundColor $C.Dim
+    Write-Host "    -Target <name>    Target for mcp-connect" -ForegroundColor $C.Dim
+    Write-Host "    -Message <text>   Commit message for smart-git" -ForegroundColor $C.Dim
     Write-Host "    -Init             Initialize new session" -ForegroundColor $C.Dim
     Write-Host "    -Recall           Recall last session" -ForegroundColor $C.Dim
     Write-Host "    -Prefs            Show learned preferences" -ForegroundColor $C.Dim
@@ -159,6 +168,38 @@ switch ($Command.ToLower()) {
     "skills-sync" {
         Write-Host "`n  Syncing top $TopN skills from registry...`n" -ForegroundColor $C.Info
         & (Join-Path $Root "scripts/install-skill.ps1") -Sync -TopN $TopN
+    }
+    "security-scan" {
+        $scanParams = @{}
+        if ($Query) { $scanParams["Path"] = $Query }
+        if ($Context -eq "staged") { $scanParams["Staged"] = $true }
+        & (Join-Path $Root "scripts/security-scan.ps1") @scanParams
+    }
+    "agent-orch" {
+        if ([string]::IsNullOrWhiteSpace($Query)) {
+            Write-Host "  Error: -Query is required (task description)" -ForegroundColor $C.Err
+            Write-Host "  Usage: .\god-cli.ps1 agent-orch -Query 'Build a REST API with auth'" -ForegroundColor $C.Dim
+            exit 1
+        }
+        $orchParams = @{ Task = $Query }
+        if ($Agent) { $orchParams["Agents"] = $Agent }
+        & (Join-Path $Root "scripts/agent-orchestrator.ps1") @orchParams
+    }
+    "mcp-connect" {
+        if ([string]::IsNullOrWhiteSpace($Query)) {
+            Write-Host "  Error: -Query is required (tool name)" -ForegroundColor $C.Err
+            Write-Host "  Usage: .\god-cli.ps1 mcp-connect -Query chrome -Context screenshot" -ForegroundColor $C.Dim
+            exit 1
+        }
+        $mcpParams = @{ Tool = $Query; Action = $Context }
+        if ($Skill) { $mcpParams["Target"] = $Skill }
+        & (Join-Path $Root "scripts/mcp-connect.ps1") @mcpParams
+    }
+    "smart-git" {
+        $gitCommand = if ($Query) { $Query } else { "status" }
+        $gitParams = @{ Command = $gitCommand }
+        if ($Agent) { $gitParams["Message"] = $Agent }
+        & (Join-Path $Root "scripts/smart-git.ps1") @gitParams
     }
     "status" {
         Write-Host "`n  GOD-OPENCODE Status" -ForegroundColor $C.Accent
