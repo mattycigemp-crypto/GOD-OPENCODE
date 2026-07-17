@@ -6,6 +6,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.5.0] - 2026-07-17
+
+### Added
+
+- **No AI Slop Skill** ([`skills/writing/no-ai-slop/SKILL.md`](skills/writing/no-ai-slop/SKILL.md)) — comprehensive anti-slop skill with banned word dictionary, anti-slop checklist, before/after examples, and concrete formatting rules. Based on web research about AI slop characteristics. Forces authentic, specific, opinionated writing.
+- **Technical Documentation Skill** ([`skills/writing/technical-documentation/SKILL.md`](skills/writing/technical-documentation/SKILL.md)) — practical guide for writing READMEs, API docs, ADRs, runbooks, and tutorials that engineers actually read.
+- **Code Generation Skill** ([`skills/core/code-generation/SKILL.md`](skills/core/code-generation/SKILL.md)) — production-focused code generation that prioritizes shipping working code with tests, error handling, and pattern matching.
+- **CLI Tool** ([`god-cli.ps1`](god-cli.ps1)) — non-interactive command-line interface wrapping all major commands: `install`, `health`, `test`, `code-graph`, `skill-fragment`, `smart-load`, `session`, `wiki-build`, `cursor-export`, `skills-sync`, `status`, `ui`.
+
+### Changed
+
+- **Terminal UI** ([`god-ui.ps1`](god-ui.ps1) v5.0) — replaced ASCII box-drawing (`+`, `-`, `|`) with Unicode characters (`╭`, `╮`, `╰`, `╯`, `─`, `│`).
+- **Session Memory** ([`scripts/session-memory.ps1`](scripts/session-memory.ps1)) — fixed PSCustomObject `.ContainsKey()` bug that prevented analytics from working. Converted to hashtable operations.
+- **README** — updated skill count to 87, added Writing category, added CLI section, updated TUI version.
+
+---
+
 ## [1.4.0] - 2026-07-17
 
 ### Added

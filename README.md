@@ -237,9 +237,10 @@ agent-orchestrator switches agents when needed
 | Component | Count | Purpose |
 |-----------|-------|---------|
 | 🤖 Agents | 10 | Specialized AI personas |
-| 🧩 Skills | 84 | Domain knowledge loaded on-demand |
+| 🧩 Skills | 87 | Domain knowledge loaded on-demand |
 | 📋 Workflows | 15 | Step-by-step processes |
 | ⚡ Commands | 6 | Slash commands for common tasks |
+| 🔧 CLI | 1 | Non-interactive command-line interface |
 
 ---
 
@@ -275,7 +276,7 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 
 ---
 
-## 🧩 Skills (84 Total)
+## 🧩 Skills (87 Total)
 
 ### Orchestration (4)
 `auto-router` · `workflow-engine` · `agent-orchestrator` · `command-builder`
@@ -304,13 +305,16 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 ### Languages (10)
 `python-expert` · `javascript-expert` · `typescript-expert` · `go-expert` · `rust-expert` · `java-expert` · `cpp-expert` · `node-expert` · `react-expert` · `nextjs-expert`
 
-### Core (10)
-`architect` · `principal-engineer` · `code-review` · `debugger` · `performance` · `refactor` · `documentation` · `bug-hunter` · `security` · `testing`
+### Core (11)
+`architect` · `principal-engineer` · `code-review` · `debugger` · `performance` · `refactor` · `documentation` · `bug-hunter` · `security` · `testing` · `code-generation`
 
 ### Advanced (7)
 `algorithm-expert` · `compiler-design` · `distributed-systems` · `operating-systems` · `optimization` · `reverse-engineering` · `system-design`
 
-> Each skill lives in exactly one category folder under `skills/`, and the per-category counts above sum to exactly **84** — same as the headline.
+### Writing (2)
+`no-ai-slop` · `technical-documentation`
+
+> Each skill lives in exactly one category folder under `skills/`, and the per-category counts above sum to exactly **87** — same as the headline.
 
 ---
 
@@ -320,6 +324,7 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 GOD-OPENCODE/
 ├── opencode.json              # OpenCode config (agents, commands)
 ├── AGENTS.md                  # Project context for OpenCode
+├── god-cli.ps1                # Non-interactive CLI
 ├── install.ps1                # Global installer (skills, workflows, agents, commands)
 ├── install.sh                 # Native bash installer (no PowerShell needed)
 ├── .opencode/skills/          # Project-local skills (auto-discovered)
@@ -372,13 +377,30 @@ Verifies:
 
 ## 🖥️ Interfaces
 
+### CLI (Non-Interactive)
+
+```powershell
+# Quick commands without the TUI
+.\god-cli.ps1 status                    # show install status
+.\god-cli.ps1 health                    # run health check
+.\god-cli.ps1 test                      # run tests
+.\god-cli.ps1 code-graph                # build code graph
+.\god-cli.ps1 skill-fragment -Query "auth jwt"
+.\god-cli.ps1 smart-load -Query "fastapi" -Context "backend"
+.\god-cli.ps1 session -Init             # init session memory
+.\god-cli.ps1 session -Track -Agent "backend-engineer"
+.\god-cli.ps1 wiki-build                # generate wiki pages
+.\god-cli.ps1 cursor-export             # export .cursorrules
+.\god-cli.ps1 -Help                     # show all commands
+```
+
 ### Terminal UI (TUI)
 
 ```powershell
 .\god-ui.ps1
 ```
 
-Interactive terminal interface (v4.0) with the following menu (Enter = the default action):
+Interactive terminal interface (v5.0) with Unicode box-drawing and the following menu (Enter = the default action):
 
 | Key | Action |
 |-----|--------|

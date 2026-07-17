@@ -157,37 +157,38 @@ function Update-Analytics {
     $analytics.totalSessions++
     $analytics.lastSeen = Get-ISOTimestamp
 
-    # Merge agent usage
+    # Convert to hashtable for reliable ContainsKey
+    $agentHash = @{}
+    foreach ($p in $analytics.totalAgentUses.PSObject.Properties) { $agentHash[$p.Name] = $p.Value }
     foreach ($agent in $Session.agents) {
-        if (-not $analytics.totalAgentUses.ContainsKey($agent)) {
-            $analytics.totalAgentUses[$agent] = 0
-        }
-        $analytics.totalAgentUses[$agent]++
+        if (-not $agentHash.ContainsKey($agent)) { $agentHash[$agent] = 0 }
+        $agentHash[$agent]++
     }
+    $analytics.totalAgentUses = $agentHash
 
-    # Merge skill usage
+    $skillHash = @{}
+    foreach ($p in $analytics.totalSkillUses.PSObject.Properties) { $skillHash[$p.Name] = $p.Value }
     foreach ($skill in $Session.skills) {
-        if (-not $analytics.totalSkillUses.ContainsKey($skill)) {
-            $analytics.totalSkillUses[$skill] = 0
-        }
-        $analytics.totalSkillUses[$skill]++
+        if (-not $skillHash.ContainsKey($skill)) { $skillHash[$skill] = 0 }
+        $skillHash[$skill]++
     }
+    $analytics.totalSkillUses = $skillHash
 
-    # Merge project visits
+    $projHash = @{}
+    foreach ($p in $analytics.totalProjectVisits.PSObject.Properties) { $projHash[$p.Name] = $p.Value }
     foreach ($proj in $Session.projects) {
-        if (-not $analytics.totalProjectVisits.ContainsKey($proj)) {
-            $analytics.totalProjectVisits[$proj] = 0
-        }
-        $analytics.totalProjectVisits[$proj]++
+        if (-not $projHash.ContainsKey($proj)) { $projHash[$proj] = 0 }
+        $projHash[$proj]++
     }
+    $analytics.totalProjectVisits = $projHash
 
-    # Merge command usage
+    $cmdHash = @{}
+    foreach ($p in $analytics.totalCommandUses.PSObject.Properties) { $cmdHash[$p.Name] = $p.Value }
     foreach ($cmd in $Session.commands) {
-        if (-not $analytics.totalCommandUses.ContainsKey($cmd)) {
-            $analytics.totalCommandUses[$cmd] = 0
-        }
-        $analytics.totalCommandUses[$cmd]++
+        if (-not $cmdHash.ContainsKey($cmd)) { $cmdHash[$cmd] = 0 }
+        $cmdHash[$cmd]++
     }
+    $analytics.totalCommandUses = $cmdHash
 
     Set-SafeJson -Path $AnalyticsFile -Data $analytics
 }
@@ -300,27 +301,35 @@ function Get-LearnedPreferences {
     }
 
     # Find most used agent
-    if ($analytics.totalAgentUses.Count -gt 0) {
-        $topAgent = $analytics.totalAgentUses.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 1
-        $prefs.favoriteAgent = $topAgent.Key
+    $agentProps = @()
+    foreach ($p in $analytics.totalAgentUses.PSObject.Properties) { $agentProps += [pscustomobject]@{ Name=$p.Name; Value=$p.Value } }
+    if ($agentProps.Count -gt 0) {
+        $topAgent = $agentProps | Sort-Object Value -Descending | Select-Object -First 1
+        $prefs.favoriteAgent = $topAgent.Name
     }
 
     # Find most used skill
-    if ($analytics.totalSkillUses.Count -gt 0) {
-        $topSkill = $analytics.totalSkillUses.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 1
-        $prefs.favoriteSkill = $topSkill.Key
+    $skillProps = @()
+    foreach ($p in $analytics.totalSkillUses.PSObject.Properties) { $skillProps += [pscustomobject]@{ Name=$p.Name; Value=$p.Value } }
+    if ($skillProps.Count -gt 0) {
+        $topSkill = $skillProps | Sort-Object Value -Descending | Select-Object -First 1
+        $prefs.favoriteSkill = $topSkill.Name
     }
 
     # Find most visited project
-    if ($analytics.totalProjectVisits.Count -gt 0) {
-        $topProject = $analytics.totalProjectVisits.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 1
-        $prefs.favoriteProject = $topProject.Key
+    $projProps = @()
+    foreach ($p in $analytics.totalProjectVisits.PSObject.Properties) { $projProps += [pscustomobject]@{ Name=$p.Name; Value=$p.Value } }
+    if ($projProps.Count -gt 0) {
+        $topProject = $projProps | Sort-Object Value -Descending | Select-Object -First 1
+        $prefs.favoriteProject = $topProject.Name
     }
 
     # Find most used command
-    if ($analytics.totalCommandUses.Count -gt 0) {
-        $topCommand = $analytics.totalCommandUses.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 1
-        $prefs.mostUsedCommand = $topCommand.Key
+    $cmdProps = @()
+    foreach ($p in $analytics.totalCommandUses.PSObject.Properties) { $cmdProps += [pscustomobject]@{ Name=$p.Name; Value=$p.Value } }
+    if ($cmdProps.Count -gt 0) {
+        $topCommand = $cmdProps | Sort-Object Value -Descending | Select-Object -First 1
+        $prefs.mostUsedCommand = $topCommand.Name
     }
 
     return $prefs
@@ -413,26 +422,32 @@ function Show-Analytics {
     Write-Host "  Last Seen:         $($analytics.lastSeen)" -ForegroundColor Gray
     Write-Host ""
 
-    if ($analytics.totalAgentUses.Count -gt 0) {
+    $agentProps2 = @()
+    foreach ($p in $analytics.totalAgentUses.PSObject.Properties) { $agentProps2 += [pscustomobject]@{ Name=$p.Name; Value=$p.Value } }
+    if ($agentProps2.Count -gt 0) {
         Write-Host "  Agent Usage:" -ForegroundColor Magenta
-        $analytics.totalAgentUses.GetEnumerator() | Sort-Object Value -Descending | ForEach-Object {
-            Write-Host "    $($_.Key): $($_.Value) times" -ForegroundColor Gray
+        $agentProps2 | Sort-Object Value -Descending | ForEach-Object {
+            Write-Host "    $($_.Name): $($_.Value) times" -ForegroundColor Gray
         }
         Write-Host ""
     }
 
-    if ($analytics.totalSkillUses.Count -gt 0) {
+    $skillProps2 = @()
+    foreach ($p in $analytics.totalSkillUses.PSObject.Properties) { $skillProps2 += [pscustomobject]@{ Name=$p.Name; Value=$p.Value } }
+    if ($skillProps2.Count -gt 0) {
         Write-Host "  Skill Usage:" -ForegroundColor Cyan
-        $analytics.totalSkillUses.GetEnumerator() | Sort-Object Value -Descending | ForEach-Object {
-            Write-Host "    $($_.Key): $($_.Value) times" -ForegroundColor Gray
+        $skillProps2 | Sort-Object Value -Descending | ForEach-Object {
+            Write-Host "    $($_.Name): $($_.Value) times" -ForegroundColor Gray
         }
         Write-Host ""
     }
 
-    if ($analytics.totalProjectVisits.Count -gt 0) {
+    $projProps2 = @()
+    foreach ($p in $analytics.totalProjectVisits.PSObject.Properties) { $projProps2 += [pscustomobject]@{ Name=$p.Name; Value=$p.Value } }
+    if ($projProps2.Count -gt 0) {
         Write-Host "  Project Visits:" -ForegroundColor Yellow
-        $analytics.totalProjectVisits.GetEnumerator() | Sort-Object Value -Descending | ForEach-Object {
-            Write-Host "    $($_.Key): $($_.Value) times" -ForegroundColor Gray
+        $projProps2 | Sort-Object Value -Descending | ForEach-Object {
+            Write-Host "    $($_.Name): $($_.Value) times" -ForegroundColor Gray
         }
         Write-Host ""
     }

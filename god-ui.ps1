@@ -22,8 +22,10 @@ $Script:Colors = @{
 }
 
 $Script:BoxChars = @{
-    TopLeft="+"; TopRight="+"; BottomLeft="+"; BottomRight="+"
-    Horizontal="-"; Vertical="|"
+    TopLeft="╭"; TopRight="╮"; BottomLeft="╰"; BottomRight="╯"
+    Horizontal="─"; Vertical="│"
+    TeeDown="┬"; TeeUp="┴"; TeeRight="├"; TeeLeft="┤"
+    Cross="┼"
 }
 
 function Clear-Screen { Clear-Host }
@@ -61,7 +63,7 @@ function Write-Section {
     param([string]$Title)
     Write-Host ""
     Write-Host "  $Title" -ForegroundColor $Colors.Accent
-    Write-Host "  $([string]::new('-', 50))" -ForegroundColor $Colors.Muted
+    Write-Host "  $([string]::new([char]0x2500, 50))" -ForegroundColor $Colors.Muted
 }
 
 function Write-MenuItem {
@@ -88,7 +90,7 @@ function Write-Status {
     Write-Host " $Value" -ForegroundColor $Color
 }
 
-function Write-Divider { Write-Host "" ; Write-Host "  $([string]::new('=', 56))" -ForegroundColor $Colors.Border }
+function Write-Divider { Write-Host "" ; Write-Host "  $([string]::new([char]0x2500, 56))" -ForegroundColor $Colors.Border }
 
 function Get-Input {
     param([string]$Prompt = "Select")
