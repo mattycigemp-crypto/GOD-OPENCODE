@@ -6,6 +6,30 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.4.0] - 2026-07-17
+
+### Added
+
+- **Persistent Session Memory** ([`scripts/session-memory.ps1`](scripts/session-memory.ps1)) — cross-session memory system with session context tracking (agents/skills/projects used), usage analytics (frequency counts across sessions), preference learning (auto-detects favorites), and conversation continuity (`-Recall` shows last session context). Writes to `memory/session.json` and `memory/analytics.json`.
+- **Wiki Auto-Builder** ([`scripts/build-wiki.ps1`](scripts/build-wiki.ps1)) — generates comprehensive reference pages from skill, agent, and workflow content. Outputs `docs/wiki/skills-reference.md`, `agents-reference.md`, and `workflows-reference.md` with overview tables and detailed per-item sections. Wired into wiki CI pipeline.
+- **Native Bash Installer** ([`install.sh`](install.sh) v2.0) — full native bash installer with no PowerShell dependency. Supports Linux, macOS, WSL, and Git Bash. Features: interactive/`--yes`/`--status`/`--uninstall` modes, full skills/agents/workflows/commands install, opencode.json merge, color output.
+- **Multi-Language Code Graph** ([`scripts/code-graph.ps1`](scripts/code-graph.ps1) v2.0) — extended to support 6 languages: PowerShell, Python, JavaScript, TypeScript, Go, and Rust. Language-specific comment stripping, function definition regexes, and call detection. Use `-Languages "py,js,ts"` to scan specific languages.
+- **Smart Skill Loader** ([`scripts/smart-loader.ps1`](scripts/smart-loader.ps1)) — context-aware section extraction with TF-IDF-like relevance scoring, exact-phrase bonuses, context-aware token weighting, and LRU cache for fast repeated queries. Extracts individual `##` sections from SKILL.md files rather than returning whole files.
+
+### Changed
+
+- **Terminal UI** ([`god-ui.ps1`](god-ui.ps1) v4.0) — added `[S] Session Memory`, `[W] Wiki Builder` menu items. Updated existing items to reflect multi-language code graph and native bash installer.
+- **Browser dashboard** ([`ui/index.html`](ui/index.html)) — added v1.4.0 announcement banner with 5 feature cards.
+- **README** — added v1.4.0 release badge, "What's New in v1.4.0" section with usage examples, updated Architecture Features table to show all concerns resolved, updated TUI menu table.
+
+### Notes
+
+- All 5 original roadmap concerns are now fully addressed with working MVPs.
+- `install.sh` is now a complete native installer (v1.0 delegated to pwsh; v2.0 is pure bash).
+- Code graph supports PS, Python, JS, TS, Go, Rust — configurable via `-Languages` flag.
+
+---
+
 ## [1.3.0] - 2026-07-17
 
 ### Added

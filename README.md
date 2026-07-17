@@ -9,11 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.3.0"><img alt="v1.3.0" src="https://img.shields.io/badge/release-v1.3.0-8b5cf6?style=for-the-badge"/></a>
+  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.4.0"><img alt="v1.4.0" src="https://img.shields.io/badge/release-v1.4.0-8b5cf6?style=for-the-badge"/></a>
 </p>
 
 <p align="center">
-  <strong>🆕 v1.3.0 — five new features:</strong> <a href="docs/wiki/architecture.md#live-skill-graph">live skill graph</a> · <a href="#use-with-cursor">Cursor drop-in</a> · <a href="#aggregate-skills-from-anywhere">skills mirror sync</a> · <a href="schemas/opencode.schema.json">JSON Schema</a> · <a href="#use-with-cursor">MCP-to-skill bridge</a>
+  <strong>🆕 v1.4.0 — five more features:</strong> <a href="#persistent-session-memory">session memory</a> · <a href="#wiki-auto-builder">wiki auto-builder</a> · <a href="#native-bash-installer">native bash installer</a> · <a href="#multi-language-code-graph">multi-lang code graph</a> · <a href="#smart-skill-loader">smart skill loader</a>
 </p>
 
 ---
@@ -81,6 +81,68 @@ Each `v*` tag push publishes a versioned image (`ghcr.io/.../god-opencode:v<vers
 
 ---
 
+## 🆕 What's New in v1.4.0
+
+Five new capabilities addressing the remaining roadmap concerns — persistent memory, wiki generation, native bash installer, multi-language code graph, and smart skill loading. See [CHANGELOG.md](CHANGELOG.md) for the full record.
+
+### Persistent Session Memory
+
+Cross-session memory that learns your preferences automatically:
+
+```powershell
+# Initialize a session, track usage, recall later
+.\scripts\session-memory.ps1 -Init
+.\scripts\session-memory.ps1 -Track -Agent "backend-engineer" -Skill "fastapi"
+.\scripts\session-memory.ps1 -Save
+.\scripts\session-memory.ps1 -Recall          # see what you did last time
+.\scripts\session-memory.ps1 -Prefs            # learned favorites
+.\scripts\session-memory.ps1 -Stats            # full usage analytics
+```
+
+### Wiki Auto-Builder
+
+Auto-generates comprehensive reference pages from skill, agent, and workflow content:
+
+```powershell
+.\scripts\build-wiki.ps1                  # build all reference pages
+.\scripts\build-wiki.ps1 -SkillsOnly      # rebuild skills reference only
+.\scripts\build-wiki.ps1 -AgentsOnly      # rebuild agents reference only
+```
+
+Outputs `docs/wiki/skills-reference.md`, `agents-reference.md`, and `workflows-reference.md` — wired into the wiki CI pipeline.
+
+### Native Bash Installer
+
+Full native bash installer — **no PowerShell dependency** on Linux/macOS/WSL:
+
+```bash
+bash install.sh              # interactive install
+bash install.sh --yes        # skip prompts
+bash install.sh --status     # check install status
+bash install.sh --uninstall  # remove global install
+```
+
+### Multi-Language Code Graph
+
+Code graph now supports 6 languages: PowerShell, Python, JavaScript, TypeScript, Go, and Rust:
+
+```powershell
+.\scripts\code-graph.ps1                          # scan all languages
+.\scripts\code-graph.ps1 -Languages "py,js,ts"   # specific languages only
+```
+
+### Smart Skill Loader
+
+Context-aware section extraction with TF-IDF scoring and LRU caching:
+
+```powershell
+.\scripts\smart-loader.ps1 -Query "authentication jwt"
+.\scripts\smart-loader.ps1 -Query "fastapi async" -Context "backend api" -Top 3
+.\scripts\smart-loader.ps1 -CacheStats
+```
+
+---
+
 ## 🆕 What's New in v1.3.0
 
 Five new capabilities — schema, MCP bridge, registry, workflow tests, Cursor export — and a major UX unlock for non-OpenCode hosts. See [CHANGELOG.md](CHANGELOG.md) and the [wiki](docs/wiki/index.md) for the canonical record.
@@ -129,10 +191,11 @@ Four open concerns documented in [docs/wiki/roadmap.md](docs/wiki/roadmap.md) �
 
 | Concern | MVP (1.2) | Where |
 |---------|-----------|-------|
-| Code graph (no function-to-file call trees) | `scripts/code-graph.ps1` emits JSON call-graph for PowerShell files | [docs/wiki/graph.md](docs/wiki/graph.md) |
-| Static markdown prompts (full SKILL.md over-consumes context) | `scripts/skill-fragment.ps1` returns matching `##` sections per request | [docs/wiki/dynamic-skills.md](docs/wiki/dynamic-skills.md) |
-| Heavy PowerShell reliance (Linux/macOS friction) | `install.sh` (bash) + `install.cmd` (cmd.exe) + ghcr.io container | [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md) |
-| No long-term memory between sessions | `New-MemoryRecall` + `memory/AGENT_PREFERENCES.md` | [docs/wiki/memory.md](docs/wiki/memory.md) |
+| Code graph (no function-to-file call trees) | ✅ `scripts/code-graph.ps1` — 6 languages (PS, Python, JS, TS, Go, Rust) | v1.2 + v1.4 |
+| Static markdown prompts (full SKILL.md over-consumes context) | ✅ `scripts/smart-loader.ps1` — TF-IDF scoring + LRU cache | v1.2 + v1.4 |
+| Heavy PowerShell reliance (Linux/macOS friction) | ✅ `install.sh` (pure bash, no pwsh needed) + `install.cmd` + ghcr.io | v1.2 + v1.4 |
+| No long-term memory between sessions | ✅ `scripts/session-memory.ps1` — session tracking + preference learning | v1.2 + v1.4 |
+| Wiki not auto-generated from content | ✅ `scripts/build-wiki.ps1` — auto-generates reference pages from content | v1.4 |
 
 Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md) and is auto-published to **GitHub Pages** by `.github/workflows/wiki-pages.yml` on every push to `master` (mkdocs-material, dark theme, instant search, pinned to the 9.5.x minor). Browse online: [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/) (after a one-time Settings → Pages → Source: **GitHub Actions** toggle). Each MVP has a concrete next milestone in the roadmap page.
 
@@ -258,6 +321,7 @@ GOD-OPENCODE/
 ├── opencode.json              # OpenCode config (agents, commands)
 ├── AGENTS.md                  # Project context for OpenCode
 ├── install.ps1                # Global installer (skills, workflows, agents, commands)
+├── install.sh                 # Native bash installer (no PowerShell needed)
 ├── .opencode/skills/          # Project-local skills (auto-discovered)
 ├── agents/                    # 10 agent personas (AGENT.md each)
 ├── skills/                    # 84 skill definitions (SKILL.md each, 11 categories)
@@ -314,22 +378,26 @@ Verifies:
 .\god-ui.ps1
 ```
 
-Interactive terminal interface (v3.0) with the following menu (Enter = the default action):
+Interactive terminal interface (v4.0) with the following menu (Enter = the default action):
 
 | Key | Action |
 |-----|--------|
 | Enter / `1` | **Install Globally** — default; installs skills/agents/workflows into `~/.config/opencode/` |
 | `2` | Health Check |
-| `3` | Code Graph — build/refresh the call-graph index |
+| `3` | Code Graph — build/refresh the call-graph index (6 languages) |
 | `4` | Skill Fragment — dynamic context lookup for a topic |
 | `5` | Memory — recall / append session memory |
 | `6` | Cross-Platform — show bash / cmd / PowerShell install paths |
 | `7` | Tests — Pester suite |
 | `8` | Wiki — open the local wiki |
 | `9` | Dashboard — open the browser dashboard |
+| `S` | Session Memory — init / track / recall cross-session context |
+| `W` | Wiki Builder — auto-generate reference pages from content |
+| `L` | Live Architecture — regenerate wiki skill/agent/workflow graph |
+| `R` | Skills Registry — bulk-fetch top-N from registry-sources.txt |
+| `C` | Cursor Export — generate .cursorrules for every agent |
+| `N` | What's new — current release notes from CHANGELOG.md |
 | `Q` | Exit |
-
-The dashboard (option 9) was previously option 7 and the install was previously option 1; the new menu elevates global install to the default action and adds Code Graph, Skill Fragment, Memory, Cross-Platform, and Wiki pages.
 
 ### Browser Dashboard
 

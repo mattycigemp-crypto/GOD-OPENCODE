@@ -219,10 +219,12 @@ function Show-Dashboard {
     Write-MenuItem "7"     "Tests"                 "Run Pester suite"
     Write-MenuItem "8"     "Wiki"                  "Open local wiki in browser"
     Write-MenuItem "9"     "Dashboard"             "Open browser dashboard"
+    Write-MenuItem "S"     "Session Memory"        "Init / track / recall cross-session context"
+    Write-MenuItem "W"     "Wiki Builder"          "Auto-generate reference pages from content"
     Write-MenuItem "L"     "Live Architecture"     "Regenerate wiki skill/agent/workflow graph"
     Write-MenuItem "R"     "Skills Registry"       "Bulk-fetch top-N from registry-sources.txt"
     Write-MenuItem "C"     "Cursor Export"         "Generate .cursorrules for every agent"
-    Write-MenuItem "N"     "What's new in v1.3.0"  "Current release notes from CHANGELOG.md"
+    Write-MenuItem "N"     "What's new in v1.4.0"  "Current release notes from CHANGELOG.md"
     Write-MenuItem "Q"     "Exit"                  "Close the interface"
 
     Write-Divider
@@ -433,37 +435,98 @@ function Show-CursorExport {
     & (Join-Path $Root "scripts\install-skill.ps1") -Use cursorrules
 }
 
+function Show-SessionMemory {
+    Clear-Screen
+    Write-Header "Session Memory  (v1.4.0)"
+    Write-Host ""
+    $sm = Join-Path $Root "scripts/session-memory.ps1"
+    if (!(Test-Path $sm)) {
+        Write-Host "  scripts/session-memory.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    Write-Host "  1 - Show Session Summary" -ForegroundColor $Colors.Muted
+    Write-Host "  2 - Initialize New Session" -ForegroundColor $Colors.Muted
+    Write-Host "  3 - Recall Last Session" -ForegroundColor $Colors.Muted
+    Write-Host "  4 - Track Usage (Agent/Skill/Project)" -ForegroundColor $Colors.Muted
+    Write-Host "  5 - Show Learned Preferences" -ForegroundColor $Colors.Muted
+    Write-Host "  6 - Show Usage Analytics" -ForegroundColor $Colors.Muted
+    Write-Host "  B - Back" -ForegroundColor $Colors.Muted
+    $choice = Get-Input "Session Memory"
+    switch ($choice.ToUpper()) {
+        "1" { & $sm }
+        "2" { & $sm -Init }
+        "3" { & $sm -Recall }
+        "4" {
+            $a = Get-Input "  Agent name (or empty)"
+            $s = Get-Input "  Skill name (or empty)"
+            $p = Get-Input "  Project name (or empty)"
+            $hasTrack = $false
+            if ($a) { & $sm -Track -Agent $a; $hasTrack = $true }
+            if ($s) { & $sm -Track -Skill $s; $hasTrack = $true }
+            if ($p) { & $sm -Track -Project $p; $hasTrack = $true }
+            if (-not $hasTrack) { Write-Host "  Nothing to track." -ForegroundColor $Colors.Warning }
+        }
+        "5" { & $sm -Prefs }
+        "6" { & $sm -Stats }
+        "B" { return }
+    }
+}
+
+function Show-WikiBuilder {
+    Clear-Screen
+    Write-Header "Wiki Auto-Builder  (v1.4.0)"
+    Write-Host ""
+    $wb = Join-Path $Root "scripts/build-wiki.ps1"
+    if (!(Test-Path $wb)) {
+        Write-Host "  scripts/build-wiki.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    Write-Host "  Auto-generates reference pages from skill/agent/workflow content." -ForegroundColor $Colors.Muted
+    Write-Host ""
+    Write-Host "  1 - Build All Reference Pages" -ForegroundColor $Colors.Muted
+    Write-Host "  2 - Skills Reference Only" -ForegroundColor $Colors.Muted
+    Write-Host "  3 - Agents Reference Only" -ForegroundColor $Colors.Muted
+    Write-Host "  4 - Workflows Reference Only" -ForegroundColor $Colors.Muted
+    Write-Host "  B - Back" -ForegroundColor $Colors.Muted
+    $choice = Get-Input "Wiki Builder"
+    switch ($choice.ToUpper()) {
+        "1" { & $wb }
+        "2" { & $wb -SkillsOnly }
+        "3" { & $wb -AgentsOnly }
+        "4" { & $wb -WorkflowsOnly }
+        "B" { return }
+    }
+}
+
 function Show-WhatsNew {
     Clear-Screen
-    Write-Header "What's New in v1.3.0"
+    Write-Header "What's New in v1.4.0"
     Write-Host ""
-    Write-Host "  Five new capabilities for AI engineering portability." -ForegroundColor $Colors.Accent
+    Write-Host "  Five new features addressing the full roadmap." -ForegroundColor $Colors.Accent
     Write-Host ""
-    Write-Section "Live Skill Graph"
-    Write-Host "  scripts\build-skill-graph.ps1 emits docs\wiki\_data\architecture.mmd" -ForegroundColor $Colors.Text
-    Write-Host "  from the agents/ + skills/ + workflows/ tree on every wiki build." -ForegroundColor $Colors.Text
+    Write-Section "Persistent Session Memory"
+    Write-Host "  scripts\session-memory.ps1 -Init/-Track/-Save/-Recall/-Prefs" -ForegroundColor $Colors.Text
+    Write-Host "  Cross-session learning, preference tracking, usage analytics." -ForegroundColor $Colors.Text
     Write-Host ""
-    Write-Section "Cursor / Windsurf Drop-in"
-    Write-Host "  scripts\install-skill.ps1 -Use cursorrules" -ForegroundColor $Colors.Text
-    Write-Host "  Generates a .cursorrules per agent into dist\cursorrules\" -ForegroundColor $Colors.Text
-    Write-Host "  One command -> open in Cursor / Windsurf / Aider immediately." -ForegroundColor $Colors.Text
+    Write-Section "Wiki Auto-Builder"
+    Write-Host "  scripts\build-wiki.ps1" -ForegroundColor $Colors.Text
+    Write-Host "  Generates skills-reference.md, agents-reference.md, workflows-reference.md" -ForegroundColor $Colors.Text
+    Write-Host "  from actual content. Wired into wiki CI pipeline." -ForegroundColor $Colors.Text
     Write-Host ""
-    Write-Section "Skills Registry Mirror"
-    Write-Host "  scripts\install-skill.ps1 -Sync [-TopN N]" -ForegroundColor $Colors.Text
-    Write-Host "  Shallow-clones the top-N sources from registry-sources.txt" -ForegroundColor $Colors.Text
-    Write-Host "  into skills-mirror\. Copy or symlink into your own skills\." -ForegroundColor $Colors.Text
+    Write-Section "Native Bash Installer"
+    Write-Host "  install.sh  (v2.0 - pure bash, no PowerShell needed)" -ForegroundColor $Colors.Text
+    Write-Host "  Supports --yes, --status, --uninstall flags." -ForegroundColor $Colors.Text
     Write-Host ""
-    Write-Section "JSON Schema Validation"
-    Write-Host "  schemas\opencode.schema.json validates opencode.json" -ForegroundColor $Colors.Text
-    Write-Host "  Editor auto-lints via the file's \$schema reference." -ForegroundColor $Colors.Text
+    Write-Section "Multi-Language Code Graph"
+    Write-Host "  scripts\code-graph.ps1 now supports PS, Python, JS, TS, Go, Rust" -ForegroundColor $Colors.Text
+    Write-Host "  Use -Languages \"py,js,ts\" to scan specific languages." -ForegroundColor $Colors.Text
     Write-Host ""
-    Write-Section "MCP-to-Skill Bridge"
-    Write-Host "  scripts\mcp-to-skill.ps1 reads opencode.json#mcp_servers" -ForegroundColor $Colors.Text
-    Write-Host "  and emits skills\<category>\mcp-<name>\SKILL.md wrappers." -ForegroundColor $Colors.Text
-    Write-Host "  Run by install.ps1 automatically." -ForegroundColor $Colors.Text
+    Write-Section "Smart Skill Loader"
+    Write-Host "  scripts\smart-loader.ps1 -Query \"auth jwt\" -Context \"backend\"" -ForegroundColor $Colors.Text
+    Write-Host "  TF-IDF scoring, exact-phrase bonuses, LRU cache." -ForegroundColor $Colors.Text
     Write-Host ""
     Write-Divider
-    Write-Host "  Canonical release notes: CHANGELOG.md  ([1.3.0] section)" -ForegroundColor $Colors.Muted
+    Write-Host "  Canonical release notes: CHANGELOG.md  ([1.4.0] section)" -ForegroundColor $Colors.Muted
     Write-Host "  Wiki page:              docs\wiki\index.md" -ForegroundColor $Colors.Muted
     Write-Divider
 }
@@ -488,11 +551,12 @@ while ($true) {
         "7" { Clear-Screen ; Show-TestRunner    ; Wait-Key }
         "8" { Clear-Screen ; Show-WikiPage      ; Wait-Key }
         "9" { Clear-Screen ; Show-BrowserDashboard ; Wait-Key }
-        "W" { Clear-Screen ; Show-WikiPage      ; Wait-Key }
-        "L" { Clear-Screen ; Show-LiveGraph     ; Wait-Key }
-        "R" { Clear-Screen ; Show-SkillsSync    ; Wait-Key }
-        "C" { Clear-Screen ; Show-CursorExport  ; Wait-Key }
-        "N" { Clear-Screen ; Show-WhatsNew      ; Wait-Key }
+        "S" { Clear-Screen ; Show-SessionMemory   ; Wait-Key }
+        "W" { Clear-Screen ; Show-WikiBuilder     ; Wait-Key }
+        "L" { Clear-Screen ; Show-LiveGraph       ; Wait-Key }
+        "R" { Clear-Screen ; Show-SkillsSync      ; Wait-Key }
+        "C" { Clear-Screen ; Show-CursorExport    ; Wait-Key }
+        "N" { Clear-Screen ; Show-WhatsNew        ; Wait-Key }
         "Q" {
             Clear-Screen
             Write-Host "" ; Write-Host "  GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""
