@@ -1063,12 +1063,8 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
 (function() {
   'use strict';
 
-  /* ===== LOADER ===== */
-  window.addEventListener('load', function() {
-    setTimeout(function() {
-      document.getElementById('loader').classList.add('hidden');
-    }, 300);
-  });
+    /* ===== LOADER (auto-hide) ===== */
+    document.getElementById('loader').classList.add('hidden');
 
   /* ===== CUSTOM CURSOR ===== */
   var cursor = document.getElementById('cursor');
@@ -1176,7 +1172,7 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
     resize();
     window.addEventListener('resize', resize);
 
-    var COUNT = 800;
+    var COUNT = 300;
     var px = [], py = [], pz = [], vx = [], vy = [], vz = [], ps = [], po = [];
     for (var i = 0; i < COUNT; i++) {
       px[i] = (Math.random() - 0.5) * 700;
@@ -1224,7 +1220,7 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
       indices.sort(function(a, b) { return pz[b] - pz[a]; });
 
       // Connection lines (only check subset for perf)
-      var lineStep = Math.max(1, Math.floor(COUNT / 200));
+      var lineStep = Math.max(1, Math.floor(COUNT / 80));
       ctx.lineWidth = 0.5;
       for (var a = 0; a < COUNT; a += lineStep) {
         for (var b = a + lineStep; b < COUNT; b += lineStep) {
