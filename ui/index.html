@@ -9,348 +9,369 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* ============================================
-       DESIGN TOKENS
-       ============================================ */
     :root {
-      --bg:          #09090b;
-      --bg-subtle:   #0f0f12;
-      --surface:     #18181b;
-      --surface-2:   #1e1e22;
-      --surface-3:   #27272a;
-      --border:      #27272a;
-      --border-dim:  #1e1e22;
-
-      --text:        #fafafa;
-      --text-2:      #a1a1aa;
-      --text-3:      #71717a;
-
-      --violet:      #8b5cf6;
-      --violet-dim:  #7c3aed;
-      --violet-glow: rgba(139, 92, 246, 0.15);
-      --cyan:        #06b6d4;
-      --cyan-dim:    #0891b2;
-      --green:       #22c55e;
-      --green-dim:   #16a34a;
-      --yellow:      #eab308;
-      --red:         #ef4444;
-      --blue:        #3b82f6;
-      --orange:      #f97316;
-      --pink:        #ec4899;
-
-      --radius:      12px;
-      --radius-sm:   8px;
-      --radius-xs:   6px;
-
-      --shadow:      0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
-      --shadow-lg:   0 10px 40px rgba(0,0,0,0.5);
-
-      --font:        'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      --mono:        'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
-
-      --sidebar-w:   260px;
+      --bg: #0a0a0a;
+      --bg-warm: #0f0e0d;
+      --surface: #151413;
+      --surface-2: #1c1b19;
+      --surface-3: #242320;
+      --border: #2a2926;
+      --border-dim: #1e1d1a;
+      --text: #f5f0e8;
+      --text-2: #a8a29e;
+      --text-3: #6b6560;
+      --accent: #c9a96e;
+      --accent-dim: #b8944f;
+      --accent-glow: rgba(201, 169, 110, 0.08);
+      --violet: #8b5cf6;
+      --cyan: #06b6d4;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --orange: #f97316;
+      --pink: #ec4899;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Cascadia Code', monospace;
     }
 
-    /* ============================================
-       RESET & BASE
-       ============================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: var(--font);
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
 
-    a { color: var(--violet); text-decoration: none; transition: color 0.15s; }
-    a:hover { color: var(--violet-dim); }
+    a { color: var(--accent); text-decoration: none; transition: color 0.3s ease; }
+    a:hover { color: var(--text); }
 
-    code {
-      font-family: var(--mono);
-      font-size: 13px;
-      background: var(--surface-2);
-      padding: 2px 6px;
-      border-radius: var(--radius-xs);
-      border: 1px solid var(--border);
+    /* HEADER */
+    .site-header {
+      position: fixed;
+      inset: 0;
+      bottom: auto;
+      z-index: 100;
+      padding: 0 clamp(20px, 4vw, 60px);
+      transition: background 0.4s ease;
     }
 
-    /* ============================================
-       LAYOUT
-       ============================================ */
-    .app {
-      display: grid;
-      grid-template-columns: var(--sidebar-w) 1fr;
-      min-height: 100vh;
+    .site-header.scrolled {
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-dim);
     }
 
-    /* ============================================
-       SIDEBAR
-       ============================================ */
-    .sidebar {
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .sidebar-header {
-      padding: 24px 20px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-brand {
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      height: 72px;
     }
 
-    .brand-icon {
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-mark {
       width: 36px;
       height: 36px;
-      background: linear-gradient(135deg, var(--violet), var(--cyan));
-      border-radius: var(--radius-sm);
+      background: var(--accent);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
       font-weight: 800;
-      color: white;
-      flex-shrink: 0;
+      font-size: 16px;
+      color: var(--bg);
     }
 
-    .brand-text h1 {
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .logo-text {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--text);
     }
 
-    .brand-text p {
-      font-size: 11px;
-      color: var(--text-3);
-      margin-top: 1px;
-    }
-
-    .sidebar-nav {
-      padding: 12px 0;
-      flex: 1;
-    }
-
-    .nav-section {
-      padding: 16px 20px 6px;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .nav-item {
+    .nav-links {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 9px 20px;
-      color: var(--text-2);
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
       font-size: 13px;
       font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      border-left: 2px solid transparent;
-      user-select: none;
+      color: var(--text-2);
+      letter-spacing: 0.02em;
+      transition: color 0.3s ease;
+      position: relative;
     }
 
-    .nav-item:hover {
-      color: var(--text);
-      background: var(--surface-2);
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
     }
 
-    .nav-item.active {
-      color: var(--text);
-      background: var(--violet-glow);
-      border-left-color: var(--violet);
-    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a.active { color: var(--accent); }
+    .nav-links a.active::after { width: 100%; }
 
-    .nav-item .icon {
-      width: 18px;
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      font-size: 14px;
-      opacity: 0.7;
+      padding: 120px clamp(20px, 4vw, 60px) 80px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .nav-item.active .icon { opacity: 1; }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
 
-    .sidebar-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
+    .hero-eyebrow {
       font-size: 11px;
-      color: var(--text-3);
-    }
-
-    /* ============================================
-       MAIN CONTENT
-       ============================================ */
-    .main {
-      padding: 32px 40px;
-      overflow-y: auto;
-      max-width: 1100px;
-    }
-
-    .page { display: none; animation: fadeIn 0.2s ease; }
-    .page.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ============================================
-       PAGE HEADER
-       ============================================ */
-    .page-header {
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
       margin-bottom: 32px;
     }
 
-    .page-header h2 {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
+    .hero h1 {
+      font-size: clamp(48px, 8vw, 120px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
       color: var(--text);
+      max-width: 900px;
     }
 
-    .page-header p {
+    .hero-sub {
+      font-size: 18px;
       color: var(--text-2);
-      margin-top: 6px;
-      font-size: 14px;
-      max-width: 600px;
+      margin-top: 32px;
+      max-width: 500px;
+      line-height: 1.7;
     }
 
-    /* ============================================
-       STATS GRID
-       ============================================ */
-    .stats {
+    .hero-cta {
+      margin-top: 48px;
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover {
+      background: var(--text);
+      color: var(--bg);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      border-top: 1px solid var(--border-dim);
+      border-bottom: 1px solid var(--border-dim);
+      padding: 48px clamp(20px, 4vw, 60px);
+    }
+
+    .stats-inner {
+      max-width: 1400px;
+      margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 32px;
+      gap: 32px;
     }
 
     .stat {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      transition: border-color 0.2s;
+      text-align: center;
     }
 
-    .stat:hover { border-color: var(--violet); }
-
     .stat-value {
-      font-size: 32px;
+      font-size: 48px;
       font-weight: 800;
       letter-spacing: -0.04em;
-      background: linear-gradient(135deg, var(--violet), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--text);
+      line-height: 1;
     }
 
     .stat-label {
       font-size: 12px;
-      color: var(--text-3);
-      margin-top: 4px;
       font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-top: 8px;
     }
 
-    /* ============================================
-       SECTIONS
-       ============================================ */
+    /* SECTIONS */
     .section {
-      margin-bottom: 36px;
+      padding: 100px clamp(20px, 4vw, 60px);
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
       margin-bottom: 16px;
     }
 
-    .section-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--violet);
-    }
-
     .section-title {
-      font-size: 16px;
-      font-weight: 600;
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
       color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 16px;
     }
 
-    /* ============================================
-       CARDS
-       ============================================ */
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-2);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* CARDS */
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2px;
+      margin-top: 48px;
     }
 
     .card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      transition: all 0.2s;
-      cursor: default;
+      padding: 36px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
     }
 
     .card:hover {
-      border-color: var(--violet);
-      box-shadow: 0 0 0 1px var(--violet-glow);
+      background: var(--surface-2);
     }
 
-    .card-title {
+    .card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .card-eyebrow {
+      font-size: 10px;
       font-weight: 600;
-      font-size: 14px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
     }
 
-    .card-title .emoji { font-size: 16px; }
+    .card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
 
-    .card-desc {
+    .card p {
+      font-size: 14px;
       color: var(--text-2);
-      font-size: 13px;
-      margin-top: 8px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .card-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 12px;
+      margin-top: 16px;
     }
 
     .tag {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: var(--radius-xs);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
       border: 1px solid var(--border);
       background: var(--surface-2);
       color: var(--text-3);
@@ -365,115 +386,109 @@
     .tag.orange  { border-color: rgba(249,115,22,0.3); color: var(--orange); }
     .tag.pink    { border-color: rgba(236,72,153,0.3); color: var(--pink); }
 
-    /* ============================================
-       TABLE
-       ============================================ */
+    /* TABLE */
     .table-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      margin-top: 48px;
+      border: 1px solid var(--border-dim);
       overflow: hidden;
     }
 
     table { width: 100%; border-collapse: collapse; }
 
     th {
-      background: var(--surface-2);
-      padding: 12px 16px;
+      background: var(--surface);
+      padding: 16px 24px;
       text-align: left;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       color: var(--text-3);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--border-dim);
     }
 
     td {
-      padding: 12px 16px;
+      padding: 16px 24px;
       border-bottom: 1px solid var(--border-dim);
       font-size: 13px;
       color: var(--text-2);
     }
 
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: var(--surface-2); }
+    tr:hover td { background: var(--surface); }
     td strong { color: var(--text); font-weight: 600; }
 
-    /* ============================================
-       CODE BLOCK
-       ============================================ */
+    /* CODE */
     .code-block {
+      margin-top: 32px;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
+      border: 1px solid var(--border-dim);
+      padding: 28px 32px;
       font-family: var(--mono);
       font-size: 13px;
-      line-height: 1.7;
+      line-height: 1.8;
       overflow-x: auto;
       white-space: pre;
     }
 
     .code-block .comment { color: var(--text-3); }
-    .code-block .cmd     { color: var(--violet); }
+    .code-block .cmd     { color: var(--accent); }
     .code-block .arg     { color: var(--cyan); }
-    .code-block .flag    { color: var(--green); }
 
-    /* ============================================
-       HEALTH ROW
-       ============================================ */
-    .health-list { display: flex; flex-direction: column; gap: 6px; }
+    /* HEALTH */
+    .health-list {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
 
     .health-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
+      gap: 16px;
+      padding: 16px 24px;
       background: var(--surface);
-      border: 1px solid var(--border);
+      transition: background 0.3s ease;
     }
+
+    .health-row:hover { background: var(--surface-2); }
 
     .health-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(34,197,94,0.4);
       flex-shrink: 0;
     }
 
-    .health-dot.ok   { background: var(--green); box-shadow: 0 0 8px var(--green); }
-    .health-dot.warn { background: var(--yellow); }
-
-    .health-label { flex: 1; font-size: 13px; color: var(--text-2); }
+    .health-label { flex: 1; font-size: 14px; color: var(--text-2); }
 
     .health-badge {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 99px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(34,197,94,0.1);
+      color: var(--green);
+      letter-spacing: 0.05em;
     }
 
-    .health-badge.ok   { background: rgba(34,197,94,0.15); color: var(--green); }
-    .health-badge.warn { background: rgba(234,179,8,0.15); color: var(--yellow); }
-
-    /* ============================================
-       ROUTER VISUALIZER
-       ============================================ */
+    /* ROUTER */
     .router-grid {
+      margin-top: 32px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 6px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2px;
     }
 
     .router-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: var(--radius-xs);
+      gap: 12px;
+      padding: 12px 16px;
       background: var(--surface);
-      border: 1px solid var(--border);
       font-size: 13px;
     }
 
@@ -481,13 +496,12 @@
       font-family: var(--mono);
       font-size: 12px;
       background: var(--surface-3);
-      padding: 2px 8px;
-      border-radius: var(--radius-xs);
+      padding: 4px 10px;
+      border-radius: 6px;
       color: var(--text-2);
     }
 
     .router-arrow { color: var(--text-3); }
-
     .router-agent { font-weight: 600; font-size: 12px; }
     .router-agent.principal { color: var(--violet); }
     .router-agent.backend   { color: var(--blue); }
@@ -498,295 +512,287 @@
     .router-agent.devops    { color: var(--green); }
     .router-agent.debugger  { color: var(--orange); }
 
-    /* ============================================
-       BADGES
-       ============================================ */
+    /* BADGE */
     .badge {
       display: inline-flex;
       align-items: center;
-      padding: 3px 10px;
-      border-radius: 99px;
-      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 10px;
       font-weight: 600;
+      letter-spacing: 0.04em;
     }
 
-    .badge.green  { background: rgba(34,197,94,0.15); color: var(--green); }
-    .badge.violet { background: rgba(139,92,246,0.15); color: var(--violet); }
+    .badge.green  { background: rgba(34,197,94,0.1); color: var(--green); }
+    .badge.violet { background: rgba(139,92,246,0.1); color: var(--violet); }
 
-    /* ============================================
-       RESPONSIVE
-       ============================================ */
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border-dim);
+      margin: 0 clamp(20px, 4vw, 60px);
+    }
+
+    /* FOOTER */
+    .site-footer {
+      padding: 80px clamp(20px, 4vw, 60px) 40px;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 64px;
+    }
+
+    .footer-brand p {
+      color: var(--text-3);
+      font-size: 14px;
+      margin-top: 16px;
+      max-width: 300px;
+      line-height: 1.7;
+    }
+
+    .footer-col h4 {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col a {
+      font-size: 13px;
+      color: var(--text-2);
+      transition: color 0.3s ease;
+    }
+
+    .footer-col a:hover { color: var(--accent); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--border-dim);
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    /* PAGE SECTIONS (hidden by default) */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    /* RESPONSIVE */
     @media (max-width: 900px) {
-      .app { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
-      .main { padding: 20px; }
-      .stats { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
       .card-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .hero h1 { font-size: 48px; }
     }
 
-    /* ============================================
-       SCROLLBAR
-       ============================================ */
+    @media (max-width: 600px) {
+      .stats-inner { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-cta { flex-direction: column; }
+    }
+
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
   </style>
 </head>
 <body>
-<div class="app">
 
-<!-- ============================================
-     SIDEBAR
-     ============================================ -->
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-brand">
-      <div class="brand-icon">G</div>
-      <div class="brand-text">
-        <h1>GOD-OPENCODE</h1>
-        <p>AI Engineering OS v2.0</p>
-      </div>
-    </div>
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="#" class="logo" onclick="showPage('hero'); return false;">
+      <div class="logo-mark">G</div>
+      <span class="logo-text">GOD-OPENCODE</span>
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#" class="active" data-nav="agents" onclick="showPage('agents'); return false;">Agents</a></li>
+        <li><a href="#" data-nav="skills" onclick="showPage('skills'); return false;">Skills</a></li>
+        <li><a href="#" data-nav="workflows" onclick="showPage('workflows'); return false;">Workflows</a></li>
+        <li><a href="#" data-nav="commands" onclick="showPage('commands'); return false;">Commands</a></li>
+        <li><a href="#" data-nav="router" onclick="showPage('router'); return false;">Router</a></li>
+        <li><a href="#" data-nav="quickstart" onclick="showPage('quickstart'); return false;">Quick Start</a></li>
+      </ul>
+    </nav>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section">Overview</div>
-    <div class="nav-item active" data-page="dashboard">
-      <span class="icon">&#9670;</span> Dashboard
-    </div>
-    <div class="nav-item" data-page="health">
-      <span class="icon">&#9829;</span> Health Check
-    </div>
+</header>
 
-    <div class="nav-section">Components</div>
-    <div class="nav-item" data-page="agents">
-      <span class="icon">&#9673;</span> Agents
-    </div>
-    <div class="nav-item" data-page="skills">
-      <span class="icon">&#9670;</span> Skills
-    </div>
-    <div class="nav-item" data-page="workflows">
-      <span class="icon">&#10222;</span> Workflows
-    </div>
-    <div class="nav-item" data-page="commands">
-      <span class="icon">/</span> Commands
-    </div>
-    <div class="nav-item" data-page="prompts">
-      <span class="icon">&#10038;</span> Prompts
-    </div>
-    <div class="nav-item" data-page="templates">
-      <span class="icon">&#11020;</span> Templates
-    </div>
-
-    <div class="nav-section">Intelligence</div>
-    <div class="nav-item" data-page="router">
-      <span class="icon">&#8644;</span> Router
-    </div>
-    <div class="nav-item" data-page="mcps">
-      <span class="icon">&#11071;</span> MCPs
-    </div>
-    <div class="nav-item" data-page="quickstart">
-      <span class="icon">&#9654;</span> Quick Start
-    </div>
-  </nav>
-  <div class="sidebar-footer">
-    <div>v2.0 &middot; Built for OpenCode</div>
+<!-- HERO -->
+<section class="hero" id="page-hero">
+  <p class="hero-eyebrow">AI Engineering Operating System</p>
+  <h1>The right expert for every task</h1>
+  <p class="hero-sub">10 specialist agents, 70+ skills, 15 workflows — one command bootstraps a production-grade AI engineering environment.</p>
+  <div class="hero-cta">
+    <a href="#quickstart" class="btn btn-primary" onclick="showPage('quickstart'); return false;">Get Started</a>
+    <a href="#agents" class="btn btn-secondary" onclick="showPage('agents'); return false;">Explore Agents</a>
   </div>
-</aside>
+</section>
 
-<!-- ============================================
-     MAIN
-     ============================================ -->
-<main class="main">
-
-<!-- ===== DASHBOARD ===== -->
-<div id="page-dashboard" class="page active">
-  <div class="page-header">
-    <h2>Dashboard</h2>
-    <p>Your AI engineering operating system &mdash; fully loaded and ready.</p>
-  </div>
-
-  <div class="stats">
-    <div class="stat"><div class="stat-value">10</div><div class="stat-label">Agents</div></div>
-    <div class="stat"><div class="stat-value">70+</div><div class="stat-label">Skills</div></div>
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-value">10</div><div class="stat-label">Expert Agents</div></div>
+    <div class="stat"><div class="stat-value">70+</div><div class="stat-label">Domain Skills</div></div>
     <div class="stat"><div class="stat-value">15</div><div class="stat-label">Workflows</div></div>
-    <div class="stat"><div class="stat-value">6</div><div class="stat-label">Commands</div></div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-dot"></div>
-      <div class="section-title">Slash Commands</div>
-    </div>
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-title"><span class="emoji">&#9889;</span> /build</div>
-        <div class="card-desc">Build a complete production application. Parses your description, selects workflow, assigns agents, and produces an implementation plan.</div>
-        <div class="card-tags"><span class="tag violet">principal-engineer</span><span class="tag cyan">all agents</span></div>
-      </div>
-      <div class="card">
-        <div class="card-title"><span class="emoji">&#127959;</span> /architect</div>
-        <div class="card-desc">Design or review system architecture. Produces ADRs, component diagrams, and scalability analysis.</div>
-        <div class="card-tags"><span class="tag violet">principal-engineer</span><span class="tag cyan">database-architect</span></div>
-      </div>
-      <div class="card">
-        <div class="card-title"><span class="emoji">&#128027;</span> /debug</div>
-        <div class="card-desc">Systematic bug investigation from symptom to root cause to fix. Includes regression test and documentation.</div>
-        <div class="card-tags"><span class="tag orange">debugger</span><span class="tag blue">backend-engineer</span></div>
-      </div>
-      <div class="card">
-        <div class="card-title"><span class="emoji">&#128065;</span> /review</div>
-        <div class="card-desc">Senior-level code review covering correctness, security, performance, and maintainability.</div>
-        <div class="card-tags"><span class="tag violet">principal-engineer</span><span class="tag red">security-engineer</span></div>
-      </div>
-      <div class="card">
-        <div class="card-title"><span class="emoji">&#128274;</span> /secure</div>
-        <div class="card-desc">Full security audit with threat modelling, OWASP checks, dependency scanning, and findings report.</div>
-        <div class="card-tags"><span class="tag red">security-engineer</span><span class="tag green">devops-engineer</span></div>
-      </div>
-      <div class="card">
-        <div class="card-title"><span class="emoji">&#9889;</span> /optimize</div>
-        <div class="card-desc">Performance optimization driven by measurement. Covers algorithms, database queries, caching, and infrastructure.</div>
-        <div class="card-tags"><span class="tag violet">principal-engineer</span><span class="tag cyan">database-architect</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-dot"></div>
-      <div class="section-title">Quick Install</div>
-    </div>
-    <div class="code-block"><span class="comment"># Bootstrap the entire framework in one command</span>
-<span class="cmd">.\god-install.ps1</span>
-
-<span class="comment"># Verify installation</span>
-<span class="cmd">.\god-health.ps1</span>
-
-<span class="comment"># Run the router against a request</span>
-<span class="cmd">.\scripts\router.ps1</span> <span class="arg">-Request</span> <span class="arg">"build a fastapi api with postgres"</span>
-
-<span class="comment"># Scan a project and generate an implementation plan</span>
-<span class="cmd">.\tools\project-scan.ps1</span> <span class="arg">-TargetPath</span> <span class="arg">"C:\path\to\your\project"</span></div>
+    <div class="stat"><div class="stat-value">6</div><div class="stat-label">Slash Commands</div></div>
   </div>
 </div>
 
-<!-- ===== AGENTS ===== -->
-<div id="page-agents" class="page">
-  <div class="page-header">
-    <h2>Agents</h2>
-    <p>10 virtual engineering personas. Each coordinates a specific set of skills and can delegate to other agents.</p>
-  </div>
+<!-- AGENTS -->
+<section class="section page-section active" id="page-agents">
+  <p class="section-eyebrow">Personas</p>
+  <h2 class="section-title">Engineering agents</h2>
+  <p class="section-desc">Each agent is a specialist with curated skills, workflow knowledge, and delegation authority.</p>
   <div class="card-grid">
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> principal-engineer</div>
-      <div class="card-desc">Technical leader. Handles architecture, cross-cutting decisions, and complex task decomposition. The default fallback agent.</div>
-      <div class="card-tags"><span class="tag violet">system-design</span><span class="tag violet">architect</span><span class="tag violet">code-review</span></div>
+      <div class="card-eyebrow">Lead</div>
+      <h3>Principal Engineer</h3>
+      <p>System design, architecture, technical strategy, and cross-cutting decisions. The default fallback agent.</p>
+      <div class="card-tags"><span class="tag violet">system-design</span><span class="tag violet">architect</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> backend-engineer</div>
-      <div class="card-desc">Server-side systems, REST APIs, business logic, database integration, and backend security.</div>
-      <div class="card-tags"><span class="tag blue">api-design</span><span class="tag blue">fastapi</span><span class="tag blue">postgres</span></div>
+      <div class="card-eyebrow">Server</div>
+      <h3>Backend Engineer</h3>
+      <p>APIs, server architecture, business logic, database integration, and backend security.</p>
+      <div class="card-tags"><span class="tag blue">api-design</span><span class="tag blue">fastapi</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> frontend-engineer</div>
-      <div class="card-desc">React, Next.js, TypeScript UI &mdash; performance, accessibility, state management, and component architecture.</div>
-      <div class="card-tags"><span class="tag yellow">react</span><span class="tag yellow">nextjs</span><span class="tag yellow">typescript</span></div>
+      <div class="card-eyebrow">Client</div>
+      <h3>Frontend Engineer</h3>
+      <p>React, Next.js, TypeScript UI — performance, accessibility, state management, component architecture.</p>
+      <div class="card-tags"><span class="tag yellow">react</span><span class="tag yellow">nextjs</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> ai-engineer</div>
-      <div class="card-desc">LLM systems, agents, RAG pipelines, embeddings, MCP servers, evals, and prompt engineering.</div>
-      <div class="card-tags"><span class="tag pink">llm-engineer</span><span class="tag pink">rag-engineer</span><span class="tag pink">prompt-engineer</span></div>
+      <div class="card-eyebrow">Intelligence</div>
+      <h3>AI Engineer</h3>
+      <p>LLM systems, agents, RAG pipelines, embeddings, MCP servers, evals, and prompt engineering.</p>
+      <div class="card-tags"><span class="tag pink">llm</span><span class="tag pink">rag</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> security-engineer</div>
-      <div class="card-desc">Security audits, vulnerability assessment, threat modelling, authentication, and cryptography.</div>
-      <div class="card-tags"><span class="tag red">security-audit</span><span class="tag red">pentest</span><span class="tag red">auth</span></div>
+      <div class="card-eyebrow">Security</div>
+      <h3>Security Engineer</h3>
+      <p>Security audits, threat modelling, OWASP checks, penetration testing, and cryptography.</p>
+      <div class="card-tags"><span class="tag red">security-audit</span><span class="tag red">pentest</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> database-architect</div>
-      <div class="card-desc">Data modelling, schema design, query optimization, migrations, replication, and sharding.</div>
-      <div class="card-tags"><span class="tag cyan">database-design</span><span class="tag cyan">postgres</span><span class="tag cyan">redis</span></div>
+      <div class="card-eyebrow">Data</div>
+      <h3>Database Architect</h3>
+      <p>Schema design, query optimization, migrations, replication, sharding, and data modelling.</p>
+      <div class="card-tags"><span class="tag cyan">database-design</span><span class="tag cyan">postgres</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> devops-engineer</div>
-      <div class="card-desc">CI/CD pipelines, Docker, Kubernetes, Terraform, cloud infrastructure, and monitoring.</div>
-      <div class="card-tags"><span class="tag green">docker</span><span class="tag green">kubernetes</span><span class="tag green">terraform</span></div>
+      <div class="card-eyebrow">Infrastructure</div>
+      <h3>DevOps Engineer</h3>
+      <p>CI/CD pipelines, Docker, Kubernetes, Terraform, cloud infrastructure, and monitoring.</p>
+      <div class="card-tags"><span class="tag green">docker</span><span class="tag green">kubernetes</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> debugger</div>
-      <div class="card-desc">Systematic root-cause analysis. Reproduces bugs, traces execution, fixes root causes, and writes regression tests.</div>
-      <div class="card-tags"><span class="tag orange">bug-hunter</span><span class="tag orange">code-review</span><span class="tag orange">testing</span></div>
+      <div class="card-eyebrow">Investigation</div>
+      <h3>Debugger</h3>
+      <p>Systematic root-cause analysis. Reproduces bugs, traces execution, fixes root causes, writes regression tests.</p>
+      <div class="card-tags"><span class="tag orange">bug-hunter</span><span class="tag orange">profiling</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> researcher</div>
-      <div class="card-desc">Technical investigation, option comparison, evidence-based recommendations, and literature synthesis.</div>
-      <div class="card-tags"><span class="tag violet">documentation</span><span class="tag violet">architect</span></div>
+      <div class="card-eyebrow">Research</div>
+      <h3>Researcher</h3>
+      <p>Technology evaluation, comparative analysis, evidence-based recommendations, and literature synthesis.</p>
+      <div class="card-tags"><span class="tag violet">documentation</span></div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="emoji">&#9673;</span> technical-writer</div>
-      <div class="card-desc">READMEs, API docs, ADRs, runbooks, tutorials, and changelogs. Ensures accuracy and developer clarity.</div>
-      <div class="card-tags"><span class="tag cyan">documentation</span><span class="tag cyan">code-review</span></div>
+      <div class="card-eyebrow>Documentation</div>
+      <h3>Technical Writer</h3>
+      <p>READMEs, API docs, ADRs, runbooks, tutorials, and changelogs. Ensures accuracy and clarity.</p>
+      <div class="card-tags"><span class="tag cyan">documentation</span></div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- ===== SKILLS ===== -->
-<div id="page-skills" class="page">
-  <div class="page-header">
-    <h2>Skills</h2>
-    <p>70+ domain-specific knowledge documents. Installed into OpenCode at <code>~/.config/opencode/skills/</code>.</p>
-  </div>
+<!-- SKILLS -->
+<section class="section page-section" id="page-skills">
+  <p class="section-eyebrow">Knowledge</p>
+  <h2 class="section-title">70+ domain skills</h2>
+  <p class="section-desc">Expert knowledge documents installed into OpenCode at ~/.config/opencode/skills/.</p>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">AI / ML</div></div>
+  <div style="margin-top: 48px;">
+    <p class="section-eyebrow">AI / ML</p>
     <div class="card-grid">
-      <div class="card"><div class="card-title"><span class="tag pink">ai</span> ai-engineer</div><div class="card-desc">LLM system design, model selection, cost/quality tradeoffs</div></div>
-      <div class="card"><div class="card-title"><span class="tag pink">ai</span> llm-engineer</div><div class="card-desc">Prompt design, context management, output validation</div></div>
-      <div class="card"><div class="card-title"><span class="tag pink">ai</span> prompt-engineer</div><div class="card-desc">System prompts, few-shot examples, chain-of-thought</div></div>
-      <div class="card"><div class="card-title"><span class="tag pink">ai</span> rag-engineer</div><div class="card-desc">Chunking, embedding, retrieval, reranking pipelines</div></div>
-      <div class="card"><div class="card-title"><span class="tag pink">ai</span> agent-builder</div><div class="card-desc">Tool use, memory, reasoning loops, safety guardrails</div></div>
-      <div class="card"><div class="card-title"><span class="tag pink">ai</span> mcp-builder</div><div class="card-desc">MCP server design, tool definitions, resource management</div></div>
+      <div class="card"><div class="card-eyebrow">ai</div><h3>ai-engineer</h3><p>LLM system design, model selection, cost/quality tradeoffs</p></div>
+      <div class="card"><div class="card-eyebrow">ai</div><h3>llm-engineer</h3><p>Prompt design, context management, output validation</p></div>
+      <div class="card"><div class="card-eyebrow">ai</div><h3>prompt-engineer</h3><p>System prompts, few-shot examples, chain-of-thought</p></div>
+      <div class="card"><div class="card-eyebrow">ai</div><h3>rag-engineer</h3><p>Chunking, embedding, retrieval, reranking pipelines</p></div>
+      <div class="card"><div class="card-eyebrow">ai</div><h3>agent-builder</h3><p>Tool use, memory, reasoning loops, safety guardrails</p></div>
+      <div class="card"><div class="card-eyebrow">ai</div><h3>mcp-builder</h3><p>MCP server design, tool definitions, resource management</p></div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">Backend</div></div>
+  <div style="margin-top: 64px;">
+    <p class="section-eyebrow">Backend</p>
     <div class="card-grid">
-      <div class="card"><div class="card-title"><span class="tag blue">backend</span> api-design</div><div class="card-desc">REST/GraphQL design, versioning, error standards</div></div>
-      <div class="card"><div class="card-title"><span class="tag blue">backend</span> fastapi</div><div class="card-desc">FastAPI, Pydantic v2, async SQLAlchemy, Alembic</div></div>
-      <div class="card"><div class="card-title"><span class="tag blue">backend</span> postgres</div><div class="card-desc">PostgreSQL schemas, indexes, query optimization</div></div>
-      <div class="card"><div class="card-title"><span class="tag blue">backend</span> redis</div><div class="card-desc">Caching, pub/sub, queues, session storage</div></div>
+      <div class="card"><div class="card-eyebrow">backend</div><h3>api-design</h3><p>REST/GraphQL design, versioning, error standards</p></div>
+      <div class="card"><div class="card-eyebrow">backend</div><h3>fastapi</h3><p>FastAPI, Pydantic v2, async SQLAlchemy, Alembic</p></div>
+      <div class="card"><div class="card-eyebrow">backend</div><h3>postgres</h3><p>PostgreSQL schemas, indexes, query optimization</p></div>
+      <div class="card"><div class="card-eyebrow">backend</div><h3>redis</h3><p>Caching, pub/sub, queues, session storage</p></div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">Security</div></div>
+  <div style="margin-top: 64px;">
+    <p class="section-eyebrow">Security</p>
     <div class="card-grid">
-      <div class="card"><div class="card-title"><span class="tag red">security</span> security-audit</div><div class="card-desc">OWASP Top 10, threat modelling, CVE assessment</div></div>
-      <div class="card"><div class="card-title"><span class="tag red">security</span> secure-coding</div><div class="card-desc">Input validation, injection prevention, secrets management</div></div>
-      <div class="card"><div class="card-title"><span class="tag red">security</span> authentication</div><div class="card-desc">JWT, OAuth2, session management, MFA</div></div>
-      <div class="card"><div class="card-title"><span class="tag red">security</span> penetration-testing</div><div class="card-desc">Exploit validation, attack simulation, reporting</div></div>
+      <div class="card"><div class="card-eyebrow">security</div><h3>security-audit</h3><p>OWASP Top 10, threat modelling, CVE assessment</p></div>
+      <div class="card"><div class="card-eyebrow">security</div><h3>secure-coding</h3><p>Input validation, injection prevention, secrets management</p></div>
+      <div class="card"><div class="card-eyebrow">security</div><h3>authentication</h3><p>JWT, OAuth2, session management, MFA</p></div>
+      <div class="card"><div class="card-eyebrow">security</div><h3>penetration-testing</h3><p>Exploit validation, attack simulation, reporting</p></div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">DevOps</div></div>
+  <div style="margin-top: 64px;">
+    <p class="section-eyebrow">DevOps</p>
     <div class="card-grid">
-      <div class="card"><div class="card-title"><span class="tag green">devops</span> docker</div><div class="card-desc">Multi-stage builds, Compose, security hardening</div></div>
-      <div class="card"><div class="card-title"><span class="tag green">devops</span> kubernetes</div><div class="card-desc">Deployments, services, ingress, RBAC, Helm</div></div>
-      <div class="card"><div class="card-title"><span class="tag green">devops</span> terraform</div><div class="card-desc">IaC, state management, modules, drift detection</div></div>
-      <div class="card"><div class="card-title"><span class="tag green">devops</span> github-actions</div><div class="card-desc">CI/CD workflows, secrets, matrix builds, caching</div></div>
+      <div class="card"><div class="card-eyebrow">devops</div><h3>docker</h3><p>Multi-stage builds, Compose, security hardening</p></div>
+      <div class="card"><div class="card-eyebrow">devops</div><h3>kubernetes</h3><p>Deployments, services, ingress, RBAC, Helm</p></div>
+      <div class="card"><div class="card-eyebrow">devops</div><h3>terraform</h3><p>IaC, state management, modules, drift detection</p></div>
+      <div class="card"><div class="card-eyebrow">devops</div><h3>github-actions</h3><p>CI/CD workflows, secrets, matrix builds, caching</p></div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- ===== WORKFLOWS ===== -->
-<div id="page-workflows" class="page">
-  <div class="page-header">
-    <h2>Workflows</h2>
-    <p>Parameterized step-by-step processes. Each step specifies the agent, skills, and action required.</p>
-  </div>
+<!-- WORKFLOWS -->
+<section class="section page-section" id="page-workflows">
+  <p class="section-eyebrow">Processes</p>
+  <h2 class="section-title">Parameterized workflows</h2>
+  <p class="section-desc">Step-by-step processes that coordinate agents, skills, and actions.</p>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Workflow</th><th>Purpose</th><th>Steps</th><th>Key Agents</th></tr></thead>
@@ -803,126 +809,60 @@
       </tbody>
     </table>
   </div>
-</div>
+</section>
 
-<!-- ===== COMMANDS ===== -->
-<div id="page-commands" class="page">
-  <div class="page-header">
-    <h2>Commands</h2>
-    <p>Slash commands that trigger coordinated multi-agent workflows.</p>
-  </div>
+<!-- COMMANDS -->
+<section class="section page-section" id="page-commands">
+  <p class="section-eyebrow">Interface</p>
+  <h2 class="section-title">Slash commands</h2>
+  <p class="section-desc">One command triggers a coordinated multi-agent workflow.</p>
   <div class="card-grid">
     <div class="card">
-      <div class="card-title">/ build</div>
-      <div class="card-desc">Analyzes your project description, selects the right workflow and agents, and produces a structured implementation plan.</div>
-      <div class="card-tags"><span class="tag violet">&rarr; build-application workflow</span></div>
+      <div class="card-eyebrow">Build</div>
+      <h3>/build</h3>
+      <p>Analyzes your project description, selects the right workflow and agents, and produces a structured implementation plan.</p>
+      <div class="card-tags"><span class="tag violet">build-application workflow</span></div>
     </div>
     <div class="card">
-      <div class="card-title">/ architect</div>
-      <div class="card-desc">Designs or reviews system architecture. Produces component diagrams, ADRs, scalability analysis, and open questions.</div>
-      <div class="card-tags"><span class="tag violet">&rarr; principal-engineer</span></div>
+      <div class="card-eyebrow">Design</div>
+      <h3>/architect</h3>
+      <p>Designs or reviews system architecture. Produces component diagrams, ADRs, scalability analysis, and open questions.</p>
+      <div class="card-tags"><span class="tag violet">principal-engineer</span></div>
     </div>
     <div class="card">
-      <div class="card-title">/ debug</div>
-      <div class="card-desc">Systematic bug investigation. From symptom to root cause to targeted fix with a regression test.</div>
-      <div class="card-tags"><span class="tag orange">&rarr; bug-investigation workflow</span></div>
+      <div class="card-eyebrow">Investigate</div>
+      <h3>/debug</h3>
+      <p>Systematic bug investigation. From symptom to root cause to targeted fix with a regression test.</p>
+      <div class="card-tags"><span class="tag orange">bug-investigation workflow</span></div>
     </div>
     <div class="card">
-      <div class="card-title">/ review</div>
-      <div class="card-desc">Senior-level code review across correctness, security, performance, and maintainability.</div>
-      <div class="card-tags"><span class="tag violet">&rarr; principal-engineer + security</span></div>
+      <div class="card-eyebrow">Review</div>
+      <h3>/review</h3>
+      <p>Senior-level code review across correctness, security, performance, and maintainability.</p>
+      <div class="card-tags"><span class="tag violet">principal-engineer + security</span></div>
     </div>
     <div class="card">
-      <div class="card-title">/ secure</div>
-      <div class="card-desc">Full security audit with threat modelling, OWASP checks, dependency scanning, and a CVSS-rated findings report.</div>
-      <div class="card-tags"><span class="tag red">&rarr; security-audit workflow</span></div>
+      <div class="card-eyebrow">Protect</div>
+      <h3>/secure</h3>
+      <p>Full security audit with threat modelling, OWASP checks, dependency scanning, and a CVSS-rated findings report.</p>
+      <div class="card-tags"><span class="tag red">security-audit workflow</span></div>
     </div>
     <div class="card">
-      <div class="card-title">/ optimize</div>
-      <div class="card-desc">Measurement-driven performance optimization. Covers algorithms, DB queries, caching, and infrastructure tuning.</div>
-      <div class="card-tags"><span class="tag violet">&rarr; performance-audit workflow</span></div>
+      <div class="card-eyebrow">Performance</div>
+      <h3>/optimize</h3>
+      <p>Measurement-driven performance optimization. Covers algorithms, DB queries, caching, and infrastructure tuning.</p>
+      <div class="card-tags"><span class="tag violet">performance-audit workflow</span></div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- ===== PROMPTS ===== -->
-<div id="page-prompts" class="page">
-  <div class="page-header">
-    <h2>Prompt Library</h2>
-    <p>Reusable prompt templates with <code>{{PARAM_NAME}}</code> substitution.</p>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Prompt</th><th>Category</th><th>Parameters</th><th>Use When</th></tr></thead>
-      <tbody>
-        <tr><td><strong>architecture-review</strong></td><td><span class="badge violet">coding</span></td><td>SYSTEM_NAME, DESCRIPTION, SCALE</td><td>Reviewing or designing system architecture</td></tr>
-        <tr><td><strong>api-design</strong></td><td><span class="badge violet">coding</span></td><td>API_NAME, DOMAIN, RESOURCES</td><td>Designing a new REST or GraphQL API</td></tr>
-        <tr><td><strong>code-review</strong></td><td><span class="badge violet">coding</span></td><td>CODE, LANGUAGE, FOCUS_AREAS</td><td>Getting a thorough code review</td></tr>
-        <tr><td><strong>bug-hunt</strong></td><td><span class="badge violet">coding</span></td><td>BUG_DESCRIPTION, COMPONENT</td><td>Investigating a bug systematically</td></tr>
-        <tr><td><strong>security-review</strong></td><td><span class="badge green">security</span></td><td>TARGET, TECH_STACK</td><td>Security review of code or architecture</td></tr>
-        <tr><td><strong>agent-design</strong></td><td><span class="badge violet">ai</span></td><td>AGENT_NAME, GOAL, TOOLS</td><td>Designing an AI agent with tool use</td></tr>
-        <tr><td><strong>prompt-engineering</strong></td><td><span class="badge violet">ai</span></td><td>TASK, MODEL, OUTPUT_FORMAT</td><td>Creating or optimizing LLM prompts</td></tr>
-        <tr><td><strong>technical-research</strong></td><td><span class="badge violet">research</span></td><td>TOPIC, OPTIONS, CRITERIA</td><td>Comparing technology options</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+<!-- ROUTER -->
+<section class="section page-section" id="page-router">
+  <p class="section-eyebrow">Intelligence</p>
+  <h2 class="section-title">Keyword router</h2>
+  <p class="section-desc">80+ keyword-to-agent mappings. Tokenizes your request and returns the top-3 candidates by match score.</p>
 
-<!-- ===== TEMPLATES ===== -->
-<div id="page-templates" class="page">
-  <div class="page-header">
-    <h2>Templates</h2>
-    <p>Project scaffolds with README, dependencies, and working starter code.</p>
-  </div>
-  <div class="card-grid">
-    <div class="card">
-      <div class="card-title"><span class="emoji">&#11020;</span> fastapi-api</div>
-      <div class="card-desc">FastAPI + async SQLAlchemy + Pydantic v2 + Alembic + JWT auth + pytest.</div>
-      <div class="card-tags"><span class="tag blue">Python</span><span class="tag blue">FastAPI</span><span class="tag blue">PostgreSQL</span></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="emoji">&#11020;</span> react-app</div>
-      <div class="card-desc">React + TypeScript + Vite + TanStack Query + React Router + Tailwind CSS.</div>
-      <div class="card-tags"><span class="tag yellow">React</span><span class="tag yellow">TypeScript</span><span class="tag yellow">Vite</span></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="emoji">&#11020;</span> nextjs-saas</div>
-      <div class="card-desc">Next.js 14 App Router + NextAuth.js + Prisma + Stripe + shadcn/ui.</div>
-      <div class="card-tags"><span class="tag yellow">Next.js</span><span class="tag yellow">TypeScript</span><span class="tag blue">PostgreSQL</span></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="emoji">&#11020;</span> ai-agent</div>
-      <div class="card-desc">LangGraph AI agent with tool use, memory, and evaluation harness.</div>
-      <div class="card-tags"><span class="tag pink">Python</span><span class="tag pink">LangGraph</span><span class="tag pink">MCP</span></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="emoji">&#11020;</span> mcp-server</div>
-      <div class="card-desc">Model Context Protocol server with sample tool, input schema, and stdio transport.</div>
-      <div class="card-tags"><span class="tag pink">Python</span><span class="tag pink">MCP SDK</span></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="emoji">&#11020;</span> rag-project</div>
-      <div class="card-desc">RAG system with ingestion pipeline, ChromaDB vector store, LLM generation, and eval harness.</div>
-      <div class="card-tags"><span class="tag pink">Python</span><span class="tag pink">LangChain</span><span class="tag pink">ChromaDB</span></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="emoji">&#11020;</span> discord-bot</div>
-      <div class="card-desc">discord.py bot with slash commands, cog architecture, persistent SQLite storage.</div>
-      <div class="card-tags"><span class="tag blue">Python</span><span class="tag blue">discord.py</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ROUTER ===== -->
-<div id="page-router" class="page">
-  <div class="page-header">
-    <h2>Router</h2>
-    <p>80+ keyword-to-agent mappings. Tokenizes your request and returns the top-3 agent candidates by match score.</p>
-  </div>
-
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">Router Logic</div></div>
-    <div class="code-block"><span class="comment"># Test the router directly</span>
+  <div class="code-block" style="margin-top: 48px;"><span class="comment"># Test the router directly</span>
 <span class="cmd">.\scripts\router.ps1</span> <span class="arg">-Request</span> <span class="arg">"build a fastapi api with postgres authentication"</span>
 
 <span class="comment"># Output:</span>
@@ -932,83 +872,36 @@
 <span class="comment">#   backend-engineer (score: 3)</span>
 <span class="comment">#   database-architect (score: 1)</span>
 <span class="comment">#   security-engineer (score: 1)</span></div>
-  </div>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">Keyword Map</div></div>
-    <div class="router-grid">
-      <div class="router-row"><span class="router-keyword">api</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">react</span> <span class="router-arrow">&rarr;</span> <span class="router-agent frontend">frontend-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">llm</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">rag</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">postgres</span> <span class="router-arrow">&rarr;</span> <span class="router-agent database">database-architect</span></div>
-      <div class="router-row"><span class="router-keyword">security</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">docker</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">kubernetes</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">debug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
-      <div class="router-row"><span class="router-keyword">bug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
-      <div class="router-row"><span class="router-keyword">owasp</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">docs</span> <span class="router-arrow">&rarr;</span> <span class="router-agent principal">technical-writer</span></div>
-      <div class="router-row"><span class="router-keyword">terraform</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">fastapi</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">jwt</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
-      <div class="router-row"><span class="router-keyword">embedding</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
-    </div>
+  <p class="section-eyebrow" style="margin-top: 64px;">Keyword Map</p>
+  <div class="router-grid">
+    <div class="router-row"><span class="router-keyword">api</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">react</span> <span class="router-arrow">&rarr;</span> <span class="router-agent frontend">frontend-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">llm</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">rag</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">postgres</span> <span class="router-arrow">&rarr;</span> <span class="router-agent database">database-architect</span></div>
+    <div class="router-row"><span class="router-keyword">security</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">docker</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">kubernetes</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">debug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
+    <div class="router-row"><span class="router-keyword">bug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
+    <div class="router-row"><span class="router-keyword">owasp</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">docs</span> <span class="router-arrow">&rarr;</span> <span class="router-agent principal">technical-writer</span></div>
+    <div class="router-row"><span class="router-keyword">terraform</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">fastapi</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">jwt</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+    <div class="router-row"><span class="router-keyword">embedding</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
   </div>
-</div>
+</section>
 
-<!-- ===== MCPS ===== -->
-<div id="page-mcps" class="page">
-  <div class="page-header">
-    <h2>MCP Servers</h2>
-    <p>Model Context Protocol integrations that extend OpenCode with external capabilities.</p>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>MCP</th><th>Status</th><th>Capability</th></tr></thead>
-      <tbody>
-        <tr><td><strong>filesystem</strong></td><td><span class="badge green">enabled</span></td><td>Read and write files, list directories, manage the file system</td></tr>
-        <tr><td><strong>github</strong></td><td><span class="badge green">enabled</span></td><td>Create PRs, read issues, manage repositories, search code</td></tr>
-        <tr><td><strong>playwright</strong></td><td><span class="badge green">enabled</span></td><td>Browser automation, web scraping, UI testing</td></tr>
-        <tr><td><strong>context7</strong></td><td><span class="badge green">enabled</span></td><td>Up-to-date library documentation and API references</td></tr>
-        <tr><td><strong>tavily</strong></td><td><span class="badge green">enabled</span></td><td>Web search with curated, AI-optimized results</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+<!-- QUICKSTART -->
+<section class="section page-section" id="page-quickstart">
+  <p class="section-eyebrow">Setup</p>
+  <h2 class="section-title">Quick start</h2>
+  <p class="section-desc">Up and running in under 5 minutes.</p>
 
-<!-- ===== HEALTH ===== -->
-<div id="page-health" class="page">
-  <div class="page-header">
-    <h2>Health Check</h2>
-    <p>Run <code>.\god-health.ps1</code> to verify your installation.</p>
-  </div>
-
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">Verification Checks</div></div>
-    <div class="health-list">
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">15 required directories exist</div><div class="health-badge ok">CHECK 1</div></div>
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">70+ SKILL.md files present in repo</div><div class="health-badge ok">CHECK 2</div></div>
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">Skills installed in ~/.config/opencode/skills/</div><div class="health-badge ok">CHECK 2b</div></div>
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">mcps/registry.json is valid JSON with 5 enabled MCPs</div><div class="health-badge ok">CHECK 3</div></div>
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">router/agent-router.json is valid JSON with routing rules</div><div class="health-badge ok">CHECK 4</div></div>
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">12 key scripts exist</div><div class="health-badge ok">CHECK 5</div></div>
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">All 10 agents have valid AGENT.md with required sections</div><div class="health-badge ok">CHECK 6</div></div>
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">4 required workflows present</div><div class="health-badge ok">CHECK 7</div></div>
-      <div class="health-row"><div class="health-dot ok"></div><div class="health-label">6 required commands present</div><div class="health-badge ok">CHECK 8</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== QUICKSTART ===== -->
-<div id="page-quickstart" class="page">
-  <div class="page-header">
-    <h2>Quick Start</h2>
-    <p>Get up and running with GOD-OPENCODE in under 5 minutes.</p>
-  </div>
-
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">1. Install</div></div>
+  <div style="margin-top: 64px;">
+    <p class="section-eyebrow">1. Install</p>
     <div class="code-block"><span class="comment"># Clone the repo</span>
 <span class="cmd">git clone</span> <span class="arg">https://github.com/mattycigemp-crypto/GOD-OPENCODE</span>
 <span class="cmd">cd</span> GOD-OPENCODE
@@ -1020,8 +913,8 @@
 <span class="cmd">.\god-health.ps1</span></div>
   </div>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">2. Use slash commands in OpenCode</div></div>
+  <div style="margin-top: 64px;">
+    <p class="section-eyebrow">2. Use slash commands</p>
     <div class="code-block"><span class="comment"># Build a new application</span>
 <span class="cmd">/build</span> a FastAPI REST API with JWT auth, PostgreSQL, and Alembic migrations
 
@@ -1035,8 +928,8 @@
 <span class="cmd">/architect</span> should I use PostgreSQL or MongoDB for a multi-tenant SaaS?</div>
   </div>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">3. Invoke agents directly</div></div>
+  <div style="margin-top: 64px;">
+    <p class="section-eyebrow">3. Invoke agents directly</p>
     <div class="code-block"><span class="comment"># Direct agent invocation</span>
 As the <span class="arg">database-architect</span>, design a schema for a multi-tenant SaaS application
   where each tenant's data must be isolated.
@@ -1046,46 +939,113 @@ As the <span class="arg">security-engineer</span>, audit this JWT implementation
 As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a customer support chatbot
   with 50k support articles.</div>
   </div>
+</section>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><div class="section-title">4. Scan a project</div></div>
-    <div class="code-block"><span class="comment"># Scan any project and get an implementation plan</span>
-<span class="cmd">.\tools\project-scan.ps1</span> <span class="arg">-TargetPath</span> <span class="arg">"C:\path\to\your\project"</span>
-
-<span class="comment"># The scanner will:</span>
-<span class="comment"># 1. Detect primary languages</span>
-<span class="comment"># 2. Identify project type (api, fullstack, frontend-app, etc.)</span>
-<span class="comment"># 3. Recommend the right workflow and agents</span>
-<span class="comment"># 4. Generate a prioritized improvement list</span></div>
+<!-- HEALTH (bonus page) -->
+<section class="section page-section" id="page-health">
+  <p class="section-eyebrow">System</p>
+  <h2 class="section-title">Health check</h2>
+  <p class="section-desc">Run .\god-health.ps1 to verify your installation.</p>
+  <div class="health-list">
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">15 required directories exist</div><div class="health-badge">CHECK 1</div></div>
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">70+ SKILL.md files present in repo</div><div class="health-badge">CHECK 2</div></div>
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">Skills installed in ~/.config/opencode/skills/</div><div class="health-badge">CHECK 2b</div></div>
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">mcps/registry.json is valid JSON with 5 enabled MCPs</div><div class="health-badge">CHECK 3</div></div>
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">router/agent-router.json is valid JSON</div><div class="health-badge">CHECK 4</div></div>
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">12 key scripts exist</div><div class="health-badge">CHECK 5</div></div>
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">All 10 agents have valid AGENT.md</div><div class="health-badge">CHECK 6</div></div>
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">4 required workflows present</div><div class="health-badge">CHECK 7</div></div>
+    <div class="health-row"><div class="health-dot"></div><div class="health-label">6 required commands present</div><div class="health-badge">CHECK 8</div></div>
   </div>
-</div>
+</section>
 
-</main>
-</div>
+<hr class="divider">
 
-<!-- ============================================
-     NAVIGATION JS
-     ============================================ -->
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-mark">G</div>
+          <span class="logo-text">GOD-OPENCODE</span>
+        </div>
+        <p>An AI engineering operating system built on OpenCode. The right expert for every task.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('agents'); return false;">Agents</a></li>
+          <li><a href="#" onclick="showPage('skills'); return false;">Skills</a></li>
+          <li><a href="#" onclick="showPage('workflows'); return false;">Workflows</a></li>
+          <li><a href="#" onclick="showPage('commands'); return false;">Commands</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('quickstart'); return false;">Quick Start</a></li>
+          <li><a href="#" onclick="showPage('router'); return false;">Router</a></li>
+          <li><a href="#" onclick="showPage('health'); return false;">Health Check</a></li>
+          <li><a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE" target="_blank">GitHub</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/issues" target="_blank">Issues</a></li>
+          <li><a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/blob/master/CONTRIBUTING.md" target="_blank">Contributing</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 GOD-OPENCODE. MIT License.</span>
+      <span>Built for OpenCode</span>
+    </div>
+  </div>
+</footer>
+
 <script>
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const page = item.dataset.page;
-      if (!page) return;
-
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-      const target = document.getElementById('page-' + page);
-      if (target) target.classList.add('active');
-      item.classList.add('active');
-    });
+  // Header scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 50);
   });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '?') {
-      document.querySelector('[data-page="quickstart"]').click();
+  // Page navigation
+  function showPage(page) {
+    // Hide hero if not hero
+    const hero = document.getElementById('page-hero');
+    const statsBar = hero.nextElementSibling;
+
+    if (page === 'hero') {
+      hero.style.display = '';
+      statsBar.style.display = '';
+      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
     }
-  });
+
+    hero.style.display = 'none';
+    statsBar.style.display = 'none';
+
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('page-' + page);
+    if (target) {
+      target.classList.add('active');
+      target.classList.add('fade-up');
+    }
+
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.dataset.nav === page);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Show hero on load
+  showPage('hero');
 </script>
+
 </body>
 </html>
