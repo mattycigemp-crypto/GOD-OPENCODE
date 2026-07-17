@@ -1,4 +1,7 @@
 {
+  "version": "2.0",
+  "description": "Agent routing, workflow triggers, and supporting agent mappings",
+
   "routing": {
     "frontend": "frontend-engineer",
     "react": "frontend-engineer",
@@ -12,6 +15,7 @@
     "tailwind": "frontend-engineer",
     "accessibility": "frontend-engineer",
     "wcag": "frontend-engineer",
+    "svelte": "frontend-engineer",
 
     "backend": "backend-engineer",
     "api": "backend-engineer",
@@ -26,6 +30,7 @@
     "graphql": "backend-engineer",
     "middleware": "backend-engineer",
     "microservice": "backend-engineer",
+    "grpc": "backend-engineer",
 
     "database": "database-architect",
     "sql": "database-architect",
@@ -41,6 +46,8 @@
     "orm": "database-architect",
     "redis": "database-architect",
     "nosql": "database-architect",
+    "replication": "database-architect",
+    "sharding": "database-architect",
 
     "ai": "ai-engineer",
     "llm": "ai-engineer",
@@ -132,5 +139,111 @@
     "tutorial": "technical-writer",
     "runbook": "technical-writer",
     "changelog": "technical-writer"
+  },
+
+  "intents": {
+    "build": {
+      "keywords": ["build", "create", "scaffold", "generate", "setup", "new project", "new app", "initialize"],
+      "primary": "principal-engineer",
+      "supporting": ["backend-engineer", "frontend-engineer", "database-architect", "devops-engineer"],
+      "skills": ["architect", "system-design", "workflow-designer"]
+    },
+    "debug": {
+      "keywords": ["debug", "fix", "bug", "error", "crash", "broken", "failing", "exception", "regression"],
+      "primary": "debugger",
+      "supporting": ["backend-engineer", "frontend-engineer", "security-engineer"],
+      "skills": ["bug-hunter", "code-review", "profiling"]
+    },
+    "review": {
+      "keywords": ["review", "code review", "audit code", "check code"],
+      "primary": "principal-engineer",
+      "supporting": ["security-engineer", "backend-engineer"],
+      "skills": ["code-review", "security", "performance"]
+    },
+    "secure": {
+      "keywords": ["security", "secure", "vulnerability", "exploit", "owasp", "auth", "hardening", "threat"],
+      "primary": "security-engineer",
+      "supporting": ["backend-engineer", "devops-engineer"],
+      "skills": ["security-audit", "secure-coding", "authentication", "penetration-testing"]
+    },
+    "optimize": {
+      "keywords": ["optimize", "performance", "speed", "slow", "bottleneck", "cache", "scale"],
+      "primary": "principal-engineer",
+      "supporting": ["database-architect", "devops-engineer", "backend-engineer"],
+      "skills": ["performance", "query-optimization", "redis"]
+    },
+    "refactor": {
+      "keywords": ["refactor", "restructure", "clean up", "technical debt", "simplify"],
+      "primary": "principal-engineer",
+      "supporting": ["backend-engineer", "frontend-engineer"],
+      "skills": ["refactor", "code-review", "system-design"]
+    },
+    "design": {
+      "keywords": ["design", "architecture", "architect", "system design", "plan", "adr"],
+      "primary": "principal-engineer",
+      "supporting": ["database-architect", "backend-engineer"],
+      "skills": ["architect", "system-design", "api-design", "database-design"]
+    },
+    "test": {
+      "keywords": ["test", "testing", "unit test", "integration test", "e2e", "coverage"],
+      "primary": "backend-engineer",
+      "supporting": ["frontend-engineer", "principal-engineer"],
+      "skills": ["testing", "e2e-testing", "integration-testing"]
+    },
+    "deploy": {
+      "keywords": ["deploy", "ci/cd", "pipeline", "docker", "kubernetes", "terraform", "cloud"],
+      "primary": "devops-engineer",
+      "supporting": ["security-engineer", "backend-engineer"],
+      "skills": ["docker", "kubernetes", "terraform", "github-actions"]
+    },
+    "api": {
+      "keywords": ["api", "rest", "graphql", "endpoint", "fastapi", "express", "middleware"],
+      "primary": "backend-engineer",
+      "supporting": ["security-engineer", "database-architect"],
+      "skills": ["api-design", "fastapi", "testing"]
+    },
+    "ai": {
+      "keywords": ["ai", "llm", "gpt", "rag", "embedding", "agent", "mcp", "prompt"],
+      "primary": "ai-engineer",
+      "supporting": ["backend-engineer"],
+      "skills": ["llm-engineer", "rag-engineer", "prompt-engineer", "agent-builder"]
+    },
+    "frontend": {
+      "keywords": ["frontend", "react", "nextjs", "vue", "css", "ui", "component", "tailwind"],
+      "primary": "frontend-engineer",
+      "supporting": ["backend-engineer", "security-engineer"],
+      "skills": ["react", "nextjs", "typescript", "state-management"]
+    },
+    "database": {
+      "keywords": ["database", "sql", "postgres", "schema", "migration", "query", "redis"],
+      "primary": "database-architect",
+      "supporting": ["backend-engineer", "devops-engineer"],
+      "skills": ["database-design", "postgres", "redis", "query-optimization"]
+    },
+    "document": {
+      "keywords": ["documentation", "readme", "docs", "guide", "tutorial", "runbook"],
+      "primary": "technical-writer",
+      "supporting": ["principal-engineer"],
+      "skills": ["documentation"]
+    },
+    "research": {
+      "keywords": ["research", "compare", "evaluate", "benchmark", "alternatives", "pros and cons"],
+      "primary": "researcher",
+      "supporting": ["principal-engineer"],
+      "skills": ["documentation"]
+    }
+  },
+
+  "workflows": {
+    "build-application": ["build app", "build application", "full stack", "new project", "saas", "mvp"],
+    "api-development": ["build api", "create api", "rest api", "graphql api"],
+    "security-audit": ["security audit", "security review", "penetration test", "owasp check"],
+    "bug-investigation": ["investigate bug", "find bug", "root cause", "debug issue"],
+    "performance-audit": ["performance audit", "optimize performance", "bottleneck analysis"],
+    "refactor-codebase": ["refactor code", "clean code", "technical debt"],
+    "create-ai-agent": ["build agent", "create agent", "ai agent"],
+    "create-mcp-server": ["build mcp", "create mcp", "mcp server"],
+    "launch-product": ["launch", "go live", "ship", "production ready"],
+    "review-code": ["code review", "pr review", "review code"]
   }
 }
