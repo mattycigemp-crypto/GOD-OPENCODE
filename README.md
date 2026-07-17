@@ -69,7 +69,7 @@ Each `v*` tag push publishes a versioned image (`ghcr.io/.../god-opencode:v<vers
 
 **Cross-platform shims:** `bash install.sh` (requires `pwsh`) on Linux/macOS/WSL; `install.cmd` on Windows cmd.exe. See [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md).
 
-**Wiki:** the eight-page reference at `docs/wiki/` is built and published automatically to **GitHub Pages** on every push to `master` — see [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/) (requires repo Settings → Pages → Source: `gh-pages` branch to be enabled once).
+**Wiki:** the eight-page reference at `docs/wiki/` is built and published automatically to **GitHub Pages** on every push to `master` — see [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/). One-time setup: repo **Settings → Pages → Build and deployment → Source: GitHub Actions → workflow: `Build and Deploy Wiki`**, then Save.
 
 ---
 
@@ -84,7 +84,7 @@ Four open concerns documented in [docs/wiki/roadmap.md](docs/wiki/roadmap.md) �
 | Heavy PowerShell reliance (Linux/macOS friction) | `install.sh` (bash) + `install.cmd` (cmd.exe) + ghcr.io container | [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md) |
 | No long-term memory between sessions | `New-MemoryRecall` + `memory/AGENT_PREFERENCES.md` | [docs/wiki/memory.md](docs/wiki/memory.md) |
 
-Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md) and is auto-published to **GitHub Pages** by `.github/workflows/wiki-pages.yml` on every push to `master` (mkdocs-material, dark theme, instant search). Browse online: [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/). Each MVP has a concrete next milestone in the roadmap page.
+Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md) and is auto-published to **GitHub Pages** by `.github/workflows/wiki-pages.yml` on every push to `master` (mkdocs-material, dark theme, instant search, pinned to the 9.5.x minor). Browse online: [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/) (after a one-time Settings → Pages → Source: **GitHub Actions** toggle). Each MVP has a concrete next milestone in the roadmap page.
 
 ---
 

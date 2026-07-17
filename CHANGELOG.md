@@ -25,6 +25,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Terminal UI** (`god-ui.ps1` v3.0) — global install (`.\install.ps1`) elevated to the default action (Enter keypress). New menu pages: Code Graph (3), Skill Fragment (4), Memory (5), Cross-Platform (6), Wiki (8). Adds an Architecture Features status section that surfaces code-graph / dynamic-skills / cross-platform / memory health. PowerShell 5.1 compatible (no PS7-only constructs).
 - **README** — added the **Architectural features (1.2)** section + wiki link table, Project Structure entries for `docs/wiki/` and `memory/`, and a "Press Enter to install globally" quick-start note.
 - **`.gitignore`** — excludes local memory artifacts (`memory/*`) while keeping `memory/AGENT_PREFERENCES.md` tracked (whitelist pattern).
+- **Wiki Pages workflow** (`.github/workflows/wiki-pages.yml`) — switched from `mkdocs gh-deploy --force --clean` (which required a `gh-pages` branch) to the official `actions/deploy-pages@v4` + `actions/upload-pages-artifact@v3` + `actions/configure-pages@v5` stack. Two-job pipeline (`build` → `deploy` with `needs`), `pages: write` + `id-token: write` OIDC permissions, no branch requirement. Pinned `mkdocs-material~=9.5.0` + `mkdocs~=1.6.0`. Users now enable Pages via **Settings → Pages → Source: GitHub Actions** (no branch selection needed).
 
 ### Notes
 

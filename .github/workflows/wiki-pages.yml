@@ -12,9 +12,14 @@ on:
       - '.github/workflows/wiki-pages.yml'
   workflow_dispatch:
 
-# Required to push to the gh-pages branch.
+# Required by actions/deploy-pages: pages:write to upsert the deployment,
+# id-token:write to authenticate via OIDC. contents:read is the default for
+# checkout. We deliberately do NOT request contents:write anywhere — the
+# old `mkdocs gh-deploy --force` push-to-gh-pages path is gone.
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 # Cancel any in-flight run for the same ref when a new push arrives.
 concurrency:
@@ -22,8 +27,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    name: Build and Deploy
+  build:
+    name: Build wiki
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -40,21 +45,39 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-mkdocs-${{ hashFiles('mkdocs.yml') }}
+          key: >-
+            ${{ runner.os }}-pip-mkdocs-${{ hashFiles('mkdocs.yml') }}
           restore-keys: |
             ${{ runner.os }}-pip-mkdocs-
 
-      - name: Install mkdocs-material
+      - name: Install mkdocs-material (pinned minor)
+        # ~=9.5.0 pins to the 9.5.x line so a future mkdocs 10.x can't
+        # silently break the wiki build.
         run: |
           python -m pip install --upgrade pip
-          pip install "mkdocs-material>=9.5"
+          pip install "mkdocs-material~=9.5.0" "mkdocs~=1.6.0"
 
       - name: Build wiki (strict)
-        # --strict fails the build on any warning (broken links, missing files).
-        # This keeps the wiki honest.
+        # --strict fails the build on any warning (broken links, missing
+        # files). Keeps the wiki honest.
         run: mkdocs build --strict
 
-      - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
