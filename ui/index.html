@@ -683,6 +683,7 @@
         <li><a href="#" data-nav="commands" onclick="showPage('commands'); return false;">Commands</a></li>
         <li><a href="#" data-nav="router" onclick="showPage('router'); return false;">Router</a></li>
         <li><a href="#" data-nav="quickstart" onclick="showPage('quickstart'); return false;">Quick Start</a></li>
+        <li><a href="#" data-nav="wiki" onclick="showPage('wiki'); return false;">Wiki</a></li>
         <li><a href="#" data-nav="tui" onclick="showPage('tui'); return false;">TUI</a></li>
       </ul>
     </nav>
@@ -696,7 +697,8 @@
   <img src="../brand/wordmark.png" alt="GOD-OPENCODE" class="hero-wordmark">
   <p class="hero-sub">10 specialist agents, 84 skills, 15 workflows — one command bootstraps a production-grade AI engineering environment.</p>
   <div class="hero-cta">
-    <a href="#" class="btn btn-primary" onclick="showPage('quickstart'); return false;">Get Started</a>
+    <a href="#" class="btn btn-primary" onclick="showPage('quickstart'); return false;">Install Globally</a>
+    <a href="#" class="btn btn-secondary" onclick="showPage('wiki'); return false;">Open Wiki</a>
     <a href="#" class="btn btn-secondary" onclick="showPage('agents'); return false;">Explore Agents</a>
   </div>
 </section>
@@ -1061,6 +1063,92 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
 </section>
 
 <hr class="divider">
+
+<!-- ARCHITECTURE FEATURES -->
+<section class="section page-section" id="page-architecture">
+  <div class="section-header">
+    <p class="section-eyebrow reveal">Roadmap status</p>
+    <h2 class="section-title reveal reveal-d1">Architectural features (1.2)</h2>
+    <p class="section-desc reveal reveal-d2">Four open concerns are now landed as MVPs. Each wiki page documents the MVP, current limitations, and the next milestone.</p>
+  </div>
+  <div class="card-grid">
+    <a class="card reveal" href="wiki/graph.md" style="text-decoration:none;">
+      <div class="card-eyebrow">Graph</div>
+      <h3>Code Graph</h3>
+      <p>Static PowerShell call-graph emitted to JSON. Multi-language + visualization in 1.3.</p>
+      <div class="card-tags"><span class="tag cyan">MVP shipped</span></div>
+    </a>
+    <a class="card reveal reveal-d1" href="wiki/dynamic-skills.md" style="text-decoration:none;">
+      <div class="card-eyebrow">Skills</div>
+      <h3>Dynamic Skills</h3>
+      <p>Per-request context pruning. Returns matching ## sections, not the whole SKILL.md.</p>
+      <div class="card-tags"><span class="tag cyan">MVP shipped</span></div>
+    </a>
+    <a class="card reveal reveal-d2" href="wiki/cross-platform.md" style="text-decoration:none;">
+      <div class="card-eyebrow">Install</div>
+      <h3>Cross-Platform</h3>
+      <p>install.sh for Linux/macOS, install.cmd for cmd.exe, ghcr.io container for everywhere else.</p>
+      <div class="card-tags"><span class="tag cyan">MVP shipped</span></div>
+    </a>
+    <a class="card reveal reveal-d3" href="wiki/memory.md" style="text-decoration:none;">
+      <div class="card-eyebrow">Memory</div>
+      <h3>Long-term Memory</h3>
+      <p>New-MemoryRecall + persistent memory/AGENT_PREFERENCES.md. Git-synced in 1.3.</p>
+      <div class="card-tags"><span class="tag cyan">MVP shipped</span></div>
+    </a>
+  </div>
+</section>
+
+<!-- WIKI -->
+<section class="section page-section" id="page-wiki">
+  <div class="section-header">
+    <p class="section-eyebrow reveal">Reference</p>
+    <h2 class="section-title reveal reveal-d1">Wiki</h2>
+    <p class="section-desc reveal reveal-d2">The single source of truth &mdash; replaces scattered README sections with an organized, browseable reference.</p>
+  </div>
+  <div class="card-grid">
+    <a class="card reveal" href="wiki/index.html" style="text-decoration:none;">
+      <div class="card-eyebrow">Index</div>
+      <h3>docs/wiki/index.md</h3>
+      <p>Landing page with all section links. Open in your editor or any markdown viewer.</p>
+    </a>
+    <a class="card reveal reveal-d1" href="wiki/getting-started.html" style="text-decoration:none;">
+      <div class="card-eyebrow">Setup</div>
+      <h3>Getting Started</h3>
+      <p>5 min from clone to first slash command. Covers Windows, Linux, macOS, Docker.</p>
+    </a>
+    <a class="card reveal reveal-d2" href="wiki/architecture.html" style="text-decoration:none;">
+      <div class="card-eyebrow">Architecture</div>
+      <h3>Architecture</h3>
+      <p>Three-layer model: agents &rarr; skills &rarr; workflows + OpenCode host.</p>
+    </a>
+    <a class="card reveal reveal-d3" href="wiki/graph.html" style="text-decoration:none;">
+      <div class="card-eyebrow">Graph</div>
+      <h3>Code Graph</h3>
+      <p>scripts/code-graph.ps1 emits a JSON call-graph index for PowerShell files.</p>
+    </a>
+    <a class="card reveal" href="wiki/dynamic-skills.html" style="text-decoration:none;">
+      <div class="card-eyebrow">Skills</div>
+      <h3>Dynamic Skills</h3>
+      <p>scripts/skill-fragment.ps1 returns matching ## sections, not the whole SKILL.md.</p>
+    </a>
+    <a class="card reveal reveal-d1" href="wiki/cross-platform.html" style="text-decoration:none;">
+      <div class="card-eyebrow">Install</div>
+      <h3>Cross-Platform</h3>
+      <p>install.sh + install.cmd + container on ghcr.io. PowerShell Gallery in 2.0.</p>
+    </a>
+    <a class="card reveal reveal-d2" href="wiki/memory.html" style="text-decoration:none;">
+      <div class="card-eyebrow">Memory</div>
+      <h3>Memory System</h3>
+      <p>Append-only markdown store + AGENT_PREFERENCES.md convention for long-term context.</p>
+    </a>
+    <a class="card reveal reveal-d3" href="wiki/roadmap.html" style="text-decoration:none;">
+      <div class="card-eyebrow">Roadmap</div>
+      <h3>Roadmap</h3>
+      <p>The four architectural concerns, each with MVP shipped and a fuller plan.</p>
+    </a>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer class="site-footer">

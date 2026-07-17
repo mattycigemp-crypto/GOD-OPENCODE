@@ -1,19 +1,13 @@
 # ============================================
 # GOD-OPENCODE TERMINAL INTERFACE
-# Version 2.0
+# Version 3.0 - Global Install as primary action
 # ============================================
-# Professional TUI for managing the GOD-OPENCODE
-# AI engineering operating system.
-#
 # Usage: .\god-ui.ps1
+# Default action: Install globally to ~/.config/opencode/
 # ============================================
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
-
-# ============================================
-# UI CONSTANTS
-# ============================================
 
 $Script:Colors = @{
     Primary   = "Magenta"
@@ -28,30 +22,20 @@ $Script:Colors = @{
 }
 
 $Script:BoxChars = @{
-    TopLeft     = "+"
-    TopRight    = "+"
-    BottomLeft  = "+"
-    BottomRight = "+"
-    Horizontal  = "-"
-    Vertical    = "|"
+    TopLeft="+"; TopRight="+"; BottomLeft="+"; BottomRight="+"
+    Horizontal="-"; Vertical="|"
 }
 
-# ============================================
-# UI FUNCTIONS
-# ============================================
-
-function Clear-Screen {
-    Clear-Host
-}
+function Clear-Screen { Clear-Host }
 
 function Write-Logo {
     $logo = @"
 
       ___  ___  ________  _______   ________
-     |\  \|\  \|\   __  \|\  ___ \ |\   __  \
-     \ \  \\\  \ \  \|\  \ \   __/|\ \  \|\  \
-     \ \   __  \ \  \\\  \ \  \_|/_\ \  \\\  \
-      \ \  \ \  \ \  \\\  \ \  \_|\ \ \  \\\  \
+     |\  \\|\  \\|\   __  \\|\  ___ \ |\   __  \
+     \ \  \\  \ \  \|\  \ \   __/|\ \  \|\  \
+     \ \   __  \ \  \\  \ \  \_|/_\ \  \\  \
+      \ \  \ \  \ \  \\  \ \  \_|\ \ \  \\  \
        \ \__\ \__\ \_______\ \_______\ \_______\
         \|__|\|__|\|_______|\|_______|\|_______|
 
@@ -64,13 +48,11 @@ function Write-Logo {
 function Write-Header {
     param([string]$Title)
     $width = 60
-    $pad = $width - $Title.Length - 4
-    if ($pad -lt 0) { $pad = 0 }
     $line = [string]::new($BoxChars.Horizontal, $width)
     Write-Host ""
     Write-Host "  $($BoxChars.TopLeft)$line$($BoxChars.TopRight)" -ForegroundColor $Colors.Border
     Write-Host "  $($BoxChars.Vertical) " -ForegroundColor $Colors.Border -NoNewline
-    Write-Host ("$Title$([string]::new(' ', $pad))") -ForegroundColor $Colors.Primary -NoNewline
+    Write-Host $Title.PadRight($width - 2) -ForegroundColor $Colors.Primary -NoNewline
     Write-Host " $($BoxChars.Vertical)" -ForegroundColor $Colors.Border
     Write-Host "  $($BoxChars.BottomLeft)$line$($BoxChars.BottomRight)" -ForegroundColor $Colors.Border
 }
@@ -87,29 +69,26 @@ function Write-MenuItem {
         [string]$Key,
         [string]$Label,
         [string]$Description,
-        [string]$Color = "White"
+        [string]$Color = "White",
+        [string]$Badge = ""
     )
     Write-Host "  " -NoNewline
     Write-Host "[$Key]" -ForegroundColor $Colors.Primary -NoNewline
     Write-Host " $Label" -ForegroundColor $Color -NoNewline
+    if ($Badge) {
+        Write-Host " ($Badge)" -ForegroundColor $Colors.Warning -NoNewline
+    }
     Write-Host "  $Description" -ForegroundColor $Colors.Muted
 }
 
 function Write-Status {
-    param(
-        [string]$Label,
-        [string]$Value,
-        [string]$Color = "Green"
-    )
+    param([string]$Label, [string]$Value, [string]$Color = "Green")
     Write-Host "  " -NoNewline
-    Write-Host "$Label" -ForegroundColor $Colors.Muted -NoNewline
+    Write-Host ($Label.PadRight(20)) -ForegroundColor $Colors.Muted -NoNewline
     Write-Host " $Value" -ForegroundColor $Color
 }
 
-function Write-Divider {
-    Write-Host ""
-    Write-Host "  $([string]::new('=', 56))" -ForegroundColor $Colors.Border
-}
+function Write-Divider { Write-Host "" ; Write-Host "  $([string]::new('=', 56))" -ForegroundColor $Colors.Border }
 
 function Get-Input {
     param([string]$Prompt = "Select")
@@ -120,27 +99,70 @@ function Get-Input {
 }
 
 function Invoke-Action {
-    param(
-        [string]$Title,
-        [scriptblock]$Action
-    )
+    param([string]$Title, [scriptblock]$Action)
     Clear-Screen
     Write-Header $Title
     Write-Host ""
-    try {
-        & $Action
-    } catch {
-        Write-Host ""
-        Write-Host "  Error: $_" -ForegroundColor $Colors.Error
-    }
+    try { & $Action } catch { Write-Host "" ; Write-Host "  Error: $_" -ForegroundColor $Colors.Error }
+    Write-Host "" ; Write-Host "  Press any key to continue..." -ForegroundColor $Colors.Muted
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+}
+
+function Wait-Key {
     Write-Host ""
     Write-Host "  Press any key to continue..." -ForegroundColor $Colors.Muted
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
 
 # ============================================
-# PAGE: DASHBOARD
+# DASHBOARD (with architectural features)
 # ============================================
+
+function Get-GlobalInstallStatus {
+    $root = $HOME + "/.config/opencode/"
+    $result = @{
+        HasSkills     = $false
+        HasAgents     = $false
+        HasWorkflows  = $false
+        HasConfig     = $false
+        SkillCount    = 0
+        AgentCount    = 0
+        WorkflowCount = 0
+    }
+    if (Test-Path "$root/skills") {
+        $result.HasSkills  = $true
+        $result.SkillCount = (Get-ChildItem "$root/skills" -Directory -ErrorAction SilentlyContinue).Count
+    }
+    if (Test-Path "$root/god-opencode/agents") {
+        $result.HasAgents  = $true
+        $result.AgentCount = (Get-ChildItem "$root/god-opencode/agents" -Directory -ErrorAction SilentlyContinue).Count
+    }
+    if (Test-Path "$root/god-opencode/workflows") {
+        $result.HasWorkflows  = $true
+        $result.WorkflowCount = (Get-ChildItem "$root/god-opencode/workflows" -File -ErrorAction SilentlyContinue).Count
+    }
+    if (Test-Path "$root/opencode.jsonc") {
+        $cfg = Get-Content "$root/opencode.jsonc" -Raw -ErrorAction SilentlyContinue
+        $result.HasConfig = $cfg -match '"security-engineer"'
+    }
+    return $result
+}
+
+function Get-MemoryStatus {
+    $dir = Join-Path $Root "memory"
+    if (!(Test-Path $dir)) { return @{ Active = $false; Count = 0 } }
+    $files = Get-ChildItem -Path $dir -Filter "*.md" -File -ErrorAction SilentlyContinue
+    return @{ Active = ($files.Count -gt 0); Count = $files.Count }
+}
+
+function Get-CodeGraphStatus {
+    $f = Join-Path $Root "docs/wiki/_data/code-graph.json"
+    if (!(Test-Path $f)) { return @{ Active = $false; Functions = 0; Edges = 0; Updated = "never" } }
+    try {
+        $g = Get-Content $f -Raw | ConvertFrom-Json
+        return @{ Active = $true; Functions = $g.nodeCount; Edges = $g.edgeCount; Updated = $g.generated }
+    } catch { return @{ Active = $false; Functions = 0; Edges = 0; Updated = "error" } }
+}
 
 function Show-Dashboard {
     Clear-Screen
@@ -148,221 +170,217 @@ function Show-Dashboard {
     Write-Header "AI Engineering Operating System"
     Write-Host ""
 
-    # System stats
+    # -- System Overview --
     Write-Section "System Overview"
+    if (Test-Path "$Root/agents") { $agentCount = (Get-ChildItem "$Root/agents" -Directory).Count } else { $agentCount = 0 }
+    if (Test-Path "$Root/skills") { $skillCount = (Get-ChildItem "$Root/skills" -Directory -Recurse | Where-Object { Test-Path "$($_.FullName)/SKILL.md" }).Count } else { $skillCount = 0 }
+    if (Test-Path "$Root/workflows") { $wfCount = (Get-ChildItem "$Root/workflows" -File).Count } else { $wfCount = 0 }
+    if (Test-Path "$Root/commands") { $cmdCount = (Get-ChildItem "$Root/commands" -File).Count } else { $cmdCount = 0 }
 
-    $agentCount = 0
-    $skillCount = 0
-    $workflowCount = 0
-    $commandCount = 0
+    Write-Status "Agents"    "$agentCount loaded"  "Cyan"
+    Write-Status "Skills"    "$skillCount total"   "Magenta"
+    Write-Status "Workflows" "$wfCount available"  "Yellow"
+    Write-Status "Commands"  "$cmdCount slash"     "Green"
 
-    if (Test-Path "$Root\agents") {
-        $agentCount = (Get-ChildItem "$Root\agents" -Directory).Count
-    }
-    if (Test-Path "$HOME\.config\opencode\skills") {
-        $skillCount = (Get-ChildItem "$HOME\.config\opencode\skills" -Directory -ErrorAction SilentlyContinue).Count
-    }
-    if (Test-Path "$Root\workflows") {
-        $workflowCount = (Get-ChildItem "$Root\workflows" -File).Count
-    }
-    if (Test-Path "$Root\commands") {
-        $commandCount = (Get-ChildItem "$Root\commands" -File).Count
-    }
-
-    Write-Status "Agents"    "$agentCount loaded" "Cyan"
-    Write-Status "Skills"    "$skillCount installed" "Magenta"
-    Write-Status "Workflows" "$workflowCount available" "Yellow"
-    Write-Status "Commands"  "$commandCount slash commands" "Green"
-
-    # Global install status
-    Write-Section "Global Install Status"
-
-    $globalSkills = Join-Path $HOME ".config\opencode\skills"
-    $globalAgents = Join-Path $HOME ".config\opencode\god-opencode\agents"
-    $globalWorkflows = Join-Path $HOME ".config\opencode\god-opencode\workflows"
-    $globalConfig = Join-Path $HOME ".config\opencode\opencode.jsonc"
-
-    $globalAgentCount = 0
-    $globalWorkflowCount = 0
-    $hasGlobalConfig = $false
-    $hasAgentConfigs = $false
-
-    if (Test-Path $globalAgents) {
-        $globalAgentCount = (Get-ChildItem $globalAgents -Directory -ErrorAction SilentlyContinue).Count
-    }
-    if (Test-Path $globalWorkflows) {
-        $globalWorkflowCount = (Get-ChildItem $globalWorkflows -File -ErrorAction SilentlyContinue).Count
-    }
-    if (Test-Path $globalConfig) {
-        $configContent = Get-Content $globalConfig -Raw -ErrorAction SilentlyContinue
-        $hasGlobalConfig = $configContent -match '"agent"'
-        $hasAgentConfigs = $configContent -match '"security-engineer"'
-    }
-
-    if ($globalSkillCount -gt 0 -or $hasAgentConfigs) {
-        Write-Status "Global Skills"    "$skillCount installed in ~/.config/opencode/skills/" "Green"
-        Write-Status "Global Agents"    "$globalAgentCount in ~/.config/opencode/god-opencode/agents/" "Green"
-        Write-Status "Global Workflows" "$globalWorkflowCount in ~/.config/opencode/god-opencode/workflows/" "Green"
-        Write-Status "Agent Configs"    "Merged into global opencode.jsonc" "Green"
+    # -- Global Install Status (HEADLINE) --
+    Write-Section "Global Install (~/ .config/opencode/)"
+    $g = Get-GlobalInstallStatus
+    if ($g.SkillCount -gt 0 -and $g.HasConfig) {
+        Write-Status "Global Skills"    "$($g.SkillCount) installed"   "Green"
+        Write-Status "Global Agents"    "$($g.AgentCount) merged"      "Green"
+        Write-Status "Global Workflows" "$($g.WorkflowCount) merged"   "Green"
+        Write-Status "opencode.jsonc"   "Agents merged"               "Green"
         Write-Host ""
-        Write-Host "  [OK] Global install active - skills work from any directory" -ForegroundColor Green
+        Write-Host "  [OK] Globally installed - skills available from any directory" -ForegroundColor Green
     } else {
         Write-Host "  [!] NOT INSTALLED GLOBALLY" -ForegroundColor Yellow
-        Write-Host "  Run .\install.ps1 to make skills available from any directory" -ForegroundColor DarkGray
+        Write-Host "      Press [Enter] to install to ~/.config/opencode/" -ForegroundColor DarkGray
     }
 
-    # Quick actions
-    Write-Section "Quick Actions"
-    Write-MenuItem "1" "Install / Update" "Bootstrap or refresh the framework"
-    Write-MenuItem "2" "Health Check"     "Verify system integrity"
-    Write-MenuItem "3" "Project Scan"     "Analyze a codebase"
-    Write-MenuItem "4" "Run Tests"        "Execute Pester test suite"
-    Write-MenuItem "5" "Memory"           "View architectural decisions"
-    Write-MenuItem "6" "Router Test"      "Test keyword routing"
-    Write-MenuItem "7" "Launch Dashboard" "Open browser dashboard"
-    Write-MenuItem "Q" "Exit"             "Close the interface"
+    # -- Architectural Features --
+    Write-Section "Architectural Features"
+    $cg = Get-CodeGraphStatus
+    $ms = Get-MemoryStatus
+    Write-Status "Code Graph"        (if ($cg.Active) { "$($cg.Functions) functions, $($cg.Edges) edges" } else { "not built (use [3])" }) (if ($cg.Active) { "Green" } else { "Yellow" })
+    Write-Status "  last updated"     $cg.Updated "DarkGray"
+    Write-Status "Dynamic Skills"    "skill-fragment.ps1 ready" "Cyan"
+    Write-Status "Cross-Platform"    "install.sh + install.cmd shims" "Cyan"
+    Write-Status "Long-term Memory"   (if ($ms.Active) { "$($ms.Count) artifacts in memory/" } else { "empty (use [5])" }) (if ($ms.Active) { "Green" } else { "Yellow" })
 
+    # -- Quick Actions --
+    Write-Section "Quick Actions"
+    Write-MenuItem "Enter" "Install Globally"      "Default action - skills/agents/workflows -> ~/.config/opencode" "Magenta" "DEFAULT"
+    Write-MenuItem "1"     "Install Globally"      "(same as Enter) .\install.ps1" "Magenta"
+    Write-MenuItem "2"     "Health Check"          "Verify system integrity"
+    Write-MenuItem "3"     "Code Graph"            "Build/refresh call-graph index"
+    Write-MenuItem "4"     "Skill Fragment"        "Dynamic context lookup for a topic"
+    Write-MenuItem "5"     "Memory"                "Recall / append session memory"
+    Write-MenuItem "6"     "Cross-Platform"        "Show bash/cmd/PowerShell install paths"
+    Write-MenuItem "7"     "Tests"                 "Run Pester suite"
+    Write-MenuItem "8"     "Wiki"                  "Open local wiki in browser"
+    Write-MenuItem "9"     "Dashboard"             "Open browser dashboard"
+    Write-MenuItem "Q"     "Exit"                  "Close the interface"
+
+    Write-Divider
+    Write-Host "  Tip: Enter = default action (Install Globally)" -ForegroundColor $Colors.Muted
     Write-Divider
 }
 
 # ============================================
-# PAGE: HEALTH CHECK
+# PAGES
 # ============================================
+
+function Show-InstallGlobally {
+    Clear-Screen
+    Write-Header "Install Globally -> ~/.config/opencode/"
+    Write-Host ""
+    Write-Host "  This will:" -ForegroundColor $Colors.Accent
+    Write-Host "    - Copy 84 SKILL.md files into ~/.config/opencode/skills/"
+    Write-Host "    - Merge 10 agent configs into ~/.config/opencode/opencode.jsonc"
+    Write-Host "    - Copy workflows/agents/commands into ~/.config/opencode/god-opencode/"
+    Write-Host "    - Update opencode.jsonc instructions glob (idempotent)"
+    Write-Host ""
+    Write-Host "  Source: .\install.ps1" -ForegroundColor $Colors.Muted
+    Write-Host ""
+    & (Join-Path $Root "install.ps1")
+    Write-Host ""
+    Write-Host "  Done. Skills now work from any directory." -ForegroundColor $Colors.Success
+}
 
 function Show-HealthCheck {
     Clear-Screen
     Write-Header "System Health Check"
     Write-Host ""
-
-    $healthScript = Join-Path $Root "god-health.ps1"
-    if (Test-Path $healthScript) {
-        & $healthScript
-    } else {
-        Write-Host "  Health check script not found." -ForegroundColor $Colors.Error
-    }
+    $hs = Join-Path $Root "god-health.ps1"
+    if (Test-Path $hs) { & $hs } else { Write-Host "  Health script missing." -ForegroundColor $Colors.Error }
 }
 
-# ============================================
-# PAGE: PROJECT SCAN
-# ============================================
-
-function Show-ProjectScan {
+function Show-CodeGraph {
     Clear-Screen
-    Write-Header "Intelligence Engine - Project Scan"
+    Write-Header "Code Graph - build call-graph index"
     Write-Host ""
-
-    $target = Get-Input "Enter project path (Enter for current dir)"
-    if ([string]::IsNullOrWhiteSpace($target)) {
-        $target = (Get-Location).Path
-    }
-
-    if (!(Test-Path $target)) {
-        Write-Host ""
-        Write-Host "  Path not found: $target" -ForegroundColor $Colors.Error
+    $cg = Join-Path $Root "scripts/code-graph.ps1"
+    if (!(Test-Path $cg)) {
+        Write-Host "  scripts/code-graph.ps1 missing." -ForegroundColor $Colors.Error
         return
     }
-
+    Write-Host "  Scanning PowerShell files..." -ForegroundColor $Colors.Accent
     Write-Host ""
-    Write-Host "  Scanning: $target" -ForegroundColor $Colors.Accent
+    & $cg
     Write-Host ""
+    Write-Host "  Output: docs/wiki/_data/code-graph.json" -ForegroundColor $Colors.Muted
+    Write-Host "  Render: open docs/wiki/graph.md in your browser / markdown viewer" -ForegroundColor $Colors.Muted
+}
 
-    $scanScript = Join-Path $Root "tools\project-scan.ps1"
-    if (Test-Path $scanScript) {
-        & $scanScript -TargetPath $target
-    } else {
-        Write-Host "  Scanner not found at $scanScript" -ForegroundColor $Colors.Error
+function Show-SkillFragment {
+    Clear-Screen
+    Write-Header "Skill Fragment - dynamic context lookup"
+    Write-Host ""
+    $sf = Join-Path $Root "scripts/skill-fragment.ps1"
+    if (!(Test-Path $sf)) {
+        Write-Host "  scripts/skill-fragment.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    $q = Get-Input "Topic (e.g. 'authentication jwt', 'fastapi async', 'kubernetes ingress')"
+    if ([string]::IsNullOrWhiteSpace($q)) { return }
+    Write-Host ""
+    Write-Host "  Matching skills (top 5):" -ForegroundColor $Colors.Accent
+    Write-Host ""
+    & $sf -Query $q | ForEach-Object {
+        Write-Host "  $($_.skill)" -ForegroundColor $Colors.Magenta
+        foreach ($t in $_.topics) {
+            Write-Host "    -- $($t.heading) (score $($t.score))" -ForegroundColor $Colors.Cyan
+        }
+        Write-Host ""
     }
 }
 
-# ============================================
-# PAGE: TEST RUNNER
-# ============================================
+function Show-Memory {
+    Clear-Screen
+    Write-Header "Memory - Architectural Decisions + Session Notes"
+    Write-Host ""
+    $ms = Join-Path $Root "scripts/memory.ps1"
+    if (Test-Path $ms) { & $ms }
+    Write-Host ""
+    Write-Section "Append a memory artifact"
+    Write-Host "  Type: [A]rchitecture-decision  [C]oding-convention  [T]odo  [L]og  [S]upposition" -ForegroundColor $Colors.Muted
+    $t = Get-Input "  Type (A/C/T/L/S) or Enter to skip"
+    $map = @{ "A"="architecture-decision" ; "C"="coding-convention" ; "T"="todo" ; "L"="changelog" ; "S"="assumption" }
+    if ($map.ContainsKey($t.ToUpper())) {
+        $title = Get-Input "  Title"
+        $body  = Get-Input "  Content (one line)"
+        if ($title -and $body) {
+            . $ms
+            New-MemoryArtifact -Type $map[$t.ToUpper()] -Title $title -Author "god-ui" -Content $body | Out-Null
+            Write-Host "  [MEMORY] Saved." -ForegroundColor $Colors.Success
+        }
+    }
+}
+
+function Show-CrossPlatform {
+    Clear-Screen
+    Write-Header "Cross-Platform Install"
+    Write-Host ""
+    Write-Section "Windows (PowerShell)"
+    Write-Host "    .\install.ps1" -ForegroundColor $Colors.Magenta
+    Write-Host ""
+    Write-Section "Windows (cmd.exe)"
+    Write-Host "    install.cmd" -ForegroundColor $Colors.Magenta
+    Write-Host ""
+    Write-Section "Linux / macOS / WSL (requires pwsh)"
+    Write-Host "    bash install.sh" -ForegroundColor $Colors.Magenta
+    Write-Host ""
+    Write-Host "  install.sh delegates to ./install.ps1 via PowerShell 7 (pwsh)." -ForegroundColor $Colors.Muted
+    Write-Host "  Get pwsh: https://aka.ms/powershell" -ForegroundColor $Colors.Muted
+    Write-Host ""
+    Write-Section "Container (any platform with Docker)"
+    Write-Host "    docker pull ghcr.io/mattycigemp-crypto/god-opencode:latest" -ForegroundColor $Colors.Magenta
+}
 
 function Show-TestRunner {
     Clear-Screen
     Write-Header "Pester Test Suite"
     Write-Host ""
-
-    Write-Section "Test Options"
-    Write-MenuItem "1" "Unit Tests"       "Fast, isolated tests"
-    Write-MenuItem "2" "Property Tests"   "Invariant verification"
-    Write-MenuItem "3" "Smoke Tests"      "Structure validation"
-    Write-MenuItem "4" "All (excl. integration)" "Full suite minus integration"
-    Write-MenuItem "B" "Back"             "Return to dashboard"
-
-    $choice = Get-Input "Select test suite"
-
-    $testPath = Join-Path $Root "tests"
+    Write-Host "  1 - Unit" -ForegroundColor $Colors.Muted
+    Write-Host "  2 - Property" -ForegroundColor $Colors.Muted
+    Write-Host "  3 - Smoke"  -ForegroundColor $Colors.Muted
+    Write-Host "  4 - All (excl. integration)" -ForegroundColor $Colors.Muted
+    Write-Host "  B - Back" -ForegroundColor $Colors.Muted
+    $choice = Get-Input "Test suite"
     $config = New-PesterConfiguration
-    $config.Run.Path = $testPath
+    $config.Run.Path = (Join-Path $Root "tests")
     $config.Output.Verbosity = "Detailed"
-
-    switch ($choice) {
-        "1" {
-            $config.Filter.Tag = "Unit"
-            Invoke-Pester -Configuration $config
-        }
-        "2" {
-            $config.Filter.Tag = "Property"
-            Invoke-Pester -Configuration $config
-        }
-        "3" {
-            $config.Filter.Tag = "Smoke"
-            Invoke-Pester -Configuration $config
-        }
-        "4" {
-            $config.Filter.ExcludeTagFilter = "Integration"
-            Invoke-Pester -Configuration $config
-        }
+    switch ($choice.ToUpper()) {
+        "1" { $config.Filter.Tag = "Unit"        ; Invoke-Pester -Configuration $config }
+        "2" { $config.Filter.Tag = "Property"     ; Invoke-Pester -Configuration $config }
+        "3" { $config.Filter.Tag = "Smoke"        ; Invoke-Pester -Configuration $config }
+        "4" { $config.Filter.ExcludeTagFilter = "Integration"; Invoke-Pester -Configuration $config }
         "B" { return }
-        default {
-            Write-Host "  Invalid option." -ForegroundColor $Colors.Warning
-        }
     }
 }
 
-# ============================================
-# PAGE: MEMORY VIEWER
-# ============================================
-
-function Show-Memory {
-    Clear-Screen
-    Write-Header "Memory - Architectural Decisions"
-    Write-Host ""
-
-    $memoryScript = Join-Path $Root "scripts\memory.ps1"
-    if (Test-Path $memoryScript) {
-        & $memoryScript
+function Show-WikiPage {
+    $wiki = Join-Path $Root "docs/wiki/index.md"
+    $html = Join-Path $Root "docs/wiki/index.html"
+    if (Test-Path $html) { Start-Process $html ; return }
+    if (Test-Path $wiki) {
+        Write-Host ""
+        Write-Host "  Wiki source: $wiki" -ForegroundColor $Colors.Muted
+        Write-Host "  Open in your editor / markdown viewer." -ForegroundColor $Colors.Muted
     } else {
-        Write-Host "  Memory script not found." -ForegroundColor $Colors.Error
+        Write-Host "  Wiki missing at $wiki" -ForegroundColor $Colors.Error
     }
 }
 
-# ============================================
-# PAGE: ROUTER TESTER
-# ============================================
-
-function Show-RouterTest {
-    Clear-Screen
-    Write-Header "Router - Keyword Test"
-    Write-Host ""
-
-    $request = Get-Input "Enter a task description"
-    if ([string]::IsNullOrWhiteSpace($request)) {
-        Write-Host "  No input provided." -ForegroundColor $Colors.Warning
-        return
-    }
-
-    Write-Host ""
-    Write-Host "  Routing: $request" -ForegroundColor $Colors.Accent
-    Write-Host ""
-
-    $routerScript = Join-Path $Root "scripts\router.ps1"
-    if (Test-Path $routerScript) {
-        & $routerScript -Request $request
+function Show-BrowserDashboard {
+    $p = Join-Path $Root "ui/index.html"
+    if (Test-Path $p) {
+        Start-Process $p
+        Write-Host "" ; Write-Host "  Dashboard opened." -ForegroundColor $Colors.Success
     } else {
-        Write-Host "  Router script not found." -ForegroundColor $Colors.Error
+        Write-Host "" ; Write-Host "  Dashboard missing at $p" -ForegroundColor $Colors.Error
     }
+    Start-Sleep -Seconds 1
 }
 
 # ============================================
@@ -371,71 +389,28 @@ function Show-RouterTest {
 
 while ($true) {
     Show-Dashboard
-    $choice = Get-Input "Command"
+    $choice = (Get-Input "Command (Enter = install globally)").Trim()
 
     switch ($choice.ToUpper()) {
-        "1" {
-            Invoke-Action "Installing GOD-OPENCODE" {
-                & (Join-Path $Root "god-install.ps1")
-            }
+        { $_ -eq "" -or $_ -eq "1" } {
+            Clear-Screen ; Show-InstallGlobally ; Wait-Key
         }
-        "2" {
-            Clear-Screen
-            Show-HealthCheck
-            Write-Host ""
-            Write-Host "  Press any key to continue..." -ForegroundColor $Colors.Muted
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-        }
-        "3" {
-            Clear-Screen
-            Show-ProjectScan
-            Write-Host ""
-            Write-Host "  Press any key to continue..." -ForegroundColor $Colors.Muted
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-        }
-        "4" {
-            Clear-Screen
-            Show-TestRunner
-            Write-Host ""
-            Write-Host "  Press any key to continue..." -ForegroundColor $Colors.Muted
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-        }
-        "5" {
-            Clear-Screen
-            Show-Memory
-            Write-Host ""
-            Write-Host "  Press any key to continue..." -ForegroundColor $Colors.Muted
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-        }
-        "6" {
-            Clear-Screen
-            Show-RouterTest
-            Write-Host ""
-            Write-Host "  Press any key to continue..." -ForegroundColor $Colors.Muted
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-        }
-        "7" {
-            $dashboardPath = Join-Path $Root "ui\index.html"
-            if (Test-Path $dashboardPath) {
-                Start-Process $dashboardPath
-                Write-Host ""
-                Write-Host "  Dashboard opened in browser." -ForegroundColor $Colors.Success
-            } else {
-                Write-Host ""
-                Write-Host "  Dashboard not found at $dashboardPath" -ForegroundColor $Colors.Error
-            }
-            Start-Sleep -Seconds 1
-        }
+        "2" { Clear-Screen ; Show-HealthCheck   ; Wait-Key }
+        "3" { Clear-Screen ; Show-CodeGraph     ; Wait-Key }
+        "4" { Clear-Screen ; Show-SkillFragment ; Wait-Key }
+        "5" { Clear-Screen ; Show-Memory        ; Wait-Key }
+        "6" { Clear-Screen ; Show-CrossPlatform ; Wait-Key }
+        "7" { Clear-Screen ; Show-TestRunner    ; Wait-Key }
+        "8" { Clear-Screen ; Show-WikiPage      ; Wait-Key }
+        "9" { Clear-Screen ; Show-BrowserDashboard ; Wait-Key }
+        "W" { Clear-Screen ; Show-WikiPage      ; Wait-Key }
         "Q" {
             Clear-Screen
-            Write-Host ""
-            Write-Host "  GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted
-            Write-Host ""
+            Write-Host "" ; Write-Host "  GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""
             exit
         }
         default {
-            Write-Host ""
-            Write-Host "  Invalid option. Try again." -ForegroundColor $Colors.Warning
+            Write-Host "" ; Write-Host "  Invalid. Enter = install globally, ? numbers / Q." -ForegroundColor $Colors.Warning
             Start-Sleep -Seconds 1
         }
     }

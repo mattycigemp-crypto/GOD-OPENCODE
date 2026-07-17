@@ -1,9 +1,14 @@
 # ============================================
 # GOD-OPENCODE MEMORY SYSTEM
-# Version 1.1
+# Version 1.2
 # ============================================
 # Dot-source or call directly.
-# Functions: New-MemoryArtifact, Get-MemoryArtifacts, Show-MemoryList
+# Functions:
+#   New-MemoryArtifact  - append / create a memory artifact
+#   Get-MemoryArtifacts - list all memory artifacts
+#   Show-MemoryList     - print artifacts as a table
+#   New-MemoryRecall    - top-N token-overlap recall across artifacts
+#   Get-MemoryPreferences - read the agent-preferences file (added 1.2)
 
 $ErrorActionPreference = "Stop"
 
@@ -96,6 +101,89 @@ function Show-MemoryList {
     Write-Host ""
     Write-Host "Total: $($Artifacts.Count) artifact(s)"
     Write-Host ""
+}
+
+# ============================================
+# NEW in 1.2: New-MemoryRecall + Get-MemoryPreferences
+# ============================================
+
+function New-MemoryRecall {
+    <#
+    .SYNOPSIS
+        Find the top-N memory artifacts whose content most overlaps with a query.
+    .DESCRIPTION
+        Tokenizes a query, scores every markdown file under `memory/` by counting
+        query-token occurrences across the body, and returns the highest-scoring
+        ones (up to -Top, default 3). Returns objects with Path / Title / Type
+        / Score / Snippet (first ~200 chars of body).
+    #>
+    param(
+        [Parameter(Mandatory=$true)][string]$Query,
+        [int]$Top = 3,
+        [string]$MemoryDir = ""
+    )
+
+    if ($MemoryDir -eq "") {
+        $Root = Split-Path $PSScriptRoot -Parent
+        $MemoryDir = Join-Path $Root "memory"
+    }
+    if (!(Test-Path $MemoryDir)) { return @() }
+
+    $Stop = @("the","and","for","with","from","into","that","this","have","has","are","was","were","you","your","our","their","his","her","its","but","not")
+    $TQ = @(
+        ($Query.ToLower() -split '[^\w]+') |
+        Where-Object { $_ -and $_.Length -ge 3 -and ($Stop -notcontains $_) }
+    ) | Select-Object -Unique
+
+    if ($TQ.Count -eq 0) { return @() }
+
+    $Hits = @()
+    Get-ChildItem -Path $MemoryDir -Filter "*.md" -File | ForEach-Object {
+        $content = Get-Content $_.FullName -Raw -ErrorAction SilentlyContinue
+        if (-not $content) { return }
+
+        # Skip AGENT_PREFERENCES.md (handled separately)
+        if ($_.Name -eq "AGENT_PREFERENCES.md") { return }
+
+        $score = ($TQ | Where-Object { $content.ToLower().Contains("$_") }).Count
+
+        # Parse frontmatter for type/title
+        $type = "" ; $title = ""
+        foreach ($Line in (Get-Content $_.FullName -TotalCount 8)) {
+            if ($Line -match '^type:\s*(.+)')  { $type  = $Matches[1].Trim() }
+            if ($Line -match '^title:\s*(.+)') { $title = $Matches[1].Trim() }
+        }
+        if (-not $title) { $title = [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }
+
+        if ($score -gt 0) {
+            $snippet = ($content -replace '\s+', ' ').Trim()
+            if ($snippet.Length -gt 240) { $snippet = $snippet.Substring(0, 240) + "..." }
+            $Hits += [pscustomobject]@{
+                Path    = $_.FullName
+                Title   = $title
+                Type    = $type
+                Score   = $score
+                Snippet = $snippet
+            }
+        }
+    }
+
+    $Hits | Sort-Object Score -Descending | Select-Object -First $Top
+}
+
+function Get-MemoryPreferences {
+    <#
+    .SYNOPSIS
+        Read the persistent agent preferences file at memory/AGENT_PREFERENCES.md.
+    #>
+    param([string]$MemoryDir = "")
+    if ($MemoryDir -eq "") {
+        $Root = Split-Path $PSScriptRoot -Parent
+        $MemoryDir = Join-Path $Root "memory"
+    }
+    $f = Join-Path $MemoryDir "AGENT_PREFERENCES.md"
+    if (!(Test-Path $f)) { return $null }
+    return Get-Content $f -Raw
 }
 
 # Direct invocation guard

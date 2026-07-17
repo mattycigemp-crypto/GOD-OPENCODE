@@ -33,7 +33,7 @@ cd GOD-OPENCODE
 .\god-ui.ps1
 ```
 
-The TUI gives you everything: system overview, install, health check, tests, router, and a link to the browser dashboard.
+The TUI gives you everything: system overview, install, health check, tests, router, and a link to the browser dashboard. **Press Enter to install globally (the default action)** — installs skills/agents/workflows into `~/.config/opencode/`.
 
 ### Alternative: Direct OpenCode
 
@@ -66,6 +66,23 @@ docker run --rm ghcr.io/mattycigemp-crypto/god-opencode:latest \
 ```
 
 Each `v*` tag publish a versioned image (`ghcr.io/.../god-opencode:v1.1.5`) plus `latest`. The image bundles PowerShell 7.4 + the installable project so it works identically on Linux, macOS, and Windows hosts.
+
+**Cross-platform shims:** `bash install.sh` (requires `pwsh`) on Linux/macOS/WSL; `install.cmd` on Windows cmd.exe. See [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md).
+
+---
+
+## Architectural features (1.2)
+
+Four open concerns documented in [docs/wiki/roadmap.md](docs/wiki/roadmap.md) — all four have a working MVP shipped:
+
+| Concern | MVP (1.2) | Where |
+|---------|-----------|-------|
+| Code graph (no function-to-file call trees) | `scripts/code-graph.ps1` emits JSON call-graph for PowerShell files | [docs/wiki/graph.md](docs/wiki/graph.md) |
+| Static markdown prompts (full SKILL.md over-consumes context) | `scripts/skill-fragment.ps1` returns matching `##` sections per request | [docs/wiki/dynamic-skills.md](docs/wiki/dynamic-skills.md) |
+| Heavy PowerShell reliance (Linux/macOS friction) | `install.sh` (bash) + `install.cmd` (cmd.exe) + ghcr.io container | [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md) |
+| No long-term memory between sessions | `New-MemoryRecall` + `memory/AGENT_PREFERENCES.md` | [docs/wiki/memory.md](docs/wiki/memory.md) |
+
+Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md). Each MVP has a concrete next milestone in the roadmap page.
 
 ---
 
@@ -197,6 +214,8 @@ GOD-OPENCODE/
 ├── mcps/                      # MCP server configs
 ├── templates/                 # Project scaffolds
 ├── tests/                     # Pester test suite
+├── docs/wiki/                 # Markdown wiki (8 pages, single source of truth)
+├── memory/                    # Long-term memory store + AGENT_PREFERENCES.md
 └── ui/                        # Browser dashboard
 ```
 
