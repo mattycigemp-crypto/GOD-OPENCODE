@@ -29,5 +29,8 @@ Desktop.ini
 .DS_Store
 
 # Release packages
+# Block stray *.zip everywhere, then whitelist release/ contents so release artifacts
+# can be committed to the repo and downloaded directly from raw.githubusercontent.com.
 *.zip
-release/
+!release/*.zip
+!release/SHA256SUMS*

@@ -1,0 +1,5 @@
+﻿# SHA256 checksums for GOD-OPENCODE release artifacts
+
+  Use: 'Get-FileHash <file> -Algorithm SHA256' and compare against the line below.
+
+  148188E93E3DD91E41E7AB38F5D1E5A3F8F14D8D553D572892081BFD2AC11E4E  god-opencode-v1.1.3.zip
