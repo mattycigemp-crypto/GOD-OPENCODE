@@ -5,9 +5,42 @@ description: Execute step-by-step workflows from the workflows/ directory. Reads
 
 # workflow-engine
 
-## Purpose
+## Mission
 
 Load and execute structured workflows defined in markdown files. Each workflow has parameters, steps with assigned agents and skills, and clear actions.
+
+## Core Responsibilities
+
+- Read workflow markdown files from `workflows/`.
+- Extract parameters and prompt for missing required values.
+- Substitute `{{PARAM}}` placeholders in step actions.
+- Execute steps sequentially with the correct agent and skills.
+- Generate a summary report after workflow completion.
+
+## Workflow
+
+1. Load the requested workflow markdown file.
+2. Parse the `## Parameters` table.
+3. Collect required parameters from the user.
+4. Substitute placeholders in each step action.
+5. Execute steps sequentially, loading the assigned agent and skills per step.
+6. Record findings and report progress.
+7. Generate a final summary with key findings and next steps.
+
+## Quality Standards
+
+Always:
+
+- Validate that the workflow file exists before executing.
+- Ask for all required parameters before starting.
+- Preserve context across steps.
+- Report failures clearly without stopping the entire workflow.
+
+Never:
+
+- Skip steps without recording the reason.
+- Substitute parameters incorrectly.
+- Lose context when switching agents.
 
 ## When to Use
 

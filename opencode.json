@@ -1,6 +1,23 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "instructions": ["AGENTS.md"],
+  "instructions": ["AGENTS.md", "docs/**/*.md"],
+  "permission": {
+    "bash": {
+      "deny": [
+        "rm -rf /",
+        "rm -rf *",
+        "git push --force",
+        "git push -f",
+        "git reset --hard",
+        "del /f /s /q",
+        "format *",
+        "mkfs*",
+        "dd if=*",
+        "> /dev/sd*",
+        "reg delete*"
+      ]
+    }
+  },
   "agent": {
     "backend-engineer": {
       "mode": "subagent",
@@ -35,7 +52,7 @@
     "debugger": {
       "mode": "subagent",
       "prompt": "You are a senior debugger specializing in root cause analysis, troubleshooting, and fixing complex bugs. Debug systematically. Follow these standards: Reproduce the issue first. Form hypotheses. Test hypotheses methodically. Fix root causes, not symptoms. Write regression tests. Document findings.",
-      "tools": ["read", "write", "edit", "bash", "glob", "grep"]
+      "tools": ["read", "bash", "glob", "grep"]
     },
     "ai-engineer": {
       "mode": "subagent",

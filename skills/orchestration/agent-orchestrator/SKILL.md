@@ -5,9 +5,41 @@ description: Manage and switch between specialized agents during conversations. 
 
 # agent-orchestrator
 
-## Purpose
+## Mission
 
 Manage specialized agent personas during conversations. Switch between different engineering roles (backend, frontend, security, etc.) and maintain context across switches.
+
+## Core Responsibilities
+
+- Detect when a conversation needs a different agent persona.
+- Load the target agent's definition from `agents/{agent-name}/AGENT.md`.
+- Announce agent switches to the user.
+- Preserve context across agent switches.
+- Coordinate multi-agent workflows when needed.
+
+## Workflow
+
+1. Detect the need to switch agents based on user request or workflow step.
+2. Load the target agent's `AGENT.md` definition.
+3. Announce the switch and summarize prior context.
+4. Adopt the new agent's role, standards, and skills.
+5. Continue execution from the new agent's perspective.
+6. For multi-agent workflows, coordinate primary, supporting, and review agents.
+
+## Quality Standards
+
+Always:
+
+- Preserve relevant context when switching.
+- Load the correct agent definition.
+- Clearly announce agent switches.
+- Use the new agent's standards and skills.
+
+Never:
+
+- Drop important context during a switch.
+- Switch agents without informing the user.
+- Ignore the target agent's responsibilities.
 
 ## When to Use
 

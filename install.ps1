@@ -1,6 +1,6 @@
 # ============================================
 # GOD-OPENCODE SMART INSTALLER
-# Version 2.1
+# Version 2.2
 # ============================================
 
 $Source = Join-Path $PSScriptRoot "skills"
@@ -257,11 +257,11 @@ if (Test-Path $GlobalConfig) {
             }
         }
 
-        # Merge instructions (append if not already present)
+        # Merge instructions (append if not already present; supports glob patterns)
         if ($Source.instructions) {
             $RawContent = Get-Content $GlobalConfig -Raw
             $InstructionsArray = @()
-            
+
             # Extract existing instructions if present
             if ($RawContent -match '"instructions"\s*:\s*\[([^\]]*)\]') {
                 $ExistingStr = $Matches[1].Trim()
@@ -269,20 +269,20 @@ if (Test-Path $GlobalConfig) {
                     $InstructionsArray = $ExistingStr -split ',' | ForEach-Object { $_.Trim().Trim('"') }
                 }
             }
-            
-            # Add new instructions
+
+            # Add new instructions (including glob patterns like docs/**/*.md)
             foreach ($Inst in $Source.instructions) {
                 if ($Inst -notin $InstructionsArray) {
                     $InstructionsArray += $Inst
                     $Merged = $true
                 }
             }
-            
+
             # Write back
             if ($Merged) {
                 $InstructionsJson = ($InstructionsArray | ForEach-Object { "`"$_`"" }) -join ', '
                 $InstructionsBlock = "`"instructions`": [$InstructionsJson]"
-                
+
                 if ($RawContent -match '"instructions"\s*:\s*\[[^\]]*\]') {
                     $RawContent = $RawContent -replace '"instructions"\s*:\s*\[[^\]]*\]', $InstructionsBlock
                 } else {
@@ -291,6 +291,39 @@ if (Test-Path $GlobalConfig) {
                     $RawContent = $RawContent.Insert($LastBrace, "$InstructionsBlock,`n  ")
                 }
                 Set-Content $GlobalConfig -Value $RawContent -Encoding UTF8
+            }
+        }
+
+        # Merge permission rules (append missing deny entries)
+        if ($Source.permission) {
+            if (-not $Global.permission) {
+                $Global | Add-Member -NotePropertyName "permission" -NotePropertyValue $Source.permission
+                $Merged = $true
+            } else {
+                foreach ($Tool in $Source.permission.PSObject.Properties.Name) {
+                    $SourceTool = $Source.permission.$Tool
+                    $GlobalTool = $Global.permission.$Tool
+
+                    if (-not $GlobalTool) {
+                        $Global.permission | Add-Member -NotePropertyName $Tool -NotePropertyValue $SourceTool
+                        $Merged = $true
+                    } else {
+                        $SourceDeny = @()
+                        $GlobalDeny = @()
+
+                        if ($SourceTool.deny) { $SourceDeny = $SourceTool.deny }
+                        if ($GlobalTool.deny) { $GlobalDeny = $GlobalTool.deny }
+
+                        foreach ($Entry in $SourceDeny) {
+                            if ($Entry -notin $GlobalDeny) {
+                                $GlobalDeny += $Entry
+                                $Merged = $true
+                            }
+                        }
+
+                        $GlobalTool.deny = $GlobalDeny
+                    }
+                }
             }
         }
 

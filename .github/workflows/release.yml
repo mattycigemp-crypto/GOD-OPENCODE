@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PowerShell
+        uses: pwsh-action/setup@v1
+        with:
+          pwsh: true
+
+      - name: Build release package
+        shell: pwsh
+        run: |
+          $Version = "${{ github.ref_name }}"
+          $VersionNumber = $Version.TrimStart('v')
+          .\scripts\package-release.ps1 -Version $VersionNumber
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: god-opencode-*.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true

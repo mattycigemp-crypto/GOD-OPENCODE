@@ -38,7 +38,7 @@ RunStep "Expansion Engine" "god-expansion.ps1"
 # INSTALL SKILLS
 # =====================================================
 
-Banner "Installing OpenCode Skills"
+Write-Banner "Installing OpenCode Skills"
 
 $Installer = Join-Path $Root "install.ps1"
 
@@ -58,7 +58,7 @@ RunStep "Health Check" "god-health.ps1"
 # SUMMARY
 # =====================================================
 
-Banner "Summary"
+Write-Banner "Summary"
 
 $Summary = @{}
 

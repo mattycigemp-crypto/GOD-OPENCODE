@@ -5,9 +5,39 @@ description: Build, scaffold, and manage GOD-OPENCODE components. Create new age
 
 # command-builder
 
-## Purpose
+## Mission
 
 Scaffold and manage GOD-OPENCODE components: agents, skills, workflows, and commands. Generate boilerplate, validate structure, and maintain consistency.
+
+## Core Responsibilities
+
+- Scaffold new agents, skills, workflows, and commands.
+- Generate consistent boilerplate and directory structure.
+- Validate component structure against project standards.
+- Maintain naming conventions and cross-references.
+
+## Workflow
+
+1. Identify the component type from the user's request.
+2. Determine the component name and target directory.
+3. Generate the required files with proper frontmatter and sections.
+4. Validate the generated structure.
+5. Report the created files and next steps.
+
+## Quality Standards
+
+Always:
+
+- Use lowercase hyphenated names for components.
+- Include required frontmatter (`name`, `description`) for skills.
+- Include required sections for each component type.
+- Validate that referenced skills exist.
+
+Never:
+
+- Create components with invalid names.
+- Skip required sections in boilerplate.
+- Leave broken cross-references.
 
 ## When to Use
 

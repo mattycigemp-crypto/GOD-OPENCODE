@@ -27,3 +27,7 @@ _fix.ps1
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Release packages
+*.zip
+release/

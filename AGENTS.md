@@ -48,6 +48,27 @@ GOD-OPENCODE extends OpenCode with three layers:
 2. **Skills** — Domain knowledge loaded on-demand (fastapi, react, security-audit, etc.)
 3. **Workflows** — Step-by-step processes (security-audit, api-design, etc.)
 
+## Build / Test / Health Commands
+
+Run these from the repository root:
+
+| Command | Purpose |
+|---------|---------|
+| `.\tests\run-tests.ps1` | Run unit, property, and smoke tests (excludes integration) |
+| `.\tests\run-tests.ps1 -All` | Run all tests including integration |
+| `.\tests\run-tests.ps1 -Integration` | Run integration tests only |
+| `.\god-health.ps1` | Run the full health check against the repository |
+
+## Contribution Workflow
+
+1. **Fork or branch** from `master`.
+2. **Make changes** following the coding standards above.
+3. **Run tests** with `.\tests\run-tests.ps1`.
+4. **Run health check** with `.\god-health.ps1`.
+5. **Commit** with clear, descriptive messages.
+6. **Open a pull request** describing the change and linking any related issue.
+7. **Tag a release** with `git tag v<major>.<minor>.<patch>` when ready.
+
 ## OpenCode Integration
 
 - Skills installed to `~/.config/opencode/skills/`

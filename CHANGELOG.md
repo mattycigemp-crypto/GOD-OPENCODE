@@ -6,6 +6,24 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.0] - 2026-07-17
+
+### Added
+
+- **Documentation** (`docs/`) — New architecture, standards, and workflow authoring guides.
+  - `docs/architecture.md` — System overview, three-layer architecture, and OpenCode integration points.
+  - `docs/standards.md` — PowerShell 5.1 compatibility, SKILL.md format, workflow syntax, and Markdown conventions.
+  - `docs/workflows.md` — Workflow authoring guide with parameter substitution and examples.
+- **OpenCode Configuration** (`opencode.json`) — Added `permission` rules to restrict destructive bash commands, per-agent `tools` restrictions, and glob-based `instructions`.
+- **Installer v2.2** (`install.ps1`) — Added merge support for `permission` fields and glob `instructions` when merging into the global OpenCode config.
+- **GitHub Release Automation** (`.github/workflows/release.yml`) — Triggered on `v*` tag pushes, creates a GitHub Release, and attaches the packaged `.zip` asset with auto-generated release notes.
+- **Local Release Packager** (`scripts/package-release.ps1`) — Builds a versioned `.zip` release package locally with all components.
+
+### Changed
+
+- **AGENTS.md** — Added build/test/health commands section and contribution workflow.
+- **`.gitignore`** — Ignores `*.zip` release packages and `release/` directory.
+
 ## [1.0.0] - 2026-07-16
 
 ### Added

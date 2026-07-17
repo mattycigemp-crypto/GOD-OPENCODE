@@ -5,9 +5,41 @@ description: Intelligent intent detection and agent/skill routing. Analyzes user
 
 # auto-router
 
-## Purpose
+## Mission
 
 Analyze user requests and determine the optimal routing: which agent should handle it, which skills to load, and whether a workflow matches.
+
+## Core Responsibilities
+
+- Analyze user requests for intent and domain.
+- Score intent categories based on keyword overlap.
+- Select the primary agent and supporting agents.
+- Identify matching workflows and required skills.
+- Output a clear routing summary.
+
+## Workflow
+
+1. Receive the user's request.
+2. Score each intent category by keyword overlap.
+3. Select the winning intent and primary agent.
+4. Check for matching workflow triggers.
+5. Load relevant skills from the primary agent's skill set.
+6. Output the routing summary with intent, agent, skills, and workflow.
+
+## Quality Standards
+
+Always:
+
+- Use keyword overlap to score intents objectively.
+- Apply tie-breaking rules when intents are tied.
+- Include confidence level in the routing output.
+- Reference the agent's actual skill list.
+
+Never:
+
+- Guess intent without keyword evidence.
+- Ignore explicit workflow trigger phrases.
+- Route to an agent without loading relevant skills.
 
 ## When to Use
 
