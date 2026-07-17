@@ -63,11 +63,11 @@ function Write-Header {
     $width = 60
     $pad = $width - $Title.Length - 4
     if ($pad -lt 0) { $pad = 0 }
-    $line = $BoxChars.Horizontal * $width
+    $line = [string]::new($BoxChars.Horizontal, $width)
     Write-Host ""
     Write-Host "  $($BoxChars.TopLeft)$line$($BoxChars.TopRight)" -ForegroundColor $Colors.Border
     Write-Host "  $($BoxChars.Vertical) " -ForegroundColor $Colors.Border -NoNewline
-    Write-Host ("$Title$(' ' * $pad)") -ForegroundColor $Colors.Primary -NoNewline
+    Write-Host ("$Title$([string]::new(' ', $pad))") -ForegroundColor $Colors.Primary -NoNewline
     Write-Host " $($BoxChars.Vertical)" -ForegroundColor $Colors.Border
     Write-Host "  $($BoxChars.BottomLeft)$line$($BoxChars.BottomRight)" -ForegroundColor $Colors.Border
 }
@@ -76,7 +76,7 @@ function Write-Section {
     param([string]$Title)
     Write-Host ""
     Write-Host "  $Title" -ForegroundColor $Colors.Accent
-    Write-Host "  $('-' * 50)" -ForegroundColor $Colors.Muted
+    Write-Host "  $([string]::new('-', 50))" -ForegroundColor $Colors.Muted
 }
 
 function Write-MenuItem {
@@ -105,7 +105,7 @@ function Write-Status {
 
 function Write-Divider {
     Write-Host ""
-    Write-Host "  $('=' * 56)" -ForegroundColor $Colors.Border
+    Write-Host "  $([string]::new('=', 56))" -ForegroundColor $Colors.Border
 }
 
 function Get-Input {
