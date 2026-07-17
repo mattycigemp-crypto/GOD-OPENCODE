@@ -31,6 +31,11 @@ docs/wiki/_data/
 # not silently swallowed.
 /site/
 
+# Local Python venv created when reproducing mkdocs builds.
+# Side-effect of local debugging; the workflow only needs Python in CI.
+venv/
+.venv/
+
 # Backups
 backups/
 
