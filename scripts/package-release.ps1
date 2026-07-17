@@ -29,6 +29,17 @@ $Include = @(
     "LICENSE"
 )
 
+# Explicit exclusions - never include in package (defense-in-depth even though $Include is allowlist-based)
+$Exclude = @(
+    ".git",
+    ".github",
+    ".freebuff",
+    "release",
+    "*.zip",
+    "*.log",
+    "*.tmp"
+)
+
 Write-Host ""
 Write-Host "============================================"
 Write-Host "     GOD-OPENCODE RELEASE PACKAGER"
@@ -56,21 +67,46 @@ if (Test-Path $Staging) {
 }
 New-Item -ItemType Directory -Path $Staging -Force | Out-Null
 
-# Copy included items into staging
+# Copy included items into staging, pruning excluded directories
 foreach ($Item in $Include) {
     $Source = Join-Path $Root $Item
     $Target = Join-Path $Staging $Item
 
-    if (Test-Path $Source) {
-        $ItemType = (Get-Item $Source).PSIsContainer
-        if ($ItemType) {
-            Copy-Item $Source $Target -Recurse -Force
-        } else {
-            Copy-Item $Source $Target -Force
-        }
-        Write-Host "[ADDED] $Item"
-    } else {
+    if (!(Test-Path $Source)) {
         Write-Host "[WARN]  $Item not found, skipping" -ForegroundColor Yellow
+        continue
+    }
+
+    $IsDir = (Get-Item $Source).PSIsContainer
+
+    if ($IsDir) {
+        New-Item -ItemType Directory -Path $Target -Force | Out-Null
+
+        # Walk source and copy everything except excluded paths
+        Get-ChildItem -Path $Source -Recurse -Force | ForEach-Object {
+            $Rel = $_.FullName.Substring($Source.Length).TrimStart('\', '/')
+            $Skip = $false
+            foreach ($Ex in $Exclude) {
+                if ($Rel -like $Ex -or $Rel -like "$Ex\*" -or $Rel -like "*/$Ex") {
+                    $Skip = $true
+                    break
+                }
+            }
+            if (-not $Skip) {
+                $DestPath = Join-Path $Target $Rel
+                if ($_.PSIsContainer) {
+                    if (!(Test-Path $DestPath)) {
+                        New-Item -ItemType Directory -Path $DestPath -Force | Out-Null
+                    }
+                } else {
+                    Copy-Item $_.FullName $DestPath -Force
+                }
+            }
+        }
+        Write-Host "[ADDED] $Item (filtered)"
+    } else {
+        Copy-Item $Source $Target -Force
+        Write-Host "[ADDED] $Item"
     }
 }
 

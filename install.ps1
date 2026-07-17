@@ -227,7 +227,7 @@ if (Test-Path $GlobalConfig) {
 
         $Merged = $false
 
-        # Merge agents
+        # Merge agents - append only new agent names, never overwrite existing user customizations
         if ($Source.agent) {
             if (-not $Global.agent) {
                 $Global | Add-Member -NotePropertyName "agent" -NotePropertyValue $Source.agent
@@ -242,7 +242,7 @@ if (Test-Path $GlobalConfig) {
             }
         }
 
-        # Merge commands
+        # Merge commands - append only new command names, never overwrite existing user customizations
         if ($Source.command) {
             if (-not $Global.command) {
                 $Global | Add-Member -NotePropertyName "command" -NotePropertyValue $Source.command
@@ -257,44 +257,24 @@ if (Test-Path $GlobalConfig) {
             }
         }
 
-        # Merge instructions (append if not already present; supports glob patterns)
+        # Merge instructions - deep-merge by appending new entries (supports glob patterns)
         if ($Source.instructions) {
-            $RawContent = Get-Content $GlobalConfig -Raw
-            $InstructionsArray = @()
-
-            # Extract existing instructions if present
-            if ($RawContent -match '"instructions"\s*:\s*\[([^\]]*)\]') {
-                $ExistingStr = $Matches[1].Trim()
-                if ($ExistingStr) {
-                    $InstructionsArray = $ExistingStr -split ',' | ForEach-Object { $_.Trim().Trim('"') }
-                }
+            $ExistingInstructions = @()
+            if ($Global.instructions) {
+                $ExistingInstructions = @($Global.instructions)
             }
-
-            # Add new instructions (including glob patterns like docs/**/*.md)
             foreach ($Inst in $Source.instructions) {
-                if ($Inst -notin $InstructionsArray) {
-                    $InstructionsArray += $Inst
+                if ($Inst -notin $ExistingInstructions) {
+                    $ExistingInstructions += $Inst
                     $Merged = $true
                 }
             }
-
-            # Write back
-            if ($Merged) {
-                $InstructionsJson = ($InstructionsArray | ForEach-Object { "`"$_`"" }) -join ', '
-                $InstructionsBlock = "`"instructions`": [$InstructionsJson]"
-
-                if ($RawContent -match '"instructions"\s*:\s*\[[^\]]*\]') {
-                    $RawContent = $RawContent -replace '"instructions"\s*:\s*\[[^\]]*\]', $InstructionsBlock
-                } else {
-                    # Add before the last closing brace
-                    $LastBrace = $RawContent.LastIndexOf('}')
-                    $RawContent = $RawContent.Insert($LastBrace, "$InstructionsBlock,`n  ")
-                }
-                Set-Content $GlobalConfig -Value $RawContent -Encoding UTF8
+            if ($ExistingInstructions.Count -gt 0) {
+                $Global.instructions = $ExistingInstructions
             }
         }
 
-        # Merge permission rules (append missing deny entries)
+        # Merge permission rules - deep-merge: preserve user's allow/deny, append new deny entries
         if ($Source.permission) {
             if (-not $Global.permission) {
                 $Global | Add-Member -NotePropertyName "permission" -NotePropertyValue $Source.permission
@@ -307,21 +287,33 @@ if (Test-Path $GlobalConfig) {
                     if (-not $GlobalTool) {
                         $Global.permission | Add-Member -NotePropertyName $Tool -NotePropertyValue $SourceTool
                         $Merged = $true
-                    } else {
-                        $SourceDeny = @()
+                        continue
+                    }
+
+                    # Merge deny arrays - union, never clobber user's existing entries
+                    if ($SourceTool.deny) {
                         $GlobalDeny = @()
-
-                        if ($SourceTool.deny) { $SourceDeny = $SourceTool.deny }
-                        if ($GlobalTool.deny) { $GlobalDeny = $GlobalTool.deny }
-
-                        foreach ($Entry in $SourceDeny) {
+                        if ($GlobalTool.deny) { $GlobalDeny = @($GlobalTool.deny) }
+                        foreach ($Entry in $SourceTool.deny) {
                             if ($Entry -notin $GlobalDeny) {
                                 $GlobalDeny += $Entry
                                 $Merged = $true
                             }
                         }
-
                         $GlobalTool.deny = $GlobalDeny
+                    }
+
+                    # Merge allow arrays - union, preserving user's custom allows
+                    if ($SourceTool.allow) {
+                        $GlobalAllow = @()
+                        if ($GlobalTool.allow) { $GlobalAllow = @($GlobalTool.allow) }
+                        foreach ($Entry in $SourceTool.allow) {
+                            if ($Entry -notin $GlobalAllow) {
+                                $GlobalAllow += $Entry
+                                $Merged = $true
+                            }
+                        }
+                        $GlobalTool.allow = $GlobalAllow
                     }
                 }
             }
@@ -330,6 +322,7 @@ if (Test-Path $GlobalConfig) {
         if ($Merged) {
             $Global | ConvertTo-Json -Depth 10 | Set-Content $GlobalConfig -Encoding UTF8
             Write-Host "[MERGED] Agent configs added to $GlobalConfig" -ForegroundColor Green
+            Write-Host "[NOTE] JSONC comments in $GlobalConfig are not preserved (round-trip via ConvertTo-Json)." -ForegroundColor DarkGray
         } else {
             Write-Host "[UNCHANGED] Agent configs already present" -ForegroundColor Yellow
         }

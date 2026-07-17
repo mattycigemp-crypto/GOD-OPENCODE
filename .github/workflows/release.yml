@@ -10,15 +10,10 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up PowerShell
-        uses: pwsh-action/setup@v1
-        with:
-          pwsh: true
 
       - name: Build release package
         shell: pwsh
