@@ -47,10 +47,15 @@ function Clear-Screen {
 function Write-Logo {
     $logo = @"
 
-  ======================
-    GOD - OPENCODE
-    AI Engineering OS
-  ======================
+      ___  ___  ________  _______   ________
+     |\  \|\  \|\   __  \|\  ___ \ |\   __  \
+     \ \  \\\  \ \  \|\  \ \   __/|\ \  \|\  \
+     \ \   __  \ \  \\\  \ \  \_|/_\ \  \\\  \
+      \ \  \ \  \ \  \\\  \ \  \_|\ \ \  \\\  \
+       \ \__\ \__\ \_______\ \_______\ \_______\
+        \|__|\|__|\|_______|\|_______|\|_______|
+
+           AI Engineering Operating System
 
 "@
     Write-Host $logo -ForegroundColor $Colors.Primary
