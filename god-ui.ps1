@@ -28,12 +28,12 @@ $Script:Colors = @{
 }
 
 $Script:BoxChars = @{
-    TopLeft     = [char]0x2554
-    TopRight    = [char]0x2557
-    BottomLeft  = [char]0x255A
-    BottomRight = [char]0x255D
-    Horizontal  = [char]0x2550
-    Vertical    = [char]0x2551
+    TopLeft     = "+"
+    TopRight    = "+"
+    BottomLeft  = "+"
+    BottomRight = "+"
+    Horizontal  = "-"
+    Vertical    = "|"
 }
 
 # ============================================
