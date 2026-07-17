@@ -1,0 +1,60 @@
+name: Build and Deploy Wiki
+
+# Triggers:
+#   - push to master when wiki content or mkdocs config changes
+#   - manual dispatch (workflow_dispatch) for ad-hoc deploys
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'docs/wiki/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/wiki-pages.yml'
+  workflow_dispatch:
+
+# Required to push to the gh-pages branch.
+permissions:
+  contents: write
+
+# Cancel any in-flight run for the same ref when a new push arrives.
+concurrency:
+  group: wiki-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-mkdocs-${{ hashFiles('mkdocs.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-mkdocs-
+
+      - name: Install mkdocs-material
+        run: |
+          python -m pip install --upgrade pip
+          pip install "mkdocs-material>=9.5"
+
+      - name: Build wiki (strict)
+        # --strict fails the build on any warning (broken links, missing files).
+        # This keeps the wiki honest.
+        run: mkdocs build --strict
+
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -8,6 +8,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [1.2.0] - 2026-07-17
 
+*(Backfilled — the underlying commit `3f1160d` shipped on the date above but the changelog entry was authored in commit `eb06e71` to keep the README self-consistent.)*
+
 ### Added
 
 - **Architectural feature pack** addressing the four open concerns documented in `docs/wiki/roadmap.md`:
