@@ -53,6 +53,97 @@
     a { color: var(--accent); text-decoration: none; transition: color 0.3s ease; }
     a:hover { color: var(--text); }
 
+    /* LOADING SCREEN */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-ring {
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loader-text {
+      margin-top: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* CUSTOM CURSOR */
+    #cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+      mix-blend-mode: difference;
+      will-change: transform;
+    }
+
+    #cursor-dot {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10001;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    #cursor.hover {
+      width: 56px;
+      height: 56px;
+      background: rgba(201, 169, 110, 0.06);
+      border-color: var(--text);
+    }
+
+    #cursor.hover-label::after {
+      content: attr(data-label);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    @media (hover: none) {
+      #cursor, #cursor-dot { display: none; }
+    }
+
     /* HEADER */
     .site-header {
       position: fixed;
@@ -96,7 +187,10 @@
       font-weight: 800;
       font-size: 16px;
       color: var(--bg);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+
+    .logo:hover .logo-mark { transform: rotate(15deg) scale(1.1); }
 
     .logo-text {
       font-size: 13px;
@@ -163,6 +257,17 @@
       pointer-events: none;
     }
 
+    #webgl-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero > * { position: relative; z-index: 1; }
+
     .hero-eyebrow {
       font-size: 11px;
       font-weight: 600;
@@ -170,6 +275,9 @@
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroReveal 0.8s ease 0.2s forwards;
     }
 
     .hero h1 {
@@ -179,6 +287,9 @@
       line-height: 0.95;
       color: var(--text);
       max-width: 900px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroReveal 0.8s ease 0.35s forwards;
     }
 
     .hero-sub {
@@ -187,12 +298,22 @@
       margin-top: 32px;
       max-width: 500px;
       line-height: 1.7;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroReveal 0.8s ease 0.5s forwards;
     }
 
     .hero-cta {
       margin-top: 48px;
       display: flex;
       gap: 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroReveal 0.8s ease 0.65s forwards;
+    }
+
+    @keyframes heroReveal {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .btn {
@@ -204,10 +325,24 @@
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.02em;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
       cursor: pointer;
       border: none;
+      position: relative;
+      overflow: hidden;
     }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.15) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .btn:hover::after { opacity: 1; }
 
     .btn-primary {
       background: var(--accent);
@@ -217,7 +352,8 @@
     .btn-primary:hover {
       background: var(--text);
       color: var(--bg);
-      transform: translateY(-2px);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 32px rgba(201, 169, 110, 0.25);
     }
 
     .btn-secondary {
@@ -229,6 +365,7 @@
     .btn-secondary:hover {
       border-color: var(--accent);
       color: var(--accent);
+      transform: translateY(-2px);
     }
 
     /* STATS BAR */
@@ -246,9 +383,7 @@
       gap: 32px;
     }
 
-    .stat {
-      text-align: center;
-    }
+    .stat { text-align: center; }
 
     .stat-value {
       font-size: 48px;
@@ -299,6 +434,22 @@
       line-height: 1.7;
     }
 
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
     /* CARDS */
     .card-grid {
       display: grid;
@@ -313,6 +464,8 @@
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
     }
 
     .card::before {
@@ -328,13 +481,22 @@
       transition: transform 0.4s ease;
     }
 
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(201,169,110,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
     .card:hover {
       background: var(--surface-2);
     }
 
-    .card:hover::before {
-      transform: scaleX(1);
-    }
+    .card:hover::before { transform: scaleX(1); }
+    .card:hover::after { opacity: 1; }
 
     .card-eyebrow {
       font-size: 10px;
@@ -375,7 +537,10 @@
       border: 1px solid var(--border);
       background: var(--surface-2);
       color: var(--text-3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
+    .tag:hover { transform: scale(1.05); }
 
     .tag.violet  { border-color: rgba(139,92,246,0.3); color: var(--violet); }
     .tag.cyan    { border-color: rgba(6,182,212,0.3); color: var(--cyan); }
@@ -412,6 +577,7 @@
       border-bottom: 1px solid var(--border-dim);
       font-size: 13px;
       color: var(--text-2);
+      transition: background 0.3s ease;
     }
 
     tr:last-child td { border-bottom: none; }
@@ -449,10 +615,13 @@
       gap: 16px;
       padding: 16px 24px;
       background: var(--surface);
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.3s ease;
     }
 
-    .health-row:hover { background: var(--surface-2); }
+    .health-row:hover {
+      background: var(--surface-2);
+      transform: translateX(4px);
+    }
 
     .health-dot {
       width: 8px;
@@ -490,6 +659,12 @@
       padding: 12px 16px;
       background: var(--surface);
       font-size: 13px;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .router-row:hover {
+      background: var(--surface-2);
+      transform: translateX(4px);
     }
 
     .router-keyword {
@@ -578,10 +753,11 @@
     .footer-col a {
       font-size: 13px;
       color: var(--text-2);
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, transform 0.3s ease;
+      display: inline-block;
     }
 
-    .footer-col a:hover { color: var(--accent); }
+    .footer-col a:hover { color: var(--accent); transform: translateX(4px); }
 
     .footer-bottom {
       display: flex;
@@ -603,9 +779,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .fade-up {
-      animation: fadeUp 0.6s ease forwards;
-    }
+    .fade-up { animation: fadeUp 0.6s ease forwards; }
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
@@ -614,6 +788,7 @@
       .card-grid { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr 1fr; }
       .hero h1 { font-size: 48px; }
+      #cursor, #cursor-dot { display: none; }
     }
 
     @media (max-width: 600px) {
@@ -628,6 +803,16 @@
   </style>
 </head>
 <body>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Loading GOD-OPENCODE</div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
 
 <!-- HEADER -->
 <header class="site-header" id="siteHeader">
@@ -651,6 +836,7 @@
 
 <!-- HERO -->
 <section class="hero" id="page-hero">
+  <canvas id="webgl-canvas"></canvas>
   <p class="hero-eyebrow">AI Engineering Operating System</p>
   <h1>The right expert for every task</h1>
   <p class="hero-sub">10 specialist agents, 70+ skills, 15 workflows — one command bootstraps a production-grade AI engineering environment.</p>
@@ -672,65 +858,65 @@
 
 <!-- AGENTS -->
 <section class="section page-section active" id="page-agents">
-  <p class="section-eyebrow">Personas</p>
-  <h2 class="section-title">Engineering agents</h2>
-  <p class="section-desc">Each agent is a specialist with curated skills, workflow knowledge, and delegation authority.</p>
+  <p class="section-eyebrow reveal">Personas</p>
+  <h2 class="section-title reveal reveal-delay-1">Engineering agents</h2>
+  <p class="section-desc reveal reveal-delay-2">Each agent is a specialist with curated skills, workflow knowledge, and delegation authority.</p>
   <div class="card-grid">
-    <div class="card">
+    <div class="card reveal">
       <div class="card-eyebrow">Lead</div>
       <h3>Principal Engineer</h3>
       <p>System design, architecture, technical strategy, and cross-cutting decisions. The default fallback agent.</p>
       <div class="card-tags"><span class="tag violet">system-design</span><span class="tag violet">architect</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-1">
       <div class="card-eyebrow">Server</div>
       <h3>Backend Engineer</h3>
       <p>APIs, server architecture, business logic, database integration, and backend security.</p>
       <div class="card-tags"><span class="tag blue">api-design</span><span class="tag blue">fastapi</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-2">
       <div class="card-eyebrow">Client</div>
       <h3>Frontend Engineer</h3>
       <p>React, Next.js, TypeScript UI — performance, accessibility, state management, component architecture.</p>
       <div class="card-tags"><span class="tag yellow">react</span><span class="tag yellow">nextjs</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-3">
       <div class="card-eyebrow">Intelligence</div>
       <h3>AI Engineer</h3>
       <p>LLM systems, agents, RAG pipelines, embeddings, MCP servers, evals, and prompt engineering.</p>
       <div class="card-tags"><span class="tag pink">llm</span><span class="tag pink">rag</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal">
       <div class="card-eyebrow">Security</div>
       <h3>Security Engineer</h3>
       <p>Security audits, threat modelling, OWASP checks, penetration testing, and cryptography.</p>
       <div class="card-tags"><span class="tag red">security-audit</span><span class="tag red">pentest</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-1">
       <div class="card-eyebrow">Data</div>
       <h3>Database Architect</h3>
       <p>Schema design, query optimization, migrations, replication, sharding, and data modelling.</p>
       <div class="card-tags"><span class="tag cyan">database-design</span><span class="tag cyan">postgres</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-2">
       <div class="card-eyebrow">Infrastructure</div>
       <h3>DevOps Engineer</h3>
       <p>CI/CD pipelines, Docker, Kubernetes, Terraform, cloud infrastructure, and monitoring.</p>
       <div class="card-tags"><span class="tag green">docker</span><span class="tag green">kubernetes</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-3">
       <div class="card-eyebrow">Investigation</div>
       <h3>Debugger</h3>
       <p>Systematic root-cause analysis. Reproduces bugs, traces execution, fixes root causes, writes regression tests.</p>
       <div class="card-tags"><span class="tag orange">bug-hunter</span><span class="tag orange">profiling</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal">
       <div class="card-eyebrow">Research</div>
       <h3>Researcher</h3>
       <p>Technology evaluation, comparative analysis, evidence-based recommendations, and literature synthesis.</p>
       <div class="card-tags"><span class="tag violet">documentation</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-1">
       <div class="card-eyebrow>Documentation</div>
       <h3>Technical Writer</h3>
       <p>READMEs, API docs, ADRs, runbooks, tutorials, and changelogs. Ensures accuracy and clarity.</p>
@@ -741,59 +927,59 @@
 
 <!-- SKILLS -->
 <section class="section page-section" id="page-skills">
-  <p class="section-eyebrow">Knowledge</p>
-  <h2 class="section-title">70+ domain skills</h2>
-  <p class="section-desc">Expert knowledge documents installed into OpenCode at ~/.config/opencode/skills/.</p>
+  <p class="section-eyebrow reveal">Knowledge</p>
+  <h2 class="section-title reveal reveal-delay-1">70+ domain skills</h2>
+  <p class="section-desc reveal reveal-delay-2">Expert knowledge documents installed into OpenCode at ~/.config/opencode/skills/.</p>
 
   <div style="margin-top: 48px;">
-    <p class="section-eyebrow">AI / ML</p>
+    <p class="section-eyebrow reveal">AI / ML</p>
     <div class="card-grid">
-      <div class="card"><div class="card-eyebrow">ai</div><h3>ai-engineer</h3><p>LLM system design, model selection, cost/quality tradeoffs</p></div>
-      <div class="card"><div class="card-eyebrow">ai</div><h3>llm-engineer</h3><p>Prompt design, context management, output validation</p></div>
-      <div class="card"><div class="card-eyebrow">ai</div><h3>prompt-engineer</h3><p>System prompts, few-shot examples, chain-of-thought</p></div>
-      <div class="card"><div class="card-eyebrow">ai</div><h3>rag-engineer</h3><p>Chunking, embedding, retrieval, reranking pipelines</p></div>
-      <div class="card"><div class="card-eyebrow">ai</div><h3>agent-builder</h3><p>Tool use, memory, reasoning loops, safety guardrails</p></div>
-      <div class="card"><div class="card-eyebrow">ai</div><h3>mcp-builder</h3><p>MCP server design, tool definitions, resource management</p></div>
+      <div class="card reveal"><div class="card-eyebrow">ai</div><h3>ai-engineer</h3><p>LLM system design, model selection, cost/quality tradeoffs</p></div>
+      <div class="card reveal reveal-delay-1"><div class="card-eyebrow">ai</div><h3>llm-engineer</h3><p>Prompt design, context management, output validation</p></div>
+      <div class="card reveal reveal-delay-2"><div class="card-eyebrow">ai</div><h3>prompt-engineer</h3><p>System prompts, few-shot examples, chain-of-thought</p></div>
+      <div class="card reveal reveal-delay-3"><div class="card-eyebrow">ai</div><h3>rag-engineer</h3><p>Chunking, embedding, retrieval, reranking pipelines</p></div>
+      <div class="card reveal"><div class="card-eyebrow">ai</div><h3>agent-builder</h3><p>Tool use, memory, reasoning loops, safety guardrails</p></div>
+      <div class="card reveal reveal-delay-1"><div class="card-eyebrow">ai</div><h3>mcp-builder</h3><p>MCP server design, tool definitions, resource management</p></div>
     </div>
   </div>
 
   <div style="margin-top: 64px;">
-    <p class="section-eyebrow">Backend</p>
+    <p class="section-eyebrow reveal">Backend</p>
     <div class="card-grid">
-      <div class="card"><div class="card-eyebrow">backend</div><h3>api-design</h3><p>REST/GraphQL design, versioning, error standards</p></div>
-      <div class="card"><div class="card-eyebrow">backend</div><h3>fastapi</h3><p>FastAPI, Pydantic v2, async SQLAlchemy, Alembic</p></div>
-      <div class="card"><div class="card-eyebrow">backend</div><h3>postgres</h3><p>PostgreSQL schemas, indexes, query optimization</p></div>
-      <div class="card"><div class="card-eyebrow">backend</div><h3>redis</h3><p>Caching, pub/sub, queues, session storage</p></div>
+      <div class="card reveal"><div class="card-eyebrow">backend</div><h3>api-design</h3><p>REST/GraphQL design, versioning, error standards</p></div>
+      <div class="card reveal reveal-delay-1"><div class="card-eyebrow">backend</div><h3>fastapi</h3><p>FastAPI, Pydantic v2, async SQLAlchemy, Alembic</p></div>
+      <div class="card reveal reveal-delay-2"><div class="card-eyebrow">backend</div><h3>postgres</h3><p>PostgreSQL schemas, indexes, query optimization</p></div>
+      <div class="card reveal reveal-delay-3"><div class="card-eyebrow">backend</div><h3>redis</h3><p>Caching, pub/sub, queues, session storage</p></div>
     </div>
   </div>
 
   <div style="margin-top: 64px;">
-    <p class="section-eyebrow">Security</p>
+    <p class="section-eyebrow reveal">Security</p>
     <div class="card-grid">
-      <div class="card"><div class="card-eyebrow">security</div><h3>security-audit</h3><p>OWASP Top 10, threat modelling, CVE assessment</p></div>
-      <div class="card"><div class="card-eyebrow">security</div><h3>secure-coding</h3><p>Input validation, injection prevention, secrets management</p></div>
-      <div class="card"><div class="card-eyebrow">security</div><h3>authentication</h3><p>JWT, OAuth2, session management, MFA</p></div>
-      <div class="card"><div class="card-eyebrow">security</div><h3>penetration-testing</h3><p>Exploit validation, attack simulation, reporting</p></div>
+      <div class="card reveal"><div class="card-eyebrow">security</div><h3>security-audit</h3><p>OWASP Top 10, threat modelling, CVE assessment</p></div>
+      <div class="card reveal reveal-delay-1"><div class="card-eyebrow">security</div><h3>secure-coding</h3><p>Input validation, injection prevention, secrets management</p></div>
+      <div class="card reveal reveal-delay-2"><div class="card-eyebrow">security</div><h3>authentication</h3><p>JWT, OAuth2, session management, MFA</p></div>
+      <div class="card reveal reveal-delay-3"><div class="card-eyebrow">security</div><h3>penetration-testing</h3><p>Exploit validation, attack simulation, reporting</p></div>
     </div>
   </div>
 
   <div style="margin-top: 64px;">
-    <p class="section-eyebrow">DevOps</p>
+    <p class="section-eyebrow reveal">DevOps</p>
     <div class="card-grid">
-      <div class="card"><div class="card-eyebrow">devops</div><h3>docker</h3><p>Multi-stage builds, Compose, security hardening</p></div>
-      <div class="card"><div class="card-eyebrow">devops</div><h3>kubernetes</h3><p>Deployments, services, ingress, RBAC, Helm</p></div>
-      <div class="card"><div class="card-eyebrow">devops</div><h3>terraform</h3><p>IaC, state management, modules, drift detection</p></div>
-      <div class="card"><div class="card-eyebrow">devops</div><h3>github-actions</h3><p>CI/CD workflows, secrets, matrix builds, caching</p></div>
+      <div class="card reveal"><div class="card-eyebrow">devops</div><h3>docker</h3><p>Multi-stage builds, Compose, security hardening</p></div>
+      <div class="card reveal reveal-delay-1"><div class="card-eyebrow">devops</div><h3>kubernetes</h3><p>Deployments, services, ingress, RBAC, Helm</p></div>
+      <div class="card reveal reveal-delay-2"><div class="card-eyebrow">devops</div><h3>terraform</h3><p>IaC, state management, modules, drift detection</p></div>
+      <div class="card reveal reveal-delay-3"><div class="card-eyebrow">devops</div><h3>github-actions</h3><p>CI/CD workflows, secrets, matrix builds, caching</p></div>
     </div>
   </div>
 </section>
 
 <!-- WORKFLOWS -->
 <section class="section page-section" id="page-workflows">
-  <p class="section-eyebrow">Processes</p>
-  <h2 class="section-title">Parameterized workflows</h2>
-  <p class="section-desc">Step-by-step processes that coordinate agents, skills, and actions.</p>
-  <div class="table-wrap">
+  <p class="section-eyebrow reveal">Processes</p>
+  <h2 class="section-title reveal reveal-delay-1">Parameterized workflows</h2>
+  <p class="section-desc reveal reveal-delay-2">Step-by-step processes that coordinate agents, skills, and actions.</p>
+  <div class="table-wrap reveal reveal-delay-3">
     <table>
       <thead><tr><th>Workflow</th><th>Purpose</th><th>Steps</th><th>Key Agents</th></tr></thead>
       <tbody>
@@ -813,41 +999,41 @@
 
 <!-- COMMANDS -->
 <section class="section page-section" id="page-commands">
-  <p class="section-eyebrow">Interface</p>
-  <h2 class="section-title">Slash commands</h2>
-  <p class="section-desc">One command triggers a coordinated multi-agent workflow.</p>
+  <p class="section-eyebrow reveal">Interface</p>
+  <h2 class="section-title reveal reveal-delay-1">Slash commands</h2>
+  <p class="section-desc reveal reveal-delay-2">One command triggers a coordinated multi-agent workflow.</p>
   <div class="card-grid">
-    <div class="card">
+    <div class="card reveal">
       <div class="card-eyebrow">Build</div>
       <h3>/build</h3>
       <p>Analyzes your project description, selects the right workflow and agents, and produces a structured implementation plan.</p>
       <div class="card-tags"><span class="tag violet">build-application workflow</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-1">
       <div class="card-eyebrow">Design</div>
       <h3>/architect</h3>
       <p>Designs or reviews system architecture. Produces component diagrams, ADRs, scalability analysis, and open questions.</p>
       <div class="card-tags"><span class="tag violet">principal-engineer</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-2">
       <div class="card-eyebrow">Investigate</div>
       <h3>/debug</h3>
       <p>Systematic bug investigation. From symptom to root cause to targeted fix with a regression test.</p>
       <div class="card-tags"><span class="tag orange">bug-investigation workflow</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-3">
       <div class="card-eyebrow">Review</div>
       <h3>/review</h3>
       <p>Senior-level code review across correctness, security, performance, and maintainability.</p>
       <div class="card-tags"><span class="tag violet">principal-engineer + security</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal">
       <div class="card-eyebrow">Protect</div>
       <h3>/secure</h3>
       <p>Full security audit with threat modelling, OWASP checks, dependency scanning, and a CVSS-rated findings report.</p>
       <div class="card-tags"><span class="tag red">security-audit workflow</span></div>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-1">
       <div class="card-eyebrow">Performance</div>
       <h3>/optimize</h3>
       <p>Measurement-driven performance optimization. Covers algorithms, DB queries, caching, and infrastructure tuning.</p>
@@ -858,11 +1044,11 @@
 
 <!-- ROUTER -->
 <section class="section page-section" id="page-router">
-  <p class="section-eyebrow">Intelligence</p>
-  <h2 class="section-title">Keyword router</h2>
-  <p class="section-desc">80+ keyword-to-agent mappings. Tokenizes your request and returns the top-3 candidates by match score.</p>
+  <p class="section-eyebrow reveal">Intelligence</p>
+  <h2 class="section-title reveal reveal-delay-1">Keyword router</h2>
+  <p class="section-desc reveal reveal-delay-2">80+ keyword-to-agent mappings. Tokenizes your request and returns the top-3 candidates by match score.</p>
 
-  <div class="code-block" style="margin-top: 48px;"><span class="comment"># Test the router directly</span>
+  <div class="code-block reveal reveal-delay-3" style="margin-top: 48px;"><span class="comment"># Test the router directly</span>
 <span class="cmd">.\scripts\router.ps1</span> <span class="arg">-Request</span> <span class="arg">"build a fastapi api with postgres authentication"</span>
 
 <span class="comment"># Output:</span>
@@ -873,36 +1059,36 @@
 <span class="comment">#   database-architect (score: 1)</span>
 <span class="comment">#   security-engineer (score: 1)</span></div>
 
-  <p class="section-eyebrow" style="margin-top: 64px;">Keyword Map</p>
+  <p class="section-eyebrow reveal" style="margin-top: 64px;">Keyword Map</p>
   <div class="router-grid">
-    <div class="router-row"><span class="router-keyword">api</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">react</span> <span class="router-arrow">&rarr;</span> <span class="router-agent frontend">frontend-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">llm</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">rag</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">postgres</span> <span class="router-arrow">&rarr;</span> <span class="router-agent database">database-architect</span></div>
-    <div class="router-row"><span class="router-keyword">security</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">docker</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">kubernetes</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">debug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
-    <div class="router-row"><span class="router-keyword">bug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
-    <div class="router-row"><span class="router-keyword">owasp</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">docs</span> <span class="router-arrow">&rarr;</span> <span class="router-agent principal">technical-writer</span></div>
-    <div class="router-row"><span class="router-keyword">terraform</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">fastapi</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">jwt</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
-    <div class="router-row"><span class="router-keyword">embedding</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
+    <div class="router-row reveal"><span class="router-keyword">api</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
+    <div class="router-row reveal reveal-delay-1"><span class="router-keyword">react</span> <span class="router-arrow">&rarr;</span> <span class="router-agent frontend">frontend-engineer</span></div>
+    <div class="router-row reveal reveal-delay-2"><span class="router-keyword">llm</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
+    <div class="router-row reveal reveal-delay-3"><span class="router-keyword">rag</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
+    <div class="router-row reveal"><span class="router-keyword">postgres</span> <span class="router-arrow">&rarr;</span> <span class="router-agent database">database-architect</span></div>
+    <div class="router-row reveal reveal-delay-1"><span class="router-keyword">security</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+    <div class="router-row reveal reveal-delay-2"><span class="router-keyword">docker</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+    <div class="router-row reveal reveal-delay-3"><span class="router-keyword">kubernetes</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+    <div class="router-row reveal"><span class="router-keyword">debug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
+    <div class="router-row reveal reveal-delay-1"><span class="router-keyword">bug</span> <span class="router-arrow">&rarr;</span> <span class="router-agent debugger">debugger</span></div>
+    <div class="router-row reveal reveal-delay-2"><span class="router-keyword">owasp</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+    <div class="router-row reveal reveal-delay-3"><span class="router-keyword">docs</span> <span class="router-arrow">&rarr;</span> <span class="router-agent principal">technical-writer</span></div>
+    <div class="router-row reveal"><span class="router-keyword">terraform</span> <span class="router-arrow">&rarr;</span> <span class="router-agent devops">devops-engineer</span></div>
+    <div class="router-row reveal reveal-delay-1"><span class="router-keyword">fastapi</span> <span class="router-arrow">&rarr;</span> <span class="router-agent backend">backend-engineer</span></div>
+    <div class="router-row reveal reveal-delay-2"><span class="router-keyword">jwt</span> <span class="router-arrow">&rarr;</span> <span class="router-agent security">security-engineer</span></div>
+    <div class="router-row reveal reveal-delay-3"><span class="router-keyword">embedding</span> <span class="router-arrow">&rarr;</span> <span class="router-agent ai">ai-engineer</span></div>
   </div>
 </section>
 
 <!-- QUICKSTART -->
 <section class="section page-section" id="page-quickstart">
-  <p class="section-eyebrow">Setup</p>
-  <h2 class="section-title">Quick start</h2>
-  <p class="section-desc">Up and running in under 5 minutes.</p>
+  <p class="section-eyebrow reveal">Setup</p>
+  <h2 class="section-title reveal reveal-delay-1">Quick start</h2>
+  <p class="section-desc reveal reveal-delay-2">Up and running in under 5 minutes.</p>
 
   <div style="margin-top: 64px;">
-    <p class="section-eyebrow">1. Install</p>
-    <div class="code-block"><span class="comment"># Clone the repo</span>
+    <p class="section-eyebrow reveal">1. Install</p>
+    <div class="code-block reveal reveal-delay-1"><span class="comment"># Clone the repo</span>
 <span class="cmd">git clone</span> <span class="arg">https://github.com/mattycigemp-crypto/GOD-OPENCODE</span>
 <span class="cmd">cd</span> GOD-OPENCODE
 
@@ -914,8 +1100,8 @@
   </div>
 
   <div style="margin-top: 64px;">
-    <p class="section-eyebrow">2. Use slash commands</p>
-    <div class="code-block"><span class="comment"># Build a new application</span>
+    <p class="section-eyebrow reveal">2. Use slash commands</p>
+    <div class="code-block reveal reveal-delay-1"><span class="comment"># Build a new application</span>
 <span class="cmd">/build</span> a FastAPI REST API with JWT auth, PostgreSQL, and Alembic migrations
 
 <span class="comment"># Debug a problem</span>
@@ -929,8 +1115,8 @@
   </div>
 
   <div style="margin-top: 64px;">
-    <p class="section-eyebrow">3. Invoke agents directly</p>
-    <div class="code-block"><span class="comment"># Direct agent invocation</span>
+    <p class="section-eyebrow reveal">3. Invoke agents directly</p>
+    <div class="code-block reveal reveal-delay-1"><span class="comment"># Direct agent invocation</span>
 As the <span class="arg">database-architect</span>, design a schema for a multi-tenant SaaS application
   where each tenant's data must be isolated.
 
@@ -943,19 +1129,19 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
 
 <!-- HEALTH (bonus page) -->
 <section class="section page-section" id="page-health">
-  <p class="section-eyebrow">System</p>
-  <h2 class="section-title">Health check</h2>
-  <p class="section-desc">Run .\god-health.ps1 to verify your installation.</p>
+  <p class="section-eyebrow reveal">System</p>
+  <h2 class="section-title reveal reveal-delay-1">Health check</h2>
+  <p class="section-desc reveal reveal-delay-2">Run .\god-health.ps1 to verify your installation.</p>
   <div class="health-list">
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">15 required directories exist</div><div class="health-badge">CHECK 1</div></div>
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">70+ SKILL.md files present in repo</div><div class="health-badge">CHECK 2</div></div>
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">Skills installed in ~/.config/opencode/skills/</div><div class="health-badge">CHECK 2b</div></div>
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">mcps/registry.json is valid JSON with 5 enabled MCPs</div><div class="health-badge">CHECK 3</div></div>
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">router/agent-router.json is valid JSON</div><div class="health-badge">CHECK 4</div></div>
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">12 key scripts exist</div><div class="health-badge">CHECK 5</div></div>
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">All 10 agents have valid AGENT.md</div><div class="health-badge">CHECK 6</div></div>
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">4 required workflows present</div><div class="health-badge">CHECK 7</div></div>
-    <div class="health-row"><div class="health-dot"></div><div class="health-label">6 required commands present</div><div class="health-badge">CHECK 8</div></div>
+    <div class="health-row reveal"><div class="health-dot"></div><div class="health-label">15 required directories exist</div><div class="health-badge">CHECK 1</div></div>
+    <div class="health-row reveal reveal-delay-1"><div class="health-dot"></div><div class="health-label">70+ SKILL.md files present in repo</div><div class="health-badge">CHECK 2</div></div>
+    <div class="health-row reveal reveal-delay-2"><div class="health-dot"></div><div class="health-label">Skills installed in ~/.config/opencode/skills/</div><div class="health-badge">CHECK 2b</div></div>
+    <div class="health-row reveal reveal-delay-3"><div class="health-dot"></div><div class="health-label">mcps/registry.json is valid JSON with 5 enabled MCPs</div><div class="health-badge">CHECK 3</div></div>
+    <div class="health-row reveal"><div class="health-dot"></div><div class="health-label">router/agent-router.json is valid JSON</div><div class="health-badge">CHECK 4</div></div>
+    <div class="health-row reveal reveal-delay-1"><div class="health-dot"></div><div class="health-label">12 key scripts exist</div><div class="health-badge">CHECK 5</div></div>
+    <div class="health-row reveal reveal-delay-2"><div class="health-dot"></div><div class="health-label">All 10 agents have valid AGENT.md</div><div class="health-badge">CHECK 6</div></div>
+    <div class="health-row reveal reveal-delay-3"><div class="health-dot"></div><div class="health-label">4 required workflows present</div><div class="health-badge">CHECK 7</div></div>
+    <div class="health-row reveal"><div class="health-dot"></div><div class="health-label">6 required commands present</div><div class="health-badge">CHECK 8</div></div>
   </div>
 </section>
 
@@ -1005,23 +1191,120 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
   </div>
 </footer>
 
+<!-- THREE.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <script>
-  // Header scroll effect
-  window.addEventListener('scroll', () => {
+(function() {
+  'use strict';
+
+  /* ========== LOADING SCREEN ========== */
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      document.getElementById('loader').classList.add('hidden');
+    }, 400);
+  });
+
+  /* ========== CUSTOM CURSOR ========== */
+  var cursor = document.getElementById('cursor');
+  var cursorDot = document.getElementById('cursor-dot');
+  var cursorX = 0, cursorY = 0;
+  var dotX = 0, dotY = 0;
+
+  document.addEventListener('mousemove', function(e) {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+  });
+
+  function animateCursor() {
+    dotX += (cursorX - dotX) * 0.2;
+    dotY += (cursorY - dotY) * 0.2;
+    cursor.style.left = dotX + 'px';
+    cursor.style.top = dotY + 'px';
+    cursorDot.style.left = cursorX + 'px';
+    cursorDot.style.top = cursorY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  var hoverTargets = document.querySelectorAll('a, button, .card, .btn, .nav-links a, .logo, .router-row, .health-row, .tag');
+  for (var i = 0; i < hoverTargets.length; i++) {
+    hoverTargets[i].addEventListener('mouseenter', function() {
+      cursor.classList.add('hover');
+    });
+    hoverTargets[i].addEventListener('mouseleave', function() {
+      cursor.classList.remove('hover');
+      cursor.removeAttribute('data-label');
+      cursor.classList.remove('hover-label');
+    });
+  }
+
+  /* ========== CARD 3D TILT ========== */
+  var cards = document.querySelectorAll('.card');
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].addEventListener('mousemove', function(e) {
+      var rect = this.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var centerX = rect.width / 2;
+      var centerY = rect.height / 2;
+      var rotateX = ((y - centerY) / centerY) * -6;
+      var rotateY = ((x - centerX) / centerX) * 6;
+      this.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.01)';
+      this.style.setProperty('--mx', (x / rect.width * 100) + '%');
+      this.style.setProperty('--my', (y / rect.height * 100) + '%');
+    });
+    cards[i].addEventListener('mouseleave', function() {
+      this.style.transform = '';
+    });
+  }
+
+  /* ========== BUTTON SPOTLIGHT ========== */
+  var btns = document.querySelectorAll('.btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('mousemove', function(e) {
+      var rect = this.getBoundingClientRect();
+      this.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+      this.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+    });
+  }
+
+  /* ========== SCROLL REVEAL (Intersection Observer) ========== */
+  var revealElements = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    for (var i = 0; i < revealElements.length; i++) {
+      observer.observe(revealElements[i]);
+    }
+  } else {
+    for (var i = 0; i < revealElements.length; i++) {
+      revealElements[i].classList.add('visible');
+    }
+  }
+
+  /* ========== HEADER SCROLL ========== */
+  window.addEventListener('scroll', function() {
     document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 50);
   });
 
-  // Page navigation
-  function showPage(page) {
-    // Hide hero if not hero
-    const hero = document.getElementById('page-hero');
-    const statsBar = hero.nextElementSibling;
+  /* ========== PAGE NAVIGATION ========== */
+  window.showPage = function(page) {
+    var hero = document.getElementById('page-hero');
+    var statsBar = hero.nextElementSibling;
 
     if (page === 'hero') {
       hero.style.display = '';
       statsBar.style.display = '';
-      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.nav-links a').forEach(function(a) { a.classList.remove('active'); });
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -1029,22 +1312,207 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
     hero.style.display = 'none';
     statsBar.style.display = 'none';
 
-    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-    const target = document.getElementById('page-' + page);
+    document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+    var target = document.getElementById('page-' + page);
     if (target) {
       target.classList.add('active');
       target.classList.add('fade-up');
     }
 
-    document.querySelectorAll('.nav-links a').forEach(a => {
+    document.querySelectorAll('.nav-links a').forEach(function(a) {
       a.classList.toggle('active', a.dataset.nav === page);
     });
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Re-observe reveals in newly visible section
+    if (target && 'IntersectionObserver' in window) {
+      var newReveals = target.querySelectorAll('.reveal:not(.visible)');
+      var sectionObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            sectionObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      newReveals.forEach(function(el) { sectionObserver.observe(el); });
+    }
+  };
+
+  showPage('hero');
+
+  /* ========== WebGL PARTICLE SYSTEM ========== */
+  var canvas = document.getElementById('webgl-canvas');
+  if (canvas && typeof THREE !== 'undefined') {
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 300;
+
+    // Particle geometry
+    var PARTICLE_COUNT = 1200;
+    var geometry = new THREE.BufferGeometry();
+    var positions = new Float32Array(PARTICLE_COUNT * 3);
+    var sizes = new Float32Array(PARTICLE_COUNT);
+    var velocities = new Float32Array(PARTICLE_COUNT * 3);
+    var opacities = new Float32Array(PARTICLE_COUNT);
+
+    for (var i = 0; i < PARTICLE_COUNT; i++) {
+      var i3 = i * 3;
+      positions[i3]     = (Math.random() - 0.5) * 800;
+      positions[i3 + 1] = (Math.random() - 0.5) * 800;
+      positions[i3 + 2] = (Math.random() - 0.5) * 400;
+      sizes[i] = Math.random() * 2.5 + 0.5;
+      velocities[i3]     = (Math.random() - 0.5) * 0.3;
+      velocities[i3 + 1] = (Math.random() - 0.5) * 0.3;
+      velocities[i3 + 2] = (Math.random() - 0.5) * 0.1;
+      opacities[i] = Math.random() * 0.5 + 0.2;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute('aOpacity', new THREE.BufferAttribute(opacities, 1));
+
+    // Particle material with custom shader
+    var vertexShader = [
+      'attribute float aSize;',
+      'attribute float aOpacity;',
+      'varying float vOpacity;',
+      'void main() {',
+      '  vOpacity = aOpacity;',
+      '  vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);',
+      '  gl_PointSize = aSize * (300.0 / -mvPosition.z);',
+      '  gl_Position = projectionMatrix * mvPosition;',
+      '}'
+    ].join('\n');
+
+    var fragmentShader = [
+      'varying float vOpacity;',
+      'void main() {',
+      '  float d = length(gl_PointCoord - vec2(0.5));',
+      '  if (d > 0.5) discard;',
+      '  float alpha = smoothstep(0.5, 0.1, d) * vOpacity;',
+      '  gl_FragColor = vec4(0.788, 0.663, 0.431, alpha);',
+      '}'
+    ].join('\n');
+
+    var material = new THREE.ShaderMaterial({
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+
+    var particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+
+    // Connection lines geometry
+    var MAX_LINES = 200;
+    var linePositions = new Float32Array(MAX_LINES * 6);
+    var lineGeometry = new THREE.BufferGeometry();
+    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+    var lineMaterial = new THREE.LineBasicMaterial({ color: 0xc9a96e, transparent: true, opacity: 0.06 });
+    var lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+    scene.add(lines);
+
+    // Mouse tracking for camera parallax
+    var mouseX = 0, mouseY = 0;
+    var targetMouseX = 0, targetMouseY = 0;
+
+    document.addEventListener('mousemove', function(e) {
+      targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      targetMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    // Scroll parallax
+    var scrollProgress = 0;
+    window.addEventListener('scroll', function() {
+      scrollProgress = window.scrollY / window.innerHeight;
+    });
+
+    // Resize
+    window.addEventListener('resize', function() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Animation loop
+    var clock = new THREE.Clock();
+    function animateParticles() {
+      requestAnimationFrame(animateParticles);
+      var elapsed = clock.getElapsedTime();
+
+      // Smooth mouse follow
+      mouseX += (targetMouseX - mouseX) * 0.03;
+      mouseY += (targetMouseY - mouseY) * 0.03;
+
+      // Camera parallax
+      camera.position.x = mouseX * 30;
+      camera.position.y = -mouseY * 20 - scrollProgress * 100;
+      camera.lookAt(0, -scrollProgress * 80, 0);
+
+      // Animate particles
+      var pos = geometry.attributes.position.array;
+      for (var i = 0; i < PARTICLE_COUNT; i++) {
+        var i3 = i * 3;
+        pos[i3]     += velocities[i3];
+        pos[i3 + 1] += velocities[i3 + 1];
+        pos[i3 + 2] += velocities[i3 + 2];
+
+        // Wrap around
+        if (pos[i3] > 400) pos[i3] = -400;
+        if (pos[i3] < -400) pos[i3] = 400;
+        if (pos[i3 + 1] > 400) pos[i3 + 1] = -400;
+        if (pos[i3 + 1] < -400) pos[i3 + 1] = 400;
+        if (pos[i3 + 2] > 200) pos[i3 + 2] = -200;
+        if (pos[i3 + 2] < -200) pos[i3 + 2] = 200;
+
+        // Gentle wave
+        pos[i3 + 1] += Math.sin(elapsed * 0.5 + i * 0.01) * 0.05;
+      }
+      geometry.attributes.position.needsUpdate = true;
+
+      // Update connection lines
+      var lineIdx = 0;
+      var lp = lines.geometry.attributes.position.array;
+      var THRESHOLD = 80;
+      for (var a = 0; a < PARTICLE_COUNT && lineIdx < MAX_LINES; a++) {
+        for (var b = a + 1; b < PARTICLE_COUNT && lineIdx < MAX_LINES; b++) {
+          var a3 = a * 3, b3 = b * 3;
+          var dx = pos[a3] - pos[b3];
+          var dy = pos[a3+1] - pos[b3+1];
+          var dz = pos[a3+2] - pos[b3+2];
+          var dist = dx*dx + dy*dy + dz*dz;
+          if (dist < THRESHOLD * THRESHOLD) {
+            var li = lineIdx * 6;
+            lp[li] = pos[a3]; lp[li+1] = pos[a3+1]; lp[li+2] = pos[a3+2];
+            lp[li+3] = pos[b3]; lp[li+4] = pos[b3+1]; lp[li+5] = pos[b3+2];
+            lineIdx++;
+          }
+        }
+      }
+      // Zero out remaining
+      for (var i = lineIdx * 6; i < MAX_LINES * 6; i++) { lp[i] = 0; }
+      lines.geometry.attributes.position.needsUpdate = true;
+
+      // Rotate entire system slowly
+      particles.rotation.y = elapsed * 0.03;
+      particles.rotation.x = Math.sin(elapsed * 0.02) * 0.1;
+      lines.rotation.y = particles.rotation.y;
+      lines.rotation.x = particles.rotation.x;
+
+      renderer.render(scene, camera);
+    }
+    animateParticles();
   }
 
-  // Show hero on load
-  showPage('hero');
+})();
 </script>
 
 </body>
