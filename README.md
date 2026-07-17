@@ -18,23 +18,30 @@ GOD-OPENCODE wraps OpenCode with a modular framework that gives every request th
 
 ---
 
-## 🚀 Quick Start (2 Options)
-
-### Option A: Project-Local (Zero Setup)
+## 🚀 Quick Start
 
 ```powershell
+# Clone and enter the directory
 git clone https://github.com/mattycigemp-crypto/GOD-OPENCODE
 cd GOD-OPENCODE
+
+# Launch the terminal UI (main command)
+.\god-ui.ps1
+```
+
+The TUI gives you everything: system overview, install, health check, tests, router, and a link to the browser dashboard.
+
+### Alternative: Direct OpenCode
+
+```powershell
+# Or run OpenCode directly (project-local, auto-discovered)
 opencode
 ```
 
-That's it. OpenCode automatically discovers everything in the repo.
-
-### Option B: Global Install (One Command)
+### Global Install (Optional)
 
 ```powershell
-git clone https://github.com/mattycigemp-crypto/GOD-OPENCODE
-cd GOD-OPENCODE
+# Make skills available from any directory
 .\install.ps1
 ```
 
@@ -206,13 +213,29 @@ Verifies:
 
 ---
 
-## 🖥️ Browser Dashboard
+## 🖥️ Interfaces
+
+### Terminal UI (TUI)
+
+```powershell
+.\god-ui.ps1
+```
+
+Interactive terminal interface with:
+- System overview (agents, skills, workflows, global status)
+- One-click install/update
+- Health check
+- Test runner
+- Router tester
+- **Launch browser dashboard** (option 7)
+
+### Browser Dashboard
 
 ```powershell
 start ui\index.html
 ```
 
-Dark-themed, responsive dashboard showing all agents, skills, workflows, and commands.
+Dark-themed, responsive dashboard showing all agents, skills, workflows, commands, and quick start guide. Launch from TUI (option 7) or directly.
 
 ---
 

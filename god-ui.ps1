@@ -174,6 +174,43 @@ function Show-Dashboard {
     Write-Status "Workflows" "$workflowCount available" "Yellow"
     Write-Status "Commands"  "$commandCount slash commands" "Green"
 
+    # Global install status
+    Write-Section "Global Install Status"
+
+    $globalSkills = Join-Path $HOME ".config\opencode\skills"
+    $globalAgents = Join-Path $HOME ".config\opencode\god-opencode\agents"
+    $globalWorkflows = Join-Path $HOME ".config\opencode\god-opencode\workflows"
+    $globalConfig = Join-Path $HOME ".config\opencode\opencode.jsonc"
+
+    $globalAgentCount = 0
+    $globalWorkflowCount = 0
+    $hasGlobalConfig = $false
+    $hasAgentConfigs = $false
+
+    if (Test-Path $globalAgents) {
+        $globalAgentCount = (Get-ChildItem $globalAgents -Directory -ErrorAction SilentlyContinue).Count
+    }
+    if (Test-Path $globalWorkflows) {
+        $globalWorkflowCount = (Get-ChildItem $globalWorkflows -File -ErrorAction SilentlyContinue).Count
+    }
+    if (Test-Path $globalConfig) {
+        $configContent = Get-Content $globalConfig -Raw -ErrorAction SilentlyContinue
+        $hasGlobalConfig = $configContent -match '"agent"'
+        $hasAgentConfigs = $configContent -match '"security-engineer"'
+    }
+
+    if ($globalSkillCount -gt 0 -or $hasAgentConfigs) {
+        Write-Status "Global Skills"    "$skillCount installed in ~/.config/opencode/skills/" "Green"
+        Write-Status "Global Agents"    "$globalAgentCount in ~/.config/opencode/god-opencode/agents/" "Green"
+        Write-Status "Global Workflows" "$globalWorkflowCount in ~/.config/opencode/god-opencode/workflows/" "Green"
+        Write-Status "Agent Configs"    "Merged into global opencode.jsonc" "Green"
+        Write-Host ""
+        Write-Host "  [OK] Global install active - skills work from any directory" -ForegroundColor Green
+    } else {
+        Write-Host "  [!] NOT INSTALLED GLOBALLY" -ForegroundColor Yellow
+        Write-Host "  Run .\install.ps1 to make skills available from any directory" -ForegroundColor DarkGray
+    }
+
     # Quick actions
     Write-Section "Quick Actions"
     Write-MenuItem "1" "Install / Update" "Bootstrap or refresh the framework"
@@ -182,6 +219,7 @@ function Show-Dashboard {
     Write-MenuItem "4" "Run Tests"        "Execute Pester test suite"
     Write-MenuItem "5" "Memory"           "View architectural decisions"
     Write-MenuItem "6" "Router Test"      "Test keyword routing"
+    Write-MenuItem "7" "Launch Dashboard" "Open browser dashboard"
     Write-MenuItem "Q" "Exit"             "Close the interface"
 
     Write-Divider
@@ -375,6 +413,18 @@ while ($true) {
             Write-Host ""
             Write-Host "  Press any key to continue..." -ForegroundColor $Colors.Muted
             $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        }
+        "7" {
+            $dashboardPath = Join-Path $Root "ui\index.html"
+            if (Test-Path $dashboardPath) {
+                Start-Process $dashboardPath
+                Write-Host ""
+                Write-Host "  Dashboard opened in browser." -ForegroundColor $Colors.Success
+            } else {
+                Write-Host ""
+                Write-Host "  Dashboard not found at $dashboardPath" -ForegroundColor $Colors.Error
+            }
+            Start-Sleep -Seconds 1
         }
         "Q" {
             Clear-Screen

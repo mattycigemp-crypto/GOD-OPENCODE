@@ -683,6 +683,7 @@
         <li><a href="#" data-nav="commands" onclick="showPage('commands'); return false;">Commands</a></li>
         <li><a href="#" data-nav="router" onclick="showPage('router'); return false;">Router</a></li>
         <li><a href="#" data-nav="quickstart" onclick="showPage('quickstart'); return false;">Quick Start</a></li>
+        <li><a href="#" data-nav="tui" onclick="showPage('tui'); return false;">TUI</a></li>
       </ul>
     </nav>
   </div>
@@ -693,7 +694,7 @@
   <canvas id="webgl-canvas"></canvas>
   <img src="../brand/icon.png" alt="" class="hero-logo">
   <img src="../brand/wordmark.png" alt="GOD-OPENCODE" class="hero-wordmark">
-  <p class="hero-sub">10 specialist agents, 70+ skills, 15 workflows — one command bootstraps a production-grade AI engineering environment.</p>
+  <p class="hero-sub">10 specialist agents, 84 skills, 15 workflows — one command bootstraps a production-grade AI engineering environment.</p>
   <div class="hero-cta">
     <a href="#" class="btn btn-primary" onclick="showPage('quickstart'); return false;">Get Started</a>
     <a href="#" class="btn btn-secondary" onclick="showPage('agents'); return false;">Explore Agents</a>
@@ -704,7 +705,7 @@
 <div class="stats-bar">
   <div class="stats-inner">
     <div class="stat"><div class="stat-value">10</div><div class="stat-label">Expert Agents</div></div>
-    <div class="stat"><div class="stat-value">70+</div><div class="stat-label">Domain Skills</div></div>
+    <div class="stat"><div class="stat-value">84</div><div class="stat-label">Domain Skills</div></div>
     <div class="stat"><div class="stat-value">15</div><div class="stat-label">Workflows</div></div>
     <div class="stat"><div class="stat-value">6</div><div class="stat-label">Slash Commands</div></div>
   </div>
@@ -785,7 +786,7 @@
 <section class="section page-section" id="page-skills">
   <div class="section-header">
     <p class="section-eyebrow reveal">Knowledge</p>
-    <h2 class="section-title reveal reveal-d1">70+ domain skills</h2>
+    <h2 class="section-title reveal reveal-d1">84 domain skills</h2>
     <p class="section-desc reveal reveal-d2">Expert knowledge documents installed into OpenCode at ~/.config/opencode/skills/.</p>
   </div>
 
@@ -1002,7 +1003,7 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
   </div>
   <div class="health-list">
     <div class="health-row reveal"><div class="health-dot"></div><div class="health-label">15 required directories exist</div><div class="health-badge">CHECK 1</div></div>
-    <div class="health-row reveal reveal-d1"><div class="health-dot"></div><div class="health-label">70+ SKILL.md files present in repo</div><div class="health-badge">CHECK 2</div></div>
+    <div class="health-row reveal reveal-d1"><div class="health-dot"></div><div class="health-label">84 SKILL.md files present in repo</div><div class="health-badge">CHECK 2</div></div>
     <div class="health-row reveal reveal-d2"><div class="health-dot"></div><div class="health-label">Skills installed in ~/.config/opencode/skills/</div><div class="health-badge">CHECK 2b</div></div>
     <div class="health-row reveal reveal-d3"><div class="health-dot"></div><div class="health-label">mcps/registry.json is valid JSON with 5 enabled MCPs</div><div class="health-badge">CHECK 3</div></div>
     <div class="health-row reveal"><div class="health-dot"></div><div class="health-label">router/agent-router.json is valid JSON</div><div class="health-badge">CHECK 4</div></div>
@@ -1010,6 +1011,52 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
     <div class="health-row reveal reveal-d2"><div class="health-dot"></div><div class="health-label">All 10 agents have valid AGENT.md</div><div class="health-badge">CHECK 6</div></div>
     <div class="health-row reveal reveal-d3"><div class="health-dot"></div><div class="health-label">4 required workflows present</div><div class="health-badge">CHECK 7</div></div>
     <div class="health-row reveal"><div class="health-dot"></div><div class="health-label">6 required commands present</div><div class="health-badge">CHECK 8</div></div>
+  </div>
+</section>
+
+<!-- TUI -->
+<section class="section page-section" id="page-tui">
+  <div class="section-header">
+    <p class="section-eyebrow reveal">Terminal</p>
+    <h2 class="section-title reveal reveal-d1">Terminal UI</h2>
+    <p class="section-desc reveal reveal-d2">Launch the interactive terminal interface for managing GOD-OPENCODE.</p>
+  </div>
+
+  <div style="margin-top: 48px;">
+    <p class="section-eyebrow reveal">Launch</p>
+    <div class="code-block reveal reveal-d1"><span class="comment"># From the GOD-OPENCODE directory</span>
+<span class="cmd">.\god-ui.ps1</span></div>
+  </div>
+
+  <div style="margin-top: 48px;">
+    <p class="section-eyebrow reveal">Features</p>
+    <div class="card-grid" style="margin-top: 16px;">
+      <div class="card reveal"><div class="card-eyebrow">Dashboard</div><h3>System Overview</h3><p>View agent count, skill count, workflow count, and global install status at a glance.</p></div>
+      <div class="card reveal reveal-d1"><div class="card-eyebrow">Install</div><h3>One-Click Install</h3><p>Bootstrap or refresh the entire framework from the terminal UI.</p></div>
+      <div class="card reveal reveal-d2"><div class="card-eyebrow">Health</div><h3>Health Check</h3><p>Verify system integrity — directories, skills, agents, workflows, configs.</p></div>
+      <div class="card reveal reveal-d3"><div class="card-eyebrow">Tests</div><h3>Test Runner</h3><p>Execute Pester test suites — unit, property, smoke, or all.</p></div>
+      <div class="card reveal"><div class="card-eyebrow">Router</div><h3>Router Test</h3><p>Test keyword routing — enter a task description and see which agent gets selected.</p></div>
+      <div class="card reveal reveal-d1"><div class="card-eyebrow">Dashboard</div><h3>Browser Dashboard</h3><p>Launch the visual dashboard directly from the TUI.</p></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 48px;">
+    <p class="section-eyebrow reveal">Menu Options</p>
+    <div class="table-wrap reveal reveal-d1">
+      <table>
+        <thead><tr><th>Key</th><th>Action</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1</strong></td><td>Install / Update</td><td>Bootstrap or refresh the framework</td></tr>
+          <tr><td><strong>2</strong></td><td>Health Check</td><td>Verify system integrity</td></tr>
+          <tr><td><strong>3</strong></td><td>Project Scan</td><td>Analyze a codebase</td></tr>
+          <tr><td><strong>4</strong></td><td>Run Tests</td><td>Execute Pester test suite</td></tr>
+          <tr><td><strong>5</strong></td><td>Memory</td><td>View architectural decisions</td></tr>
+          <tr><td><strong>6</strong></td><td>Router Test</td><td>Test keyword routing</td></tr>
+          <tr><td><strong>7</strong></td><td>Launch Dashboard</td><td>Open browser dashboard</td></tr>
+          <tr><td><strong>Q</strong></td><td>Exit</td><td>Close the interface</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
