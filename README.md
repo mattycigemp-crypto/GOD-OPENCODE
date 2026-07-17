@@ -32,62 +32,79 @@ cd GOD-OPENCODE
 .\god-health.ps1
 ```
 
-That's it. You now have 10 expert agents, 70+ skills, 15 workflows, and 6 slash commands ready to use in OpenCode.
+That's it. You now have 10 expert agents, 84 skills, 15 workflows, and 6 slash commands ready to use in OpenCode.
+
+### How OpenCode Discovers Everything
+
+When you run `opencode` in the GOD-OPENCODE directory, OpenCode **automatically** discovers:
+
+| What | Where | How |
+|------|-------|-----|
+| Project context | `AGENTS.md` | OpenCode reads it on startup |
+| Agent configs | `opencode.json` | OpenCode loads custom agents and commands |
+| Project-local skills | `.opencode/skills/` | OpenCode discovers from `.opencode/skills/*/SKILL.md` |
+| Global skills | `~/.config/opencode/skills/` | OpenCode discovers from `~/.config/opencode/skills/*/SKILL.md` |
+
+**No manual setup required** — just `opencode` in the repo directory.
+
+For **global access** (skills available from any directory):
+
+```powershell
+.\install.ps1
+```
+
+This copies skills, workflows, agents, and commands to `~/.config/opencode/`.
 
 ---
 
 ## Architecture
 
-GOD-OPENCODE is organized as a layered stack:
+GOD-OPENCODE extends OpenCode with three layers:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  Intelligence Engine                                 │
-│  Scans repos, detects project type, generates plans  │
+│  Orchestration Layer                                │
+│  auto-router → workflow-engine → agent-orchestrator │
 ├─────────────────────────────────────────────────────┤
-│  Router                                              │
-│  Keyword → Agent + Skills selection                  │
-├─────────────────────────────────────────────────────┤
-│  Command System                                      │
-│  /build  /architect  /debug  /review  /secure  /optimize
-├──────────────────────┬──────────────────────────────┤
-│  MCP System           │  Prompt Library              │
-│  5 MCP servers        │  50+ prompt templates        │
-├──────────────────────┴──────────────────────────────┤
-│  Workflow System                                     │
-│  15 parameterized workflow definitions               │
-├──────────────────────┬──────────────────────────────┤
-│  Agents              │  Templates                    │
-│  10 personas         │  9 project scaffolds          │
-├──────────────────────┴──────────────────────────────┤
 │  Skills System                                       │
-│  70+ SKILL.md files across 10 categories             │
+│  84 SKILL.md files across 11 categories              │
 ├─────────────────────────────────────────────────────┤
-│  Memory System                                       │
-│  ADRs, TODOs, conventions, changelogs                │
+│  Agents                                              │
+│  10 engineering personas with custom prompts         │
 ├─────────────────────────────────────────────────────┤
-│  Installer Engine                                    │
-│  god-install.ps1 — fully idempotent one-command setup│
+│  Workflows                                           │
+│  15 parameterized step-by-step processes             │
+├─────────────────────────────────────────────────────┤
+│  Commands                                            │
+│  6 slash commands for common tasks                   │
 └─────────────────────────────────────────────────────┘
                        ↕
 ┌─────────────────────────────────────────────────────┐
-│  OpenCode — reads ~/.config/opencode/skills/ at runtime
+│  OpenCode — reads .opencode/ and ~/.config/opencode/│
 └─────────────────────────────────────────────────────┘
 ```
 
-| Layer | Directory | Purpose |
-|-------|-----------|---------|
-| Installer | `god-install.ps1` | Bootstraps everything |
-| Skills | `skills/` | 70+ expert knowledge docs |
-| Agents | `agents/` | 10 engineering personas |
-| Workflows | `workflows/` | 15 step-by-step processes |
-| MCPs | `mcps/` | 5 MCP server configs |
-| Prompts | `prompts/` | 15+ reusable prompt templates |
-| Templates | `templates/` | 9 project scaffolds |
-| Memory | `memory/` | Persistent ADRs and decisions |
-| Router | `router/` | Keyword-to-agent dispatch |
-| Commands | `commands/` | Slash command definitions |
-| Intelligence | `scripts/god-intelligence.ps1` | Repo scanner + plan generator |
+### How Routing Works
+
+1. You type: `"security audit the auth flow"`
+2. **auto-router** skill detects intent: `secure` (confidence: high)
+3. **auto-router** matches workflow: `security-audit`
+4. **workflow-engine** skill loads `workflows/security-audit.md`
+5. Executes 8 steps sequentially, loading skills per step
+6. **agent-orchestrator** switches agents when needed
+
+---
+
+## Orchestration Skills
+
+These skills power the intelligent routing system:
+
+| Skill | Purpose |
+|-------|---------|
+| `auto-router` | Intent detection → agent/skill/workflow routing |
+| `workflow-engine` | Execute step-by-step workflows from markdown files |
+| `agent-orchestrator` | Switch between specialist agents mid-conversation |
+| `command-builder` | Scaffold agents, skills, workflows, commands |
 
 ---
 
@@ -95,12 +112,12 @@ GOD-OPENCODE is organized as a layered stack:
 
 | Command | Description | Agent |
 |---------|-------------|-------|
-| `/build` | Build a complete application from description to deployment | principal-engineer + all |
-| `/architect` | Design or review system architecture | principal-engineer |
+| `/security-audit` | Full security audit with threat modelling and OWASP checks | security-engineer |
+| `/api-design` | Design RESTful/GraphQL APIs with schemas and documentation | backend-engineer |
 | `/debug` | Systematic bug investigation from symptom to fix | debugger |
-| `/review` | Senior-level code review across correctness, security, performance | principal-engineer + security |
-| `/secure` | Full security audit with threat modelling and OWASP checks | security-engineer |
-| `/optimize` | Measurement-driven performance optimization | principal-engineer + database-architect |
+| `/review` | Senior-level code review across correctness, security, performance | principal-engineer |
+| `/optimize` | Measurement-driven performance optimization | principal-engineer |
+| `/build` | Scaffold new agents, skills, workflows, commands | backend-engineer |
 
 ---
 
@@ -119,108 +136,50 @@ GOD-OPENCODE is organized as a layered stack:
 | `researcher` | Technology evaluation, comparative analysis |
 | `technical-writer` | Documentation, ADRs, runbooks, changelogs |
 
+Invoke agents with `@agent-name` in OpenCode, or switch between primary agents with Tab.
+
+---
+
+## Skills
+
+84 skills across 11 categories:
+
+| Category | Skills |
+|----------|--------|
+| `orchestration` | auto-router, workflow-engine, agent-orchestrator, command-builder |
+| `backend` | api-design, fastapi, express, graphql, database-design, postgres, mongodb, redis, sqlite |
+| `frontend` | react, nextjs, typescript, css-architecture, state-management, component-design, web-performance, testing-frontend, accessibility, bundling |
+| `security` | security, authentication, cryptography, penetration-testing, secure-coding, security-audit |
+| `devops` | docker, kubernetes, ci-cd, terraform, cloud, linux, networking, github-actions |
+| `database` | database-design, postgres, mongodb, sqlite, query-optimization, schema-design, redis, replication, sharding, data-migration |
+| `testing` | testing, unit-testing, integration-testing, e2e-testing, test-driven-development, property-based-testing |
+| `ai` | ai-engineer, llm-engineer, rag-engineer, embedding-engineer, evaluation-engineer, prompt-engineer, mcp-builder, agent-builder, tool-builder, workflow-designer |
+| `languages` | python-expert, javascript-expert, typescript-expert, go-expert, rust-expert, java-expert, cpp-expert, node-expert, react-expert, nextjs-expert |
+| `core` | architect, principal-engineer, code-review, debugger, performance, refactor, documentation, bug-hunter, security, testing |
+| `advanced` | algorithm-expert, compiler-design, distributed-systems, operating-systems, optimization, reverse-engineering, system-design |
+
 ---
 
 ## Project Structure
 
 ```
 GOD-OPENCODE/
-├── god-install.ps1          # One-command installer
-├── god-health.ps1           # System health check
-├── god-ui.ps1               # Terminal UI
-├── install.ps1              # Smart skill installer
-├── agents/                  # 10 agent personas
-│   ├── principal-engineer/
-│   │   └── AGENT.md
-│   └── ...
-├── skills/                  # 70+ skill definitions
-│   ├── ai/
-│   ├── backend/
-│   ├── frontend/
-│   ├── devops/
-│   ├── security/
-│   ├── database/
-│   ├── testing/
-│   └── advanced/
-├── workflows/               # 15 parameterized workflows
-├── commands/                # 6 slash command definitions
-├── prompts/                 # 15+ prompt templates
-├── templates/               # 9 project scaffolds
-├── mcps/                    # MCP server configs
-├── router/                  # Keyword-to-agent routing
-├── scripts/                 # Core engine scripts
-│   ├── shared-utils.ps1     # Shared utility functions
-│   ├── router.ps1           # Router engine
-│   ├── god-builder.ps1      # Builder engine
-│   ├── god-expansion.ps1    # Expansion engine
-│   ├── memory.ps1           # Memory system
-│   └── workflow-engine.ps1  # Workflow engine
-├── tools/                   # Intelligence tools
-├── tests/                   # Pester test suite
-│   ├── unit/
-│   ├── property/
-│   ├── smoke/
-│   └── integration/
-└── ui/                      # Browser dashboard
-    └── index.html
+├── opencode.json              # OpenCode config (agents, commands, MCPs)
+├── AGENTS.md                  # Project context for OpenCode
+├── god-install.ps1            # One-command installer
+├── install.ps1                # Smart installer (skills, workflows, agents, commands)
+├── .opencode/skills/          # Project-local skills (auto-discovered)
+├── agents/                    # 10 agent personas
+├── skills/                    # 84 skill definitions
+├── workflows/                 # 15 parameterized workflows
+├── commands/                  # 6 slash command definitions
+├── router/                    # Intent detection and routing config
+├── scripts/                   # Core engine scripts
+├── mcps/                      # MCP server configs
+├── templates/                 # Project scaffolds
+├── tests/                     # Pester test suite
+└── ui/                        # Browser dashboard
 ```
-
----
-
-## Terminal UI
-
-Launch the interactive terminal interface:
-
-```powershell
-.\god-ui.ps1
-```
-
-Features:
-- Dashboard with system overview
-- Health check visualization
-- Project scan with intelligence engine
-- Test runner with suite selection
-- Memory viewer
-- Router keyword tester
-
----
-
-## Browser Dashboard
-
-Open the visual dashboard:
-
-```powershell
-start ui\index.html
-```
-
-A dark-themed, responsive dashboard showing all agents, skills, workflows, commands, prompts, templates, router mappings, and MCP integrations.
-
----
-
-## How the Router Works
-
-The router tokenizes your request, matches keywords against `router/agent-router.json`, and returns the top-3 agent candidates by match score.
-
-```powershell
-.\scripts\router.ps1 -Request "build a fastapi api with postgres authentication"
-```
-
-Output:
-```
-Selected Agent : backend-engineer
-Fallback       : False
-Top Candidates:
-  backend-engineer (score: 3)
-  database-architect (score: 1)
-  security-engineer (score: 1)
-Skills Loaded:
-  - api-design
-  - code-review
-  - backend-engineer
-  ...
-```
-
-Edit `router/agent-router.json` to add custom keyword mappings — no script changes needed.
 
 ---
 
@@ -235,8 +194,6 @@ Edit `router/agent-router.json` to add custom keyword mappings — no script cha
 
 # Run specific test suite
 Invoke-Pester -Path .\tests\unit\ -Output Detailed
-Invoke-Pester -Path .\tests\property\ -Output Detailed
-Invoke-Pester -Path .\tests\smoke\ -Output Detailed
 ```
 
 ---
@@ -248,27 +205,35 @@ Invoke-Pester -Path .\tests\smoke\ -Output Detailed
 ```
 
 Verifies:
-- All 15 required directories exist
-- 70+ SKILL.md files present in repo
+- All required directories exist
+- SKILL.md files present in repo
 - Skills installed in `~/.config/opencode/skills/`
-- MCP registry is valid JSON with 5 enabled MCPs
-- Router config is valid JSON with routing rules
-- 12 key scripts exist
-- All 10 agents have valid AGENT.md with required sections
-- 4 required workflows present
-- 6 required commands present
+- Workflows, agents, commands installed in `~/.config/opencode/god-opencode/`
+- Router config is valid JSON
+- All agents have valid AGENT.md
+
+---
+
+## Browser Dashboard
+
+Open the visual dashboard:
+
+```powershell
+start ui\index.html
+```
+
+A dark-themed, responsive dashboard showing all agents, skills, workflows, and commands.
 
 ---
 
 ## Contribution Guidelines
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full process.
-
 **Quick rules:**
 - Skill directories: `skills/{category}/{skill-name}/SKILL.md`
 - Agent directories: `agents/{agent-name}/AGENT.md`
+- Workflow files: `workflows/{workflow-name}.md`
 - All names: lowercase with hyphens only
-- New components require all mandatory sections (see CONTRIBUTING.md)
+- Skills must have YAML frontmatter with `name` and `description`
 - Test with `.\god-health.ps1` before submitting
 
 ---
