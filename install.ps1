@@ -221,10 +221,17 @@ $GlobalConfig = Join-Path $HOME ".config\opencode\opencode.jsonc"
 $SourceConfig = Join-Path $PSScriptRoot "opencode.json"
 
 if (Test-Path $GlobalConfig) {
+    $Global = $null
+    $Source = $null
     try {
         $Global = Get-Content $GlobalConfig -Raw | ConvertFrom-Json
         $Source = Get-Content $SourceConfig -Raw | ConvertFrom-Json
+    } catch {
+        Write-Host "[WARNING] Could not parse global config: $_" -ForegroundColor Yellow
+        Write-Host "[WARNING] Fix the JSON/JSONC syntax in $GlobalConfig and re-run." -ForegroundColor Yellow
+    }
 
+    if ($Global -and $Source) {
         $Merged = $false
 
         # Merge agents - append only new agent names, never overwrite existing user customizations
@@ -322,12 +329,11 @@ if (Test-Path $GlobalConfig) {
         if ($Merged) {
             $Global | ConvertTo-Json -Depth 10 | Set-Content $GlobalConfig -Encoding UTF8
             Write-Host "[MERGED] Agent configs added to $GlobalConfig" -ForegroundColor Green
-            Write-Host "[NOTE] JSONC comments in $GlobalConfig are not preserved (round-trip via ConvertTo-Json)." -ForegroundColor DarkGray
+            Write-Host "[NOTE] JSONC comments in $GlobalConfig are not preserved (round-trip via ConvertTo-Json)." -ForegroundColor Yellow
+            Write-Host "[NOTE] Back up the file before re-running if it contains custom comments." -ForegroundColor Yellow
         } else {
             Write-Host "[UNCHANGED] Agent configs already present" -ForegroundColor Yellow
         }
-    } catch {
-        Write-Host "[WARNING] Could not merge config: $_" -ForegroundColor Yellow
     }
 } else {
     Write-Host "[SKIP] Global config not found at $GlobalConfig" -ForegroundColor Yellow
