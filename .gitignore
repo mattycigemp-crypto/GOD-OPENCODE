@@ -28,9 +28,9 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 
-# Release packages
-# Block stray *.zip everywhere, then whitelist release/ contents so release artifacts
-# can be committed to the repo and downloaded directly from raw.githubusercontent.com.
+# Release packages (kept on-repo for direct download; see release/SHA256SUMS.txt)
+# NOTE: each release adds ~134 KB of binary blob to git history with no LFS or
+# cleanup. For multi-year repos consider moving zips to .gitattributes + Git LFS.
 *.zip
 !release/*.zip
 !release/SHA256SUMS*
