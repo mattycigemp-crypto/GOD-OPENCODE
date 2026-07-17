@@ -21,11 +21,26 @@ $Script:Colors = @{
     Border    = "DarkCyan"
 }
 
+# Define Unicode box-drawing characters as variables to avoid parser issues
+$Script:BoxTopLeft = [char]0x256D      # ╭
+$Script:BoxTopRight = [char]0x256E     # ╮
+$Script:BoxBottomLeft = [char]0x2570   # ╰
+$Script:BoxBottomRight = [char]0x256F  # ╯
+$Script:BoxHorizontal = [char]0x2500   # ─
+$Script:BoxVertical = [char]0x2502     # │
+$Script:BoxTeeDown = [char]0x252C      # ┬
+$Script:BoxTeeUp = [char]0x2534        # ┴
+$Script:BoxTeeRight = [char]0x251C     # ├
+$Script:BoxTeeLeft = [char]0x2524      # ┤
+$Script:BoxCross = [char]0x253C        # ┼
+
 $Script:BoxChars = @{
-    TopLeft="╭"; TopRight="╮"; BottomLeft="╰"; BottomRight="╯"
-    Horizontal="─"; Vertical="│"
-    TeeDown="┬"; TeeUp="┴"; TeeRight="├"; TeeLeft="┤"
-    Cross="┼"
+    TopLeft=$Script:BoxTopLeft; TopRight=$Script:BoxTopRight
+    BottomLeft=$Script:BoxBottomLeft; BottomRight=$Script:BoxBottomRight
+    Horizontal=$Script:BoxHorizontal; Vertical=$Script:BoxVertical
+    TeeDown=$Script:BoxTeeDown; TeeUp=$Script:BoxTeeUp
+    TeeRight=$Script:BoxTeeRight; TeeLeft=$Script:BoxTeeLeft
+    Cross=$Script:BoxCross
 }
 
 function Clear-Screen { Clear-Host }
