@@ -69,5 +69,5 @@ We rank by:
 
 ## See also
 
-- [CHANGELOG.md](../../CHANGELOG.md) — released improvements
+- [CHANGELOG.md](https://github.com/mattycigemp-crypto/GOD-OPENCODE/blob/master/CHANGELOG.md) — released improvements
 - [wiki README](index.md) — back to wiki landing

@@ -39,6 +39,6 @@ The wiki is also surfaced via:
 
 ## See also
 
-- [CHANGELOG.md](../../CHANGELOG.md) — version history
-- [README.md](../../README.md) — one-page overview
-- [AGENTS.md](../../AGENTS.md) — context file for OpenCode
+- [CHANGELOG.md](https://github.com/mattycigemp-crypto/GOD-OPENCODE/blob/master/CHANGELOG.md) — version history
+- [README.md](https://github.com/mattycigemp-crypto/GOD-OPENCODE/blob/master/README.md) — one-page overview
+- [AGENTS.md](https://github.com/mattycigemp-crypto/GOD-OPENCODE/blob/master/AGENTS.md) — context file for OpenCode
