@@ -210,6 +210,107 @@ Write-Host ""
 Write-Host "Commands: New=$CNew Updated=$CUpdated Unchanged=$CSkipped"
 
 # ============================================
+# MERGE AGENT CONFIGS TO GLOBAL OPENCODE.JSON
+# ============================================
+
+Write-Host ""
+Write-Host "--- Merging Agent Configs to Global Config ---"
+Write-Host ""
+
+$GlobalConfig = Join-Path $HOME ".config\opencode\opencode.jsonc"
+$SourceConfig = Join-Path $PSScriptRoot "opencode.json"
+
+if (Test-Path $GlobalConfig) {
+    try {
+        $Global = Get-Content $GlobalConfig -Raw | ConvertFrom-Json
+        $Source = Get-Content $SourceConfig -Raw | ConvertFrom-Json
+
+        $Merged = $false
+
+        # Merge agents
+        if ($Source.agent) {
+            if (-not $Global.agent) {
+                $Global | Add-Member -NotePropertyName "agent" -NotePropertyValue $Source.agent
+                $Merged = $true
+            } else {
+                foreach ($Prop in $Source.agent.PSObject.Properties) {
+                    if (-not $Global.agent.PSObject.Properties[$Prop.Name]) {
+                        $Global.agent | Add-Member -NotePropertyName $Prop.Name -NotePropertyValue $Prop.Value
+                        $Merged = $true
+                    }
+                }
+            }
+        }
+
+        # Merge commands
+        if ($Source.command) {
+            if (-not $Global.command) {
+                $Global | Add-Member -NotePropertyName "command" -NotePropertyValue $Source.command
+                $Merged = $true
+            } else {
+                foreach ($Prop in $Source.command.PSObject.Properties) {
+                    if (-not $Global.command.PSObject.Properties[$Prop.Name]) {
+                        $Global.command | Add-Member -NotePropertyName $Prop.Name -NotePropertyValue $Prop.Value
+                        $Merged = $true
+                    }
+                }
+            }
+        }
+
+        # Merge instructions (append if not already present)
+        if ($Source.instructions) {
+            $RawContent = Get-Content $GlobalConfig -Raw
+            $InstructionsArray = @()
+            
+            # Extract existing instructions if present
+            if ($RawContent -match '"instructions"\s*:\s*\[([^\]]*)\]') {
+                $ExistingStr = $Matches[1].Trim()
+                if ($ExistingStr) {
+                    $InstructionsArray = $ExistingStr -split ',' | ForEach-Object { $_.Trim().Trim('"') }
+                }
+            }
+            
+            # Add new instructions
+            foreach ($Inst in $Source.instructions) {
+                if ($Inst -notin $InstructionsArray) {
+                    $InstructionsArray += $Inst
+                    $Merged = $true
+                }
+            }
+            
+            # Write back
+            if ($Merged) {
+                $InstructionsJson = ($InstructionsArray | ForEach-Object { "`"$_`"" }) -join ', '
+                $InstructionsBlock = "`"instructions`": [$InstructionsJson]"
+                
+                if ($RawContent -match '"instructions"\s*:\s*\[[^\]]*\]') {
+                    $RawContent = $RawContent -replace '"instructions"\s*:\s*\[[^\]]*\]', $InstructionsBlock
+                } else {
+                    # Add before the last closing brace
+                    $LastBrace = $RawContent.LastIndexOf('}')
+                    $RawContent = $RawContent.Insert($LastBrace, "$InstructionsBlock,`n  ")
+                }
+                Set-Content $GlobalConfig -Value $RawContent -Encoding UTF8
+            }
+        }
+
+        if ($Merged) {
+            $Global | ConvertTo-Json -Depth 10 | Set-Content $GlobalConfig -Encoding UTF8
+            Write-Host "[MERGED] Agent configs added to $GlobalConfig" -ForegroundColor Green
+        } else {
+            Write-Host "[UNCHANGED] Agent configs already present" -ForegroundColor Yellow
+        }
+    } catch {
+        Write-Host "[WARNING] Could not merge config: $_" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "[SKIP] Global config not found at $GlobalConfig" -ForegroundColor Yellow
+}
+
+Write-Host ""
+Write-Host "Done."
+
+# ============================================
 # SUMMARY
 # ============================================
 
