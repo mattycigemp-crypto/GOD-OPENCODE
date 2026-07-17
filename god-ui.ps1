@@ -47,12 +47,10 @@ function Clear-Screen {
 function Write-Logo {
     $logo = @"
 
-     _____ ____   ____            __  __ ___
-    / ____|  _ \ / ___|___ _   _|  \/  | _ \
-   | |  __| |_) | |   / _ \ | | | |\/| | |_)
-   | |_| |  _ <| |__|  __/ |_| | |  | | _ <
-     \____|_| \_\\____\___|\__, |_|  |_|_(_) |
-                           |___/             |_|
+  ======================
+    GOD - OPENCODE
+    AI Engineering OS
+  ======================
 
 "@
     Write-Host $logo -ForegroundColor $Colors.Primary
