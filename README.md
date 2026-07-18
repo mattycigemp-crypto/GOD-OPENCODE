@@ -1,17 +1,52 @@
 <p align="center">
-  <img src="brand/wordmark.png" alt="GOD-OPENCODE" width="600">
+<p align="center">
+  <img src="brand/terminal-demo.svg" alt="CogniVect Terminal" width="700">
 </p>
 
-<h3 align="center">An AI engineering operating system built on top of OpenCode.</h3>
+<p align="center">
+  <img src="brand/pipeline-graph.svg" alt="CogniVect Pipeline" width="800">
+</p>
+  <img src="brand/terminal-demo.svg" alt="CogniVect Terminal Demo" width="700">
+</p>
 
+<p align="center">
+  <img src="brand/pipeline-graph.svg" alt="CogniVect Pipeline" width="800">
+</p>
+<p align="center">
+  <img src="brand/wordmark.png" alt="CogniVect" width="600">
+</p>
+
+<h3 align="center">An CogniVect â€” the AI engineering OS that thinks in vectors.</h3>
+
+<p align="center">
+  <img src="brand/terminal-demo.svg" alt="CogniVect Terminal Demo" width="700">
+</p>
+
+<p align="center">
+  <img src="brand/pipeline-graph.svg" alt="CogniVect Pipeline" width="800">
+</p>
 <p align="center">
   One command bootstraps a complete, production-grade AI engineering environment — with the right experts, skills, workflows, and tools already loaded.
 </p>
 
 <p align="center">
-  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.6.0"><img alt="v1.6.0" src="https://img.shields.io/badge/release-v1.6.0-8b5cf6?style=for-the-badge"/></a>
+  <img src="brand/terminal-demo.svg" alt="CogniVect Terminal Demo" width="700">
 </p>
 
+<p align="center">
+  <img src="brand/pipeline-graph.svg" alt="CogniVect Pipeline" width="800">
+</p>
+<p align="center">
+  <a href="https://github.com/mattycigemp-crypto/CogniVect/releases/tag/v1.6.0"><img alt="v1.6.0" src="https://img.shields.io/badge/release-v1.6.0-8b5cf6?style=for-the-badge"/></a>
+</p>
+
+<p align="center">
+  <img src="brand/terminal-demo.svg" alt="CogniVect Terminal Demo" width="700">
+</p>
+
+<p align="center">
+  <img src="brand/pipeline-graph.svg" alt="CogniVect Pipeline" width="800">
+</p>
 <p align="center">
   <strong>?? v1.6.0 — five more features:</strong> <a href="#security-scanner">security scanner</a> · <a href="#agent-orchestrator">agent orchestrator</a> · <a href="#mcp-connectors">MCP connectors</a> · <a href="#smart-git">smart git</a> · <a href="#test-driven-ai-workflow">test-driven AI</a>
 </p>
@@ -20,11 +55,11 @@
 
 ## Purpose
 
-GOD-OPENCODE provides a structured, production-grade AI engineering environment on top of OpenCode. It routes every request to the right expert agent, loads domain-specific skills on demand, and executes proven workflows step by step.
+CogniVect provides a structured, production-grade AI engineering environment on top of OpenCode. It routes every request to the right expert agent, loads domain-specific skills on demand, and executes proven workflows step by step.
 
 ## ?? Overview
 
-GOD-OPENCODE wraps OpenCode with a modular framework that gives every request the right context: the expert agent persona, the domain-specific skill knowledge, and the proven workflow step sequence. Instead of getting a generic AI assistant, you get a senior principal engineer, a security auditor, a database architect, or a full-stack team — whichever the task calls for.
+CogniVect wraps OpenCode with a modular framework that gives every request the right context: the expert agent persona, the domain-specific skill knowledge, and the proven workflow step sequence. Instead of getting a generic AI assistant, you get a senior principal engineer, a security auditor, a database architect, or a full-stack team — whichever the task calls for.
 
 **Everything is file-based and transparent.** Skills, agents, workflows — all Markdown. Router — JSON config. Nothing is hidden.
 
@@ -34,8 +69,8 @@ GOD-OPENCODE wraps OpenCode with a modular framework that gives every request th
 
 ```powershell
 # Clone and enter the directory
-git clone https://github.com/mattycigemp-crypto/GOD-OPENCODE
-cd GOD-OPENCODE
+git clone https://github.com/mattycigemp-crypto/CogniVect
+cd CogniVect
 
 # Launch the terminal UI (main command)
 .\god-ui.ps1
@@ -57,27 +92,27 @@ opencode
 .\install.ps1
 ```
 
-Now GOD-OPENCODE works from **any directory** on your machine.
+Now CogniVect works from **any directory** on your machine.
 
 ### Alternative: Container
 
 ```bash
 # Pull the published image (no PowerShell host required)
-docker pull ghcr.io/mattycigemp-crypto/god-opencode:latest
+docker pull ghcr.io/mattycigemp-crypto/cognivect:latest
 
-# Drop into a PowerShell session with GOD-OPENCODE ready
-docker run --rm -it ghcr.io/mattycigemp-crypto/god-opencode:latest
+# Drop into a PowerShell session with CogniVect ready
+docker run --rm -it ghcr.io/mattycigemp-crypto/cognivect:latest
 
 # Or one-shot: run the installer
-docker run --rm ghcr.io/mattycigemp-crypto/god-opencode:latest \
+docker run --rm ghcr.io/mattycigemp-crypto/cognivect:latest \
   pwsh -File ./install.ps1
 ```
 
-Each `v*` tag push publishes a versioned image (`ghcr.io/.../god-opencode:v<version>`) plus `latest`. The image bundles PowerShell 7.4 + the installable project so it works identically on Linux, macOS, and Windows hosts.
+Each `v*` tag push publishes a versioned image (`ghcr.io/.../cognivect:v<version>`) plus `latest`. The image bundles PowerShell 7.4 + the installable project so it works identically on Linux, macOS, and Windows hosts.
 
 **Cross-platform shims:** `bash install.sh` (requires `pwsh`) on Linux/macOS/WSL; `install.cmd` on Windows cmd.exe. See [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md).
 
-**Wiki:** the eight-page reference at `docs/wiki/` is built and published automatically to **GitHub Pages** on every push to `master` — see [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/). One-time setup: repo **Settings ? Pages ? Build and deployment ? Source: GitHub Actions ? workflow: `Build and Deploy Wiki`**, then Save.
+**Wiki:** the eight-page reference at `docs/wiki/` is built and published automatically to **GitHub Pages** on every push to `master` — see [mattycigemp-crypto.github.io/CogniVect](https://mattycigemp-crypto.github.io/CogniVect/). One-time setup: repo **Settings ? Pages ? Build and deployment ? Source: GitHub Actions ? workflow: `Build and Deploy Wiki`**, then Save.
 
 ---
 
@@ -260,7 +295,7 @@ Four open concerns documented in [docs/wiki/roadmap.md](docs/wiki/roadmap.md) — 
 | No long-term memory between sessions | ? `scripts/session-memory.ps1` — session tracking + preference learning | v1.2 + v1.4 |
 | Wiki not auto-generated from content | ? `scripts/build-wiki.ps1` — auto-generates reference pages from content | v1.4 |
 
-Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md) and is auto-published to **GitHub Pages** by `.github/workflows/wiki-pages.yml` on every push to `master` (mkdocs-material, dark theme, instant search, pinned to the 9.5.x minor). Browse online: [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/) (after a one-time Settings ? Pages ? Source: **GitHub Actions** toggle). Each MVP has a concrete next milestone in the roadmap page.
+Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md) and is auto-published to **GitHub Pages** by `.github/workflows/wiki-pages.yml` on every push to `master` (mkdocs-material, dark theme, instant search, pinned to the 9.5.x minor). Browse online: [mattycigemp-crypto.github.io/CogniVect](https://mattycigemp-crypto.github.io/CogniVect/) (after a one-time Settings ? Pages ? Source: **GitHub Actions** toggle). Each MVP has a concrete next milestone in the roadmap page.
 
 ---
 
@@ -268,7 +303,7 @@ Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md) and is auto-publishe
 
 ### Automatic Discovery
 
-When you run `opencode` in the GOD-OPENCODE directory, OpenCode **automatically** discovers:
+When you run `opencode` in the CogniVect directory, OpenCode **automatically** discovers:
 
 | What | Where | Status |
 |------|-------|--------|
@@ -385,7 +420,7 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 ## ?? Project Structure
 
 ```
-GOD-OPENCODE/
+CogniVect/
 +-- opencode.json              # OpenCode config (agents, commands)
 +-- AGENTS.md                  # Project context for OpenCode
 +-- god-cli.ps1                # Non-interactive CLI
@@ -434,7 +469,7 @@ Verifies:
 - ? All required directories exist
 - ? SKILL.md files present in repo
 - ? Skills installed in `~/.config/opencode/skills/`
-- ? Workflows/agents/commands in `~/.config/opencode/god-opencode/`
+- ? Workflows/agents/commands in `~/.config/opencode/cognivect/`
 - ? Router config is valid JSON
 - ? All agents have valid AGENT.md
 

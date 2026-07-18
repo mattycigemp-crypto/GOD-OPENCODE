@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 420" font-family="'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#09090b"/>
+      <stop offset="100%" style="stop-color:#18181b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Terminal window -->
+  <rect width="700" height="420" rx="12" fill="url(#bg)" stroke="#27272a" stroke-width="1.5"/>
+
+  <!-- Title bar -->
+  <rect width="700" height="36" rx="12" fill="#18181b"/>
+  <rect y="24" width="700" height="12" fill="#18181b"/>
+  <circle cx="20" cy="18" r="5" fill="#ef4444"/>
+  <circle cx="40" cy="18" r="5" fill="#eab308"/>
+  <circle cx="60" cy="18" r="5" fill="#22c55e"/>
+  <text x="350" y="22" text-anchor="middle" fill="#71717a" font-size="11" font-weight="500">CogniVect Terminal</text>
+
+  <!-- Line 1: Install -->
+  <text x="16" y="72" fill="#8b5cf6" font-size="13" font-weight="600">$</text>
+  <text x="30" y="72" fill="#fafafa" font-size="13">
+    <tspan fill="#8b5cf6">.\god-ui.ps1</tspan>
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="0.5s" fill="freeze"/>
+  </text>
+  <text x="30" y="92" fill="#22c55e" font-size="12" opacity="0">
+    &#x2714; 88 skills installed globally
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="1.5s" fill="freeze"/>
+  </text>
+  <text x="30" y="108" fill="#22c55e" font-size="12" opacity="0">
+    &#x2714; 16 workflows ready
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="1.8s" fill="freeze"/>
+  </text>
+
+  <!-- Line 2: Security scan -->
+  <text x="16" y="140" fill="#8b5cf6" font-size="13" font-weight="600" opacity="0">$</text>
+  <text x="30" y="140" fill="#fafafa" font-size="13" opacity="0">
+    <tspan fill="#06b6d4">.\god-cli.ps1</tspan> security-scan -Staged
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="2.5s" fill="freeze"/>
+  </text>
+  <text x="16" y="140" fill="#8b5cf6" font-size="13" font-weight="600" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="2.5s" fill="freeze"/>
+  </text>
+  <text x="30" y="160" fill="#22c55e" font-size="12" opacity="0">
+    &#x2714; [OK] No security issues found
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="3.5s" fill="freeze"/>
+  </text>
+
+  <!-- Line 3: Agent orchestrator -->
+  <text x="16" y="192" fill="#8b5cf6" font-size="13" font-weight="600" opacity="0">$</text>
+  <text x="30" y="192" fill="#fafafa" font-size="13" opacity="0">
+    <tspan fill="#ec4899">.\god-cli.ps1</tspan> agent-orch -Task "Build REST API"
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="4.0s" fill="freeze"/>
+  </text>
+  <text x="16" y="192" fill="#8b5cf6" font-size="13" font-weight="600" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="4.0s" fill="freeze"/>
+  </text>
+  <text x="30" y="212" fill="#71717a" font-size="12" opacity="0">
+    Selected: principal-engineer, backend-engineer, security-engineer
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="5.0s" fill="freeze"/>
+  </text>
+  <text x="30" y="228" fill="#22c55e" font-size="12" opacity="0">
+    &#x2714; ORCHESTRATION COMPLETE — 3 agents, 0 failures
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="5.3s" fill="freeze"/>
+  </text>
+
+  <!-- Line 4: Smart git -->
+  <text x="16" y="260" fill="#8b5cf6" font-size="13" font-weight="600" opacity="0">$</text>
+  <text x="30" y="260" fill="#fafafa" font-size="13" opacity="0">
+    <tspan fill="#eab308">.\god-cli.ps1</tspan> smart-git commit
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="6.0s" fill="freeze"/>
+  </text>
+  <text x="16" y="260" fill="#8b5cf6" font-size="13" font-weight="600" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="6.0s" fill="freeze"/>
+  </text>
+  <text x="30" y="280" fill="#22c55e" font-size="12" opacity="0">
+    &#x2714; [OK] Committed: feat(api): add REST endpoints with auth
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="7.0s" fill="freeze"/>
+  </text>
+
+  <!-- Line 5: Health check -->
+  <text x="16" y="312" fill="#8b5cf6" font-size="13" font-weight="600" opacity="0">$</text>
+  <text x="30" y="312" fill="#fafafa" font-size="13" opacity="0">
+    <tspan fill="#8b5cf6">.\god-health.ps1</tspan>
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="7.5s" fill="freeze"/>
+  </text>
+  <text x="16" y="312" fill="#8b5cf6" font-size="13" font-weight="600" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="7.5s" fill="freeze"/>
+  </text>
+  <text x="30" y="332" fill="#22c55e" font-size="12" opacity="0">
+    &#x2714; 56/56 checks passed
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="8.5s" fill="freeze"/>
+  </text>
+
+  <!-- Blinking cursor -->
+  <rect x="30" y="354" width="8" height="16" fill="#8b5cf6" opacity="1">
+    <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="410" width="700" height="10" rx="0" fill="url(#accent)" opacity="0.6"/>
+</svg>

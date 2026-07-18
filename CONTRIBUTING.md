@@ -1,8 +1,8 @@
-﻿# Contributing to GOD-OPENCODE
+﻿# Contributing to CogniVect
 
 ## Overview
 
-GOD-OPENCODE is file-based and declarative - contributing means adding or improving Markdown and JSON files. There are no runtime dependencies to install, no builds to run, and no databases to configure.
+CogniVect is file-based and declarative - contributing means adding or improving Markdown and JSON files. There are no runtime dependencies to install, no builds to run, and no databases to configure.
 
 ---
 

@@ -1,11 +1,11 @@
-# GOD-OPENCODE
+# CogniVect
 
 An AI engineering OS built on OpenCode. Provides specialized agents, domain skills, and structured workflows for production-grade software development.
 
 ## Project Structure
 
 ```
-GOD-OPENCODE/
+CogniVect/
 ├── opencode.json              # OpenCode config (agents, commands)
 ├── AGENTS.md                  # Project context for OpenCode
 ├── god-cli.ps1                # Non-interactive CLI
@@ -95,7 +95,7 @@ The terminal UI (`god-ui.ps1`) provides an interactive menu:
 
 ## Architecture
 
-GOD-OPENCODE extends OpenCode with three layers:
+CogniVect extends OpenCode with three layers:
 
 1. **Agents** — Specialized AI personas (backend-engineer, security-engineer, etc.)
 2. **Skills** — Domain knowledge loaded on-demand (fastapi, react, security-audit, etc.)
@@ -132,7 +132,7 @@ Run these from the repository root:
 ## OpenCode Integration
 
 - Skills installed to `~/.config/opencode/skills/`
-- Workflows/agents/commands copied to `~/.config/opencode/god-opencode/`
+- Workflows/agents/commands copied to `~/.config/opencode/cognivect/`
 - Use `skill` tool to load skills: `skill(name="auto-router")`
 - Use `@agent-name` to invoke subagents
 - Tab to switch between primary agents (Build/Plan)

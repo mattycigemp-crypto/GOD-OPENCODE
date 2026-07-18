@@ -1,6 +1,6 @@
-# GOD-OPENCODE Wiki
+# CogniVect Wiki
 
-> The single source of truth for GOD-OPENCODE — replacing scattered
+> The single source of truth for CogniVect — replacing scattered
 > README sections with an organized, browseable reference.
 
 Welcome. The wiki documents the system honestly, including the four
@@ -51,6 +51,6 @@ The wiki is also surfaced via:
 
 ## See also
 
-- [CHANGELOG.md](https://github.com/mattycigemp-crypto/GOD-OPENCODE/blob/master/CHANGELOG.md) — version history
-- [README.md](https://github.com/mattycigemp-crypto/GOD-OPENCODE/blob/master/README.md) — one-page overview
-- [AGENTS.md](https://github.com/mattycigemp-crypto/GOD-OPENCODE/blob/master/AGENTS.md) — context file for OpenCode
+- [CHANGELOG.md](https://github.com/mattycigemp-crypto/CogniVect/blob/master/CHANGELOG.md) — version history
+- [README.md](https://github.com/mattycigemp-crypto/CogniVect/blob/master/README.md) — one-page overview
+- [AGENTS.md](https://github.com/mattycigemp-crypto/CogniVect/blob/master/AGENTS.md) — context file for OpenCode

@@ -1,4 +1,4 @@
-# GOD-OPENCODE Architecture
+# CogniVect Architecture
 
 ## System Overview
 
@@ -11,7 +11,7 @@
                        │  skill(name="...") / @agent-name / /command
                        │
 ┌──────────────────────▼──────────────────────────────────────────┐
-│                      GOD-OPENCODE Layer                         │
+│                      CogniVect Layer                         │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐   │
 │  │    Agents    │  │    Skills    │  │      Workflows       │   │
 │  │  (10 roles)  │  │  (88 skills) │  │     (16 processes)   │   │
@@ -32,7 +32,7 @@
 
 ## Three-Layer Architecture
 
-GOD-OPENCODE extends OpenCode with three layers:
+CogniVect extends OpenCode with three layers:
 
 ### 1. Agents
 
