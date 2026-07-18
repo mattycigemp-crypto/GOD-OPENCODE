@@ -16,7 +16,6 @@ param(
     [string]$Task,
     [string]$Agents = "",
     [switch]$DryRun,
-    [switch]$ShowDetails
 )
 
 $ErrorActionPreference = "Stop"
