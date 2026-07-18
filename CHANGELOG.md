@@ -6,7 +6,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [1.6.0 - CogniVect Rebrand] - 2026-07-17
+## [1.6.0 - CogniVect Platform Launch] - 2026-07-17
 
 ### Added
 
