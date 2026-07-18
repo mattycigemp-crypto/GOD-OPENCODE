@@ -37,7 +37,7 @@
   <rect width="800" height="300" rx="12" fill="url(#bg2)" stroke="#27272a" stroke-width="1"/>
 
   <!-- Title -->
-  <text x="400" y="32" text-anchor="middle" fill="#fafafa" font-size="14" font-weight="700" letter-spacing="0.05em">COGNIVECT PIPELINE</text>
+  <text x="400" y="32" text-anchor="middle" fill="#fafafa" font-size="14" font-weight="700" letter-spacing="0.05em">GOD-OPENCODE PIPELINE</text>
   <text x="400" y="50" text-anchor="middle" fill="#71717a" font-size="11">Your request flows through 6 specialized layers</text>
 
   <!-- Step 1: Intent Detection -->
