@@ -32,9 +32,13 @@
 
 ## What is CogniVect?
 
-CogniVect wraps OpenCode with a modular framework that gives every request the right context: the expert agent persona, the domain-specific skill knowledge, and the proven workflow step sequence. Instead of getting a generic AI assistant, you get a senior principal engineer, a security auditor, a database architect, or a full-stack team — whichever the task calls for.
+CogniVect wraps OpenCode with a three-layer architecture that gives every request the right context:
 
-**Everything is file-based and transparent.** Skills, agents, workflows — all Markdown. Router — JSON config. Nothing is hidden.
+- **10 Specialist Agents** — senior principal engineers, security auditors, database architects, and more
+- **88 Domain Skills** — production-grade knowledge for fastapi, react, postgres, kubernetes, and 84 other domains
+- **16 Automated Workflows** — step-by-step processes for API development, security audits, debugging, and deployment
+
+Instead of getting a generic AI assistant, you get the right expert for the job. Everything is file-based, transparent, and extensible.
 
 ---
 
