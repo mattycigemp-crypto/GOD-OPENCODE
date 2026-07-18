@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="brand/icon.png" alt="CogniVect" width="120">
+  <img src="brand/wordmark.png" alt="CogniVect" width="120">
 </p>
 
 <h1 align="center">CogniVect</h1>
