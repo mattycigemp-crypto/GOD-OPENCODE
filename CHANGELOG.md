@@ -18,6 +18,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Test-Driven AI Workflow** ([`workflows/test-driven-ai.md`](workflows/test-driven-ai.md)) — automated test generation workflow that generates tests before code, then implements to pass.
 
 ### Changed
+- **Parent Brand**: CogniVect is the parent brand, GOD-OPENCODE is the flagship product. Platform positioning established.
 
 - **Terminal UI** ([`god-ui.ps1`](god-ui.ps1) v6.0) — added Security Scanner (T), Agent Orchestrator (A), MCP Connectors (M), Smart Git (G) menu items.
 - **CLI** ([`god-cli.ps1`](god-cli.ps1) v1.1) — added `security-scan`, `agent-orch`, `mcp-connect`, `smart-git` commands.

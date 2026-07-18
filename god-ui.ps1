@@ -1,5 +1,5 @@
 # ============================================
-# CogniVect TERMINAL INTERFACE
+# CogniVect — GOD-OPENCODE Terminal Interface
 # Version 6.0 - v1.6.0 with security scanner, agent orchestrator, MCP connectors, smart git
 # ============================================
 # Usage: .\god-ui.ps1
@@ -697,7 +697,7 @@ while ($true) {
         "N" { Clear-Screen ; Show-WhatsNew        ; Wait-Key }
         "Q" {
             Clear-Screen
-            Write-Host "" ; Write-Host "  CogniVect UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""
+            Write-Host "" ; Write-Host "  CogniVect GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""
             exit
         }
         default {
