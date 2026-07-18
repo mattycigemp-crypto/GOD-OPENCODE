@@ -112,7 +112,7 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
       "category": "core",
-      "skills_description": "Read, write, and list files in the project. Wraps the official Anthropic MCP filesystem server as a GOD-OPENCODE skill so any agent can opt in."
+      "skills_description": "Read, write, and list files in the project. Wraps the official Anthropic MCP filesystem server as a CogniVect skill so any agent can opt in."
     },
     "github": {
       "transport": "stdio",
@@ -120,7 +120,7 @@
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}" },
       "category": "devops",
-      "skills_description": "Interact with GitHub repositories, issues, and pull requests from inside a GOD-OPENCODE session."
+      "skills_description": "Interact with GitHub repositories, issues, and pull requests from inside a CogniVect session."
     },
     "playwright": {
       "transport": "stdio",

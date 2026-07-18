@@ -1,5 +1,5 @@
 ﻿# ============================================
-# GOD-OPENCODE HEALTH CHECK
+# CogniVect HEALTH CHECK
 # Version 2.0
 # ============================================
 
@@ -32,7 +32,7 @@ function Check-Fail($Component, $Expected, $Actual) {
 
 Write-Host ""
 Write-Host "======================================================"
-Write-Host "          GOD-OPENCODE HEALTH CHECK v2.0"
+Write-Host "          CogniVect HEALTH CHECK v2.0"
 Write-Host "======================================================"
 Write-Host ""
 

@@ -1,5 +1,5 @@
 # ============================================
-# GOD-OPENCODE SMART INSTALLER
+# CogniVect SMART INSTALLER
 # Version 2.2
 # ============================================
 
@@ -9,7 +9,7 @@ $DataDir = Join-Path $HOME ".config\opencode\god-opencode"
 
 Write-Host ""
 Write-Host "============================================"
-Write-Host "     GOD-OPENCODE SMART INSTALLER"
+Write-Host "     CogniVect SMART INSTALLER"
 Write-Host "============================================"
 Write-Host ""
 
@@ -365,7 +365,7 @@ if (Test-Path $GlobalConfig) {
 # GENERATE MCP SKILL WRAPPERS
 # ============================================
 # After merging mcp_servers, generate a SKILL.md wrapper for each so any
-# GOD-OPENCODE skill installer pulls them as regular skills.
+# CogniVect skill installer pulls them as regular skills.
 
 Write-Host ""
 Write-Host "--- Generating MCP Skill Wrappers ---"

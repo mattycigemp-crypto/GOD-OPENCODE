@@ -37,7 +37,7 @@
   <img src="brand/pipeline-graph.svg" alt="CogniVect Pipeline" width="800">
 </p>
 <p align="center">
-  <a href="https://github.com/mattycigemp-crypto/CogniVect/releases/tag/v1.6.0"><img alt="v1.6.0" src="https://img.shields.io/badge/release-v1.6.0-8b5cf6?style=for-the-badge"/></a>
+  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.6.0"><img alt="v1.6.0" src="https://img.shields.io/badge/release-v1.6.0-8b5cf6?style=for-the-badge"/></a>
 </p>
 
 <p align="center">
@@ -69,7 +69,7 @@ CogniVect wraps OpenCode with a modular framework that gives every request the r
 
 ```powershell
 # Clone and enter the directory
-git clone https://github.com/mattycigemp-crypto/CogniVect
+git clone https://github.com/mattycigemp-crypto/GOD-OPENCODE
 cd CogniVect
 
 # Launch the terminal UI (main command)

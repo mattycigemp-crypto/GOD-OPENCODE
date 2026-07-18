@@ -1,5 +1,5 @@
 # ============================================
-# GOD-OPENCODE TERMINAL INTERFACE
+# CogniVect TERMINAL INTERFACE
 # Version 6.0 - v1.6.0 with security scanner, agent orchestrator, MCP connectors, smart git
 # ============================================
 # Usage: .\god-ui.ps1
@@ -150,13 +150,13 @@ function Get-GlobalInstallStatus {
         $result.HasSkills  = $true
         $result.SkillCount = (Get-ChildItem "$root/skills" -Directory -ErrorAction SilentlyContinue).Count
     }
-    if (Test-Path "$root/god-opencode/agents") {
+    if (Test-Path "$root/cognivect/agents") {
         $result.HasAgents  = $true
-        $result.AgentCount = (Get-ChildItem "$root/god-opencode/agents" -Directory -ErrorAction SilentlyContinue).Count
+        $result.AgentCount = (Get-ChildItem "$root/cognivect/agents" -Directory -ErrorAction SilentlyContinue).Count
     }
-    if (Test-Path "$root/god-opencode/workflows") {
+    if (Test-Path "$root/cognivect/workflows") {
         $result.HasWorkflows  = $true
-        $result.WorkflowCount = (Get-ChildItem "$root/god-opencode/workflows" -File -ErrorAction SilentlyContinue).Count
+        $result.WorkflowCount = (Get-ChildItem "$root/cognivect/workflows" -File -ErrorAction SilentlyContinue).Count
     }
     if (Test-Path "$root/opencode.jsonc") {
         $cfg = Get-Content "$root/opencode.jsonc" -Raw -ErrorAction SilentlyContinue
@@ -277,7 +277,7 @@ function Show-InstallGlobally {
     Write-Host "  This will:" -ForegroundColor $Colors.Accent
     Write-Host "    - Copy 88 SKILL.md files into ~/.config/opencode/skills/"
     Write-Host "    - Merge 10 agent configs into ~/.config/opencode/opencode.jsonc"
-    Write-Host "    - Copy workflows/agents/commands into ~/.config/opencode/god-opencode/"
+    Write-Host "    - Copy workflows/agents/commands into ~/.config/opencode/cognivect/"
     Write-Host "    - Update opencode.jsonc instructions glob (idempotent)"
     Write-Host ""
     Write-Host "  Source: .\install.ps1" -ForegroundColor $Colors.Muted
@@ -374,7 +374,7 @@ function Show-CrossPlatform {
     Write-Host "  Get pwsh: https://aka.ms/powershell" -ForegroundColor $Colors.Muted
     Write-Host ""
     Write-Section "Container (any platform with Docker)"
-    Write-Host "    docker pull ghcr.io/mattycigemp-crypto/god-opencode:latest" -ForegroundColor $Colors.Magenta
+    Write-Host "    docker pull ghcr.io/mattycigemp-crypto/cognivect:latest" -ForegroundColor $Colors.Magenta
 }
 
 function Show-TestRunner {
@@ -697,7 +697,7 @@ while ($true) {
         "N" { Clear-Screen ; Show-WhatsNew        ; Wait-Key }
         "Q" {
             Clear-Screen
-            Write-Host "" ; Write-Host "  GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""
+            Write-Host "" ; Write-Host "  CogniVect UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""
             exit
         }
         default {
