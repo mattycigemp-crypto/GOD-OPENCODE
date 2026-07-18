@@ -2,39 +2,40 @@
   <img src="brand/wordmark.png" alt="CogniVect" width="400">
 </p>
 
-<h3 align="center">CogniVect — the AI engineering OS that thinks in vectors.</h3>
+<h3 align="center">GOD-OPENCODE — the AI engineering OS that thinks in vectors.</h3>
 
 <p align="center">
-  <strong>GOD-OPENCODE</strong> is the flagship product of CogniVect — 10 specialist agents, 88 domain skills, 16 automated workflows.
+  Built by <strong>CogniVect</strong> — 10 specialist agents, 88 domain skills, 16 automated workflows.
 </p>
 
 <p align="center">
   <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.6.0"><img alt="v1.6.0" src="https://img.shields.io/badge/release-v1.6.0-8b5cf6?style=for-the-badge"/></a>
   <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge"/></a>
+  <a href="https://cognivect.com"><img alt="CogniVect" src="https://img.shields.io/badge/company-CogniVect-8b5cf6?style=for-the-badge"/></a>
 </p>
 
 ---
 
-## What is CogniVect?
+## What is GOD-OPENCODE?
 
-CogniVect is an AI engineering platform built on top of OpenCode. It wraps OpenCode with a three-layer architecture that gives every request the right context:
+GOD-OPENCODE wraps OpenCode with a three-layer architecture that gives every request the right context:
 
 - **10 Specialist Agents** — senior principal engineers, security auditors, database architects, and more
 - **88 Domain Skills** — production-grade knowledge for fastapi, react, postgres, kubernetes, and 84 other domains
 - **16 Automated Workflows** — step-by-step processes for API development, security audits, debugging, and deployment
 
-**GOD-OPENCODE** is the first product built on the CogniVect platform. Instead of getting a generic AI assistant, you get the right expert for the job. Everything is file-based, transparent, and extensible.
+Instead of getting a generic AI assistant, you get the right expert for the job. Everything is file-based, transparent, and extensible.
 
 ---
 
 ## Animated Demo
 
 <p align="center">
-  <img src="brand/terminal-demo.svg" alt="CogniVect Terminal Demo" width="700">
+  <img src="brand/terminal-demo.svg" alt="GOD-OPENCODE Terminal Demo" width="700">
 </p>
 
 <p align="center">
-  <img src="brand/pipeline-graph.svg" alt="CogniVect Pipeline" width="800">
+  <img src="brand/pipeline-graph.svg" alt="GOD-OPENCODE Pipeline" width="800">
 </p>
 
 ---
@@ -170,6 +171,15 @@ GOD-OPENCODE/
 ├── memory/                    # Long-term memory store
 └── ui/                        # Browser dashboard
 ```
+
+---
+
+## About CogniVect
+
+CogniVect is the company behind GOD-OPENCODE. We build AI-powered tools that help developers ship faster with confidence.
+
+- Website: [cognivect.com](https://cognivect.com)
+- GitHub: [github.com/mattycigemp-crypto](https://github.com/mattycigemp-crypto)
 
 ---
 
