@@ -218,12 +218,25 @@ function Show-Dashboard {
     Write-Section "Architectural Features"
     $cg = Get-CodeGraphStatus
     $ms = Get-MemoryStatus
-    Write-Status "Code Graph"        (if ($cg.Active) { "$($cg.Functions) functions, $($cg.Edges) edges" } else { "not built (use [3])" }) (if ($cg.Active) { "Green" } else { "Yellow" })
+    if ($cg.Active) {
+        $cgValue = "$($cg.Functions) functions, $($cg.Edges) edges"
+        $cgColor = "Green"
+    } else {
+        $cgValue = "not built (use [3])"
+        $cgColor = "Yellow"
+    }
+    Write-Status "Code Graph" $cgValue $cgColor
     Write-Status "  last updated"     $cg.Updated "DarkGray"
     Write-Status "Dynamic Skills"    "skill-fragment.ps1 ready" "Cyan"
     Write-Status "Cross-Platform"    "install.sh + install.cmd shims" "Cyan"
-    Write-Status "Long-term Memory"   (if ($ms.Active) { "$($ms.Count) artifacts in memory/" } else { "empty (use [5])" }) (if ($ms.Active) { "Green" } else { "Yellow" })
-
+    if ($ms.Active) {
+        $msValue = "$($ms.Count) artifacts in memory/"
+        $msColor = "Green"
+    } else {
+        $msValue = "empty (use [5])"
+        $msColor = "Yellow"
+    }
+    Write-Status "Long-term Memory" $msValue $msColor
     # -- Quick Actions --
     Write-Section "Quick Actions"
     Write-MenuItem "Enter" "Install Globally"      "Default action - skills/agents/workflows -> ~/.config/opencode" "Magenta" "DEFAULT"
