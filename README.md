@@ -1,20 +1,29 @@
 <p align="center">
-  <img src="brand/wordmark.png" alt="CogniVect" width="120">
+  <img src="brand/wordmark.png" alt="CogniVect" width="400">
 </p>
 
-<h1 align="center">CogniVect</h1>
+<h3 align="center">CogniVect — the AI engineering OS that thinks in vectors.</h3>
 
 <p align="center">
-  <strong>The AI engineering OS that thinks in vectors.</strong>
-</p>
-
-<p align="center">
-  10 specialist agents, 88 domain skills, 16 automated workflows — one command bootstraps a production-grade AI engineering environment.
+  <strong>GOD-OPENCODE</strong> is the flagship product of CogniVect — 10 specialist agents, 88 domain skills, 16 automated workflows.
 </p>
 
 <p align="center">
   <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.6.0"><img alt="v1.6.0" src="https://img.shields.io/badge/release-v1.6.0-8b5cf6?style=for-the-badge"/></a>
+  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge"/></a>
 </p>
+
+---
+
+## What is CogniVect?
+
+CogniVect is an AI engineering platform built on top of OpenCode. It wraps OpenCode with a three-layer architecture that gives every request the right context:
+
+- **10 Specialist Agents** — senior principal engineers, security auditors, database architects, and more
+- **88 Domain Skills** — production-grade knowledge for fastapi, react, postgres, kubernetes, and 84 other domains
+- **16 Automated Workflows** — step-by-step processes for API development, security audits, debugging, and deployment
+
+**GOD-OPENCODE** is the first product built on the CogniVect platform. Instead of getting a generic AI assistant, you get the right expert for the job. Everything is file-based, transparent, and extensible.
 
 ---
 
@@ -27,18 +36,6 @@
 <p align="center">
   <img src="brand/pipeline-graph.svg" alt="CogniVect Pipeline" width="800">
 </p>
-
----
-
-## What is CogniVect?
-
-CogniVect wraps OpenCode with a three-layer architecture that gives every request the right context:
-
-- **10 Specialist Agents** — senior principal engineers, security auditors, database architects, and more
-- **88 Domain Skills** — production-grade knowledge for fastapi, react, postgres, kubernetes, and 84 other domains
-- **16 Automated Workflows** — step-by-step processes for API development, security audits, debugging, and deployment
-
-Instead of getting a generic AI assistant, you get the right expert for the job. Everything is file-based, transparent, and extensible.
 
 ---
 
@@ -60,7 +57,7 @@ Press Enter to install globally — installs skills/agents/workflows into `~/.co
 ## What's New in v1.6.0
 
 | Feature | Command | Purpose |
-|---------|---------|---------|
+|---------|---------|--------|
 | Security Scanner | `T` in TUI / `.\god-cli.ps1 security-scan` | Pre-commit secret/vulnerability scan |
 | Agent Orchestrator | `A` in TUI / `.\god-cli.ps1 agent-orch` | Multi-agent task delegation |
 | MCP Connectors | `M` in TUI / `.\god-cli.ps1 mcp-connect` | Chrome/DB/Jira/Monitoring integration |
@@ -72,7 +69,7 @@ Press Enter to install globally — installs skills/agents/workflows into `~/.co
 ## What You Get
 
 | Component | Count | Purpose |
-|-----------|-------|---------|
+|-----------|-------|--------|
 | Agents | 10 | Specialized AI personas |
 | Skills | 88 | Domain knowledge loaded on-demand |
 | Workflows | 16 | Step-by-step processes |
@@ -159,7 +156,7 @@ User Request
 ## Project Structure
 
 ```
-CogniVect/
+GOD-OPENCODE/
 ├── god-ui.ps1                 # Interactive terminal UI (TUI)
 ├── god-cli.ps1                # Non-interactive CLI
 ├── install.ps1                # Global installer
