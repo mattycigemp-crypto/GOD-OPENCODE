@@ -10,7 +10,7 @@ GOD-OPENCODE is file-based and declarative - contributing means adding or improv
 
 1. Create a directory: `skills/{category}/{skill-name}/`
    - Use lowercase letters and hyphens only (e.g., `skills/backend/graphql-subscriptions/`)
-   - Valid categories: `ai`, `backend`, `frontend`, `devops`, `security`, `database`, `advanced`, `testing`
+   - Valid categories: `ai`, `backend`, `frontend`, `devops`, `security`, `database`, `advanced`, `testing`, `languages`, `core`, `orchestration`, `writing`
 
 2. Create `skills/{category}/{skill-name}/SKILL.md` with all required sections:
 

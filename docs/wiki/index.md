@@ -17,7 +17,18 @@ architectural concerns we're actively working on (see [Roadmap](roadmap.md)).
 | [Cross-Platform](cross-platform.md) | Linux / macOS / Windows / Docker install matrix |
 | [Memory System](memory.md) | Long-term session + project memory |
 | [Roadmap](roadmap.md) | Four open architectural concerns and how we're addressing them |
-| [v1.6.0 Features](#v160-features) | Security Scanner, Agent Orchestrator, MCP Connectors, Smart Git |
+
+## v1.6.0 Features
+
+New in v1.6.0 — five features from deep research on developer needs:
+
+| Feature | Access | Purpose |
+|---------|--------|--------|
+| Security Scanner | TUI `[T]` / CLI `security-scan` | Pre-commit secret/vulnerability scan |
+| Agent Orchestrator | TUI `[A]` / CLI `agent-orch` | Multi-agent task delegation |
+| MCP Connectors | TUI `[M]` / CLI `mcp-connect` | Chrome/DB/Jira/Monitoring integration |
+| Smart Git | TUI `[G]` / CLI `smart-git` | Atomic commits, save points, rollback |
+| Test-Driven AI | Workflow `test-driven-ai.md` | Generate tests before code |
 
 ## How this wiki is built
 
