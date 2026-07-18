@@ -1,11 +1,11 @@
-ï»¿<p align="center">
+<p align="center">
   <img src="brand/wordmark.png" alt="GOD-OPENCODE" width="600">
 </p>
 
 <h3 align="center">An AI engineering operating system built on top of OpenCode.</h3>
 
 <p align="center">
-  One command bootstraps a complete, production-grade AI engineering environment â€” with the right experts, skills, workflows, and tools already loaded.
+  One command bootstraps a complete, production-grade AI engineering environment — with the right experts, skills, workflows, and tools already loaded.
 </p>
 
 <p align="center">
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <strong>ğŸ†• v1.6.0 â€” five more features:</strong> <a href="#security-scanner">security scanner</a> Â· <a href="#agent-orchestrator">agent orchestrator</a> Â· <a href="#mcp-connectors">MCP connectors</a> Â· <a href="#smart-git">smart git</a> Â· <a href="#test-driven-ai-workflow">test-driven AI</a>
+  <strong>?? v1.6.0 — five more features:</strong> <a href="#security-scanner">security scanner</a> · <a href="#agent-orchestrator">agent orchestrator</a> · <a href="#mcp-connectors">MCP connectors</a> · <a href="#smart-git">smart git</a> · <a href="#test-driven-ai-workflow">test-driven AI</a>
 </p>
 
 ---
@@ -22,15 +22,15 @@
 
 GOD-OPENCODE provides a structured, production-grade AI engineering environment on top of OpenCode. It routes every request to the right expert agent, loads domain-specific skills on demand, and executes proven workflows step by step.
 
-## ğŸ“‹ Overview
+## ?? Overview
 
-GOD-OPENCODE wraps OpenCode with a modular framework that gives every request the right context: the expert agent persona, the domain-specific skill knowledge, and the proven workflow step sequence. Instead of getting a generic AI assistant, you get a senior principal engineer, a security auditor, a database architect, or a full-stack team â€” whichever the task calls for.
+GOD-OPENCODE wraps OpenCode with a modular framework that gives every request the right context: the expert agent persona, the domain-specific skill knowledge, and the proven workflow step sequence. Instead of getting a generic AI assistant, you get a senior principal engineer, a security auditor, a database architect, or a full-stack team — whichever the task calls for.
 
-**Everything is file-based and transparent.** Skills, agents, workflows â€” all Markdown. Router â€” JSON config. Nothing is hidden.
+**Everything is file-based and transparent.** Skills, agents, workflows — all Markdown. Router — JSON config. Nothing is hidden.
 
 ---
 
-## ğŸš€ Quick Start
+## ?? Quick Start
 
 ```powershell
 # Clone and enter the directory
@@ -41,7 +41,7 @@ cd GOD-OPENCODE
 .\god-ui.ps1
 ```
 
-The TUI gives you everything: system overview, install, health check, tests, router, and a link to the browser dashboard. **Press Enter to install globally (the default action)** â€” installs skills/agents/workflows into `~/.config/opencode/`.
+The TUI gives you everything: system overview, install, health check, tests, router, and a link to the browser dashboard. **Press Enter to install globally (the default action)** — installs skills/agents/workflows into `~/.config/opencode/`.
 
 ### Alternative: Direct OpenCode
 
@@ -77,11 +77,11 @@ Each `v*` tag push publishes a versioned image (`ghcr.io/.../god-opencode:v<vers
 
 **Cross-platform shims:** `bash install.sh` (requires `pwsh`) on Linux/macOS/WSL; `install.cmd` on Windows cmd.exe. See [docs/wiki/cross-platform.md](docs/wiki/cross-platform.md).
 
-**Wiki:** the eight-page reference at `docs/wiki/` is built and published automatically to **GitHub Pages** on every push to `master` â€” see [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/). One-time setup: repo **Settings â†’ Pages â†’ Build and deployment â†’ Source: GitHub Actions â†’ workflow: `Build and Deploy Wiki`**, then Save.
+**Wiki:** the eight-page reference at `docs/wiki/` is built and published automatically to **GitHub Pages** on every push to `master` — see [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/). One-time setup: repo **Settings ? Pages ? Build and deployment ? Source: GitHub Actions ? workflow: `Build and Deploy Wiki`**, then Save.
 
 ---
 
-## ğŸ†• What's New in v1.6.0
+## ?? What's New in v1.6.0
 
 Five new capabilities addressing the latest research on what developers want from AI coding tools. See [CHANGELOG.md](CHANGELOG.md) for the full record.
 
@@ -144,9 +144,9 @@ Automated test generation workflow:
 
 ---
 
-## ğŸ†• What's New in v1.4.0
+## ?? What's New in v1.4.0
 
-Five new capabilities addressing the remaining roadmap concerns â€” persistent memory, wiki generation, native bash installer, multi-language code graph, and smart skill loading. See [CHANGELOG.md](CHANGELOG.md) for the full record.
+Five new capabilities addressing the remaining roadmap concerns — persistent memory, wiki generation, native bash installer, multi-language code graph, and smart skill loading. See [CHANGELOG.md](CHANGELOG.md) for the full record.
 
 ### Persistent Session Memory
 
@@ -172,11 +172,11 @@ Auto-generates comprehensive reference pages from skill, agent, and workflow con
 .\scripts\build-wiki.ps1 -AgentsOnly      # rebuild agents reference only
 ```
 
-Outputs `docs/wiki/skills-reference.md`, `agents-reference.md`, and `workflows-reference.md` â€” wired into the wiki CI pipeline.
+Outputs `docs/wiki/skills-reference.md`, `agents-reference.md`, and `workflows-reference.md` — wired into the wiki CI pipeline.
 
 ### Native Bash Installer
 
-Full native bash installer â€” **no PowerShell dependency** on Linux/macOS/WSL:
+Full native bash installer — **no PowerShell dependency** on Linux/macOS/WSL:
 
 ```bash
 bash install.sh              # interactive install
@@ -206,9 +206,9 @@ Context-aware section extraction with TF-IDF scoring and LRU caching:
 
 ---
 
-## ğŸ†• What's New in v1.3.0
+## ?? What's New in v1.3.0
 
-Five new capabilities â€” schema, MCP bridge, registry, workflow tests, Cursor export â€” and a major UX unlock for non-OpenCode hosts. See [CHANGELOG.md](CHANGELOG.md) and the [wiki](docs/wiki/index.md) for the canonical record.
+Five new capabilities — schema, MCP bridge, registry, workflow tests, Cursor export — and a major UX unlock for non-OpenCode hosts. See [CHANGELOG.md](CHANGELOG.md) and the [wiki](docs/wiki/index.md) for the canonical record.
 
 ### Use with Cursor (or Windsurf / Aider)
 
@@ -220,7 +220,7 @@ Five new capabilities â€” schema, MCP bridge, registry, workflow tests, Cursor e
 cp dist\cursorrules\backend-engineer.cursorrules <your-project>\.cursorrules
 ```
 
-Each `.cursorrules` includes the agent's role, responsibilities, standards, and skill allowlist â€” same persona you would see inside OpenCode. See [`scripts/export-cursorrules.ps1`](scripts/export-cursorrules.ps1).
+Each `.cursorrules` includes the agent's role, responsibilities, standards, and skill allowlist — same persona you would see inside OpenCode. See [`scripts/export-cursorrules.ps1`](scripts/export-cursorrules.ps1).
 
 ### Aggregate skills from anywhere
 
@@ -236,35 +236,35 @@ Then copy `skills-mirror/<source>/skills/<category>/<name>` into your own `skill
 
 ### Live skill graph
 
-Every wiki build now re-emits `docs/wiki/_data/architecture.mmd` from the actual `agents/` + `skills/` + `workflows/` tree. The wiki architecture page renders it as a live Mermaid graph â€” never stale. Generator: [`scripts/build-skill-graph.ps1`](scripts/build-skill-graph.ps1).
+Every wiki build now re-emits `docs/wiki/_data/architecture.mmd` from the actual `agents/` + `skills/` + `workflows/` tree. The wiki architecture page renders it as a live Mermaid graph — never stale. Generator: [`scripts/build-skill-graph.ps1`](scripts/build-skill-graph.ps1).
 
 ### Schema-validated opencode.json
 
-[`schemas/opencode.schema.json`](schemas/opencode.schema.json) is now a JSON Schema 2020-12 that any editor (Cursor, VS Code) auto-lints against. Conditional `then:` rules ensure MCP servers carry `command` (stdio) or `url` (http/sse) â€” never neither, never both.
+[`schemas/opencode.schema.json`](schemas/opencode.schema.json) is now a JSON Schema 2020-12 that any editor (Cursor, VS Code) auto-lints against. Conditional `then:` rules ensure MCP servers carry `command` (stdio) or `url` (http/sse) — never neither, never both.
 
 ### Cross-host MCP bridge
 
-Every entry in `opencode.json#mcp_servers` is wrapped as `skills/<category>/mcp-<name>/SKILL.md` by `scripts/mcp-to-skill.ps1` and shipped through the global installer â€” any OpenCode agent can now opt in to any registered MCP server as if it were a regular skill.
+Every entry in `opencode.json#mcp_servers` is wrapped as `skills/<category>/mcp-<name>/SKILL.md` by `scripts/mcp-to-skill.ps1` and shipped through the global installer — any OpenCode agent can now opt in to any registered MCP server as if it were a regular skill.
 
 ---
 
 ## Architectural features (1.2)
 
-Four open concerns documented in [docs/wiki/roadmap.md](docs/wiki/roadmap.md) â€” all four have a working MVP shipped:
+Four open concerns documented in [docs/wiki/roadmap.md](docs/wiki/roadmap.md) — all four have a working MVP shipped:
 
 | Concern | MVP (1.2) | Where |
 |---------|-----------|-------|
-| Code graph (no function-to-file call trees) | âœ… `scripts/code-graph.ps1` â€” 6 languages (PS, Python, JS, TS, Go, Rust) | v1.2 + v1.4 |
-| Static markdown prompts (full SKILL.md over-consumes context) | âœ… `scripts/smart-loader.ps1` â€” TF-IDF scoring + LRU cache | v1.2 + v1.4 |
-| Heavy PowerShell reliance (Linux/macOS friction) | âœ… `install.sh` (pure bash, no pwsh needed) + `install.cmd` + ghcr.io | v1.2 + v1.4 |
-| No long-term memory between sessions | âœ… `scripts/session-memory.ps1` â€” session tracking + preference learning | v1.2 + v1.4 |
-| Wiki not auto-generated from content | âœ… `scripts/build-wiki.ps1` â€” auto-generates reference pages from content | v1.4 |
+| Code graph (no function-to-file call trees) | ? `scripts/code-graph.ps1` — 6 languages (PS, Python, JS, TS, Go, Rust) | v1.2 + v1.4 |
+| Static markdown prompts (full SKILL.md over-consumes context) | ? `scripts/smart-loader.ps1` — TF-IDF scoring + LRU cache | v1.2 + v1.4 |
+| Heavy PowerShell reliance (Linux/macOS friction) | ? `install.sh` (pure bash, no pwsh needed) + `install.cmd` + ghcr.io | v1.2 + v1.4 |
+| No long-term memory between sessions | ? `scripts/session-memory.ps1` — session tracking + preference learning | v1.2 + v1.4 |
+| Wiki not auto-generated from content | ? `scripts/build-wiki.ps1` — auto-generates reference pages from content | v1.4 |
 
-Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md) and is auto-published to **GitHub Pages** by `.github/workflows/wiki-pages.yml` on every push to `master` (mkdocs-material, dark theme, instant search, pinned to the 9.5.x minor). Browse online: [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/) (after a one-time Settings â†’ Pages â†’ Source: **GitHub Actions** toggle). Each MVP has a concrete next milestone in the roadmap page.
+Full wiki lives at [docs/wiki/index.md](docs/wiki/index.md) and is auto-published to **GitHub Pages** by `.github/workflows/wiki-pages.yml` on every push to `master` (mkdocs-material, dark theme, instant search, pinned to the 9.5.x minor). Browse online: [mattycigemp-crypto.github.io/GOD-OPENCODE](https://mattycigemp-crypto.github.io/GOD-OPENCODE/) (after a one-time Settings ? Pages ? Source: **GitHub Actions** toggle). Each MVP has a concrete next milestone in the roadmap page.
 
 ---
 
-## ğŸ§  How It Works
+## ?? How It Works
 
 ### Automatic Discovery
 
@@ -272,43 +272,43 @@ When you run `opencode` in the GOD-OPENCODE directory, OpenCode **automatically*
 
 | What | Where | Status |
 |------|-------|--------|
-| ğŸ“„ Project context | `AGENTS.md` | âœ… Automatic |
-| âš™ï¸ Agent configs | `opencode.json` | âœ… Automatic |
-| ğŸ¯ Project-local skills | `.opencode/skills/` | âœ… Automatic |
-| ğŸŒ Global skills | `~/.config/opencode/skills/` | âš ï¸ Requires `install.ps1` |
+| ?? Project context | `AGENTS.md` | ? Automatic |
+| ?? Agent configs | `opencode.json` | ? Automatic |
+| ?? Project-local skills | `.opencode/skills/` | ? Automatic |
+| ?? Global skills | `~/.config/opencode/skills/` | ?? Requires `install.ps1` |
 
 ### Routing Flow
 
 ```
 You type: "security audit the auth flow"
-         â†“
+         ?
 auto-router detects intent: secure (confidence: high)
-         â†“
+         ?
 auto-router matches workflow: security-audit
-         â†“
+         ?
 workflow-engine loads: workflows/security-audit.md
-         â†“
+         ?
 Executes 8 steps, loading skills per step
-         â†“
+         ?
 agent-orchestrator switches agents when needed
 ```
 
 ---
 
-## ğŸ¯ What You Get
+## ?? What You Get
 
 | Component | Count | Purpose |
 |-----------|-------|---------|
-| ğŸ¤– Agents | 10 | Specialized AI personas |
-| ğŸ§© Skills | 88 | Domain knowledge loaded on-demand |
-| ğŸ“‹ Workflows | 16 | Step-by-step processes |
-| âš¡ Commands | 6 | Slash commands for common tasks |
-| ğŸ”§ CLI | 1 | Non-interactive command-line interface |
-| ğŸ›¡ï¸ Security | 1 | Pre-commit scanning for secrets/vulns |
+| ?? Agents | 10 | Specialized AI personas |
+| ?? Skills | 88 | Domain knowledge loaded on-demand |
+| ?? Workflows | 16 | Step-by-step processes |
+| ? Commands | 6 | Slash commands for common tasks |
+| ?? CLI | 1 | Non-interactive command-line interface |
+| ??? Security | 1 | Pre-commit scanning for secrets/vulns |
 
 ---
 
-## ğŸ¤– Agents
+## ?? Agents
 
 Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab.
 
@@ -327,7 +327,7 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 
 ---
 
-## âš¡ Slash Commands
+## ? Slash Commands
 
 | Command | What It Does | Agent Used |
 |---------|--------------|------------|
@@ -340,76 +340,76 @@ Invoke with `@agent-name` in OpenCode, or switch between primary agents with Tab
 
 ---
 
-## ğŸ§© Skills (88 Total)
+## ?? Skills (88 Total)
 
 ### Orchestration (4)
-`auto-router` Â· `workflow-engine` Â· `agent-orchestrator` Â· `command-builder`
+`auto-router` · `workflow-engine` · `agent-orchestrator` · `command-builder`
 
 ### Backend (10)
-`api-design` Â· `fastapi` Â· `express` Â· `graphql` Â· `django` Â· `database-design` Â· `postgres` Â· `mongodb` Â· `redis` Â· `sqlite`
+`api-design` · `fastapi` · `express` · `graphql` · `django` · `database-design` · `postgres` · `mongodb` · `redis` · `sqlite`
 
 ### Frontend (10)
-`react` Â· `nextjs` Â· `typescript` Â· `css-architecture` Â· `state-management` Â· `component-design` Â· `web-performance` Â· `testing-frontend` Â· `accessibility` Â· `bundling`
+`react` · `nextjs` · `typescript` · `css-architecture` · `state-management` · `component-design` · `web-performance` · `testing-frontend` · `accessibility` · `bundling`
 
 ### Security (6)
-`authentication` Â· `cryptography` Â· `penetration-testing` Â· `secure-coding` Â· `security-audit` Â· `security-scanner`
+`authentication` · `cryptography` · `penetration-testing` · `secure-coding` · `security-audit` · `security-scanner`
 
 ### DevOps (8)
-`docker` Â· `kubernetes` Â· `ci-cd` Â· `terraform` Â· `cloud` Â· `linux` Â· `networking` Â· `github-actions`
+`docker` · `kubernetes` · `ci-cd` · `terraform` · `cloud` · `linux` · `networking` · `github-actions`
 
 ### Database (5)
-`query-optimization` Â· `schema-design` Â· `replication` Â· `sharding` Â· `data-migration`
+`query-optimization` · `schema-design` · `replication` · `sharding` · `data-migration`
 
 ### Testing (5)
-`unit-testing` Â· `integration-testing` Â· `e2e-testing` Â· `test-driven-development` Â· `property-based-testing`
+`unit-testing` · `integration-testing` · `e2e-testing` · `test-driven-development` · `property-based-testing`
 
 ### AI (10)
-`ai-engineer` Â· `llm-engineer` Â· `rag-engineer` Â· `embedding-engineer` Â· `evaluation-engineer` Â· `prompt-engineer` Â· `mcp-builder` Â· `agent-builder` Â· `tool-builder` Â· `workflow-designer`
+`ai-engineer` · `llm-engineer` · `rag-engineer` · `embedding-engineer` · `evaluation-engineer` · `prompt-engineer` · `mcp-builder` · `agent-builder` · `tool-builder` · `workflow-designer`
 
 ### Languages (10)
-`python-expert` Â· `javascript-expert` Â· `typescript-expert` Â· `go-expert` Â· `rust-expert` Â· `java-expert` Â· `cpp-expert` Â· `node-expert` Â· `react-expert` Â· `nextjs-expert`
+`python-expert` · `javascript-expert` · `typescript-expert` · `go-expert` · `rust-expert` · `java-expert` · `cpp-expert` · `node-expert` · `react-expert` · `nextjs-expert`
 
 ### Core (11)
-`architect` Â· `principal-engineer` Â· `code-review` Â· `debugger` Â· `performance` Â· `refactor` Â· `documentation` Â· `bug-hunter` Â· `security` Â· `testing` Â· `code-generation`
+`architect` · `principal-engineer` · `code-review` · `debugger` · `performance` · `refactor` · `documentation` · `bug-hunter` · `security` · `testing` · `code-generation`
 
 ### Advanced (7)
-`algorithm-expert` Â· `compiler-design` Â· `distributed-systems` Â· `operating-systems` Â· `optimization` Â· `reverse-engineering` Â· `system-design`
+`algorithm-expert` · `compiler-design` · `distributed-systems` · `operating-systems` · `optimization` · `reverse-engineering` · `system-design`
 
 ### Writing (2)
-`no-ai-slop` Â· `technical-documentation`
+`no-ai-slop` · `technical-documentation`
 
-> Each skill lives in exactly one category folder under `skills/`, and the per-category counts above sum to exactly **88** â€” same as the headline.
+> Each skill lives in exactly one category folder under `skills/`, and the per-category counts above sum to exactly **88** — same as the headline.
 
 ---
 
-## ğŸ“ Project Structure
+## ?? Project Structure
 
 ```
 GOD-OPENCODE/
-â”œâ”€â”€ opencode.json              # OpenCode config (agents, commands)
-â”œâ”€â”€ AGENTS.md                  # Project context for OpenCode
-â”œâ”€â”€ god-cli.ps1                # Non-interactive CLI
-â”œâ”€â”€ god-ui.ps1                 # Interactive terminal UI (TUI)
-â”œâ”€â”€ install.ps1                # Global installer (skills, workflows, agents, commands)
-â”œâ”€â”€ install.sh                 # Native bash installer (no PowerShell needed)
-â”œâ”€â”€ .opencode/skills/          # Project-local skills (auto-discovered)
-â”œâ”€â”€ agents/                    # 10 agent personas (AGENT.md each)
-â”œâ”€â”€ skills/                    # 88 skill definitions (SKILL.md each, 12 categories)
-â”œâ”€â”€ workflows/                 # 16 parameterized workflows
-â”œâ”€â”€ commands/                  # 6 slash command definitions
-â”œâ”€â”€ router/                    # Intent detection and routing config
-â”œâ”€â”€ scripts/                   # PowerShell engines (builder, expansion, health)
-â”œâ”€â”€ mcps/                      # MCP server configs
-â”œâ”€â”€ templates/                 # Project scaffolds
-â”œâ”€â”€ tests/                     # Pester test suite
-â”œâ”€â”€ docs/wiki/                 # Markdown wiki (8 pages, single source of truth)
-â”œâ”€â”€ memory/                    # Long-term memory store + AGENT_PREFERENCES.md
-â””â”€â”€ ui/                        # Browser dashboard
++-- opencode.json              # OpenCode config (agents, commands)
++-- AGENTS.md                  # Project context for OpenCode
++-- god-cli.ps1                # Non-interactive CLI
++-- god-ui.ps1                 # Interactive terminal UI (TUI)
++-- install.ps1                # Global installer (skills, workflows, agents, commands)
++-- install.sh                 # Native bash installer (no PowerShell needed)
++-- .opencode/skills/          # Project-local skills (auto-discovered)
++-- agents/                    # 10 agent personas (AGENT.md each)
++-- skills/                    # 88 skill definitions (SKILL.md each, 12 categories)
++-- workflows/                 # 16 parameterized workflows
++-- commands/                  # 6 slash command definitions
++-- router/                    # Intent detection and routing config
++-- scripts/                   # PowerShell engines (builder, expansion, health)
++-- mcps/                      # MCP server configs
++-- templates/                 # Project scaffolds
++-- tests/                     # Pester test suite
++-- docs/wiki/                 # Markdown wiki (8 pages, single source of truth)
++-- memory/                    # Long-term memory store + AGENT_PREFERENCES.md
++-- ui/                        # Browser dashboard
 ```
 
 ---
 
-## ğŸ§ª Testing
+## ?? Testing
 
 ```powershell
 # Run all tests
@@ -424,23 +424,23 @@ Invoke-Pester -Path .\tests\unit\ -Output Detailed
 
 ---
 
-## ğŸ¥ Health Check
+## ?? Health Check
 
 ```powershell
 .\god-health.ps1
 ```
 
 Verifies:
-- âœ… All required directories exist
-- âœ… SKILL.md files present in repo
-- âœ… Skills installed in `~/.config/opencode/skills/`
-- âœ… Workflows/agents/commands in `~/.config/opencode/god-opencode/`
-- âœ… Router config is valid JSON
-- âœ… All agents have valid AGENT.md
+- ? All required directories exist
+- ? SKILL.md files present in repo
+- ? Skills installed in `~/.config/opencode/skills/`
+- ? Workflows/agents/commands in `~/.config/opencode/god-opencode/`
+- ? Router config is valid JSON
+- ? All agents have valid AGENT.md
 
 ---
 
-## ğŸ–¥ï¸ Interfaces
+## ??? Interfaces
 
 ### CLI (Non-Interactive)
 
@@ -473,25 +473,25 @@ Interactive terminal interface (v6.0) with Unicode box-drawing and the following
 
 | Key | Action |
 |-----|--------|
-| Enter / `1` | **Install Globally** â€” default; installs skills/agents/workflows into `~/.config/opencode/` |
+| Enter / `1` | **Install Globally** — default; installs skills/agents/workflows into `~/.config/opencode/` |
 | `2` | Health Check |
-| `3` | Code Graph â€” build/refresh the call-graph index (6 languages) |
-| `4` | Skill Fragment â€” dynamic context lookup for a topic |
-| `5` | Memory â€” recall / append session memory |
-| `6` | Cross-Platform â€” show bash / cmd / PowerShell install paths |
-| `7` | Tests â€” Pester suite |
-| `8` | Wiki â€” open the local wiki |
-| `9` | Dashboard â€” open the browser dashboard |
-| `S` | Session Memory â€” init / track / recall cross-session context |
-| `W` | Wiki Builder â€” auto-generate reference pages from content |
-| `L` | Live Architecture â€” regenerate wiki skill/agent/workflow graph |
-| `R` | Skills Registry â€” bulk-fetch top-N from registry-sources.txt |
-| `C` | Cursor Export â€” generate .cursorrules for every agent |
-| `T` | Security Scanner â€” pre-commit secret/vulnerability scan |
-| `A` | Agent Orchestrator â€” multi-agent task delegation |
-| `M` | MCP Connectors â€” connect to Chrome/DB/Jira/Monitoring |
-| `G` | Smart Git â€” atomic commits, save points, rollback |
-| `N` | What's new â€” current release notes from CHANGELOG.md |
+| `3` | Code Graph — build/refresh the call-graph index (6 languages) |
+| `4` | Skill Fragment — dynamic context lookup for a topic |
+| `5` | Memory — recall / append session memory |
+| `6` | Cross-Platform — show bash / cmd / PowerShell install paths |
+| `7` | Tests — Pester suite |
+| `8` | Wiki — open the local wiki |
+| `9` | Dashboard — open the browser dashboard |
+| `S` | Session Memory — init / track / recall cross-session context |
+| `W` | Wiki Builder — auto-generate reference pages from content |
+| `L` | Live Architecture — regenerate wiki skill/agent/workflow graph |
+| `R` | Skills Registry — bulk-fetch top-N from registry-sources.txt |
+| `C` | Cursor Export — generate .cursorrules for every agent |
+| `T` | Security Scanner — pre-commit secret/vulnerability scan |
+| `A` | Agent Orchestrator — multi-agent task delegation |
+| `M` | MCP Connectors — connect to Chrome/DB/Jira/Monitoring |
+| `G` | Smart Git — atomic commits, save points, rollback |
+| `N` | What's new — current release notes from CHANGELOG.md |
 | `Q` | Exit |
 
 ### Browser Dashboard
@@ -504,7 +504,7 @@ Dark-themed, responsive dashboard showing all agents, skills, workflows, command
 
 ---
 
-## ğŸ¤ Contributing
+## ?? Contributing
 
 | Component | Location | Format |
 |-----------|----------|--------|
@@ -520,6 +520,6 @@ Dark-themed, responsive dashboard showing all agents, skills, workflows, command
 
 ---
 
-## ğŸ“„ License
+## ?? License
 
 MIT

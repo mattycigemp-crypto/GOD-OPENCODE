@@ -62,7 +62,7 @@ open ui/index.html          # macOS
 xdg-open ui/index.html      # Linux
 ```
 
-## v1.6.0 Features
+## v1.6.0 Features (also accessible via TUI menu keys T/A/M/G or god-cli.ps1)
 
 New in v1.6.0 — five features from deep research on developer needs:
 
