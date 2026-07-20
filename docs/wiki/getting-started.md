@@ -5,8 +5,8 @@ Five-minute setup, works on Windows / Linux / macOS / Docker.
 ## 1. Clone
 
 ```bash
-git clone https://github.com/mattycigemp-crypto/CogniVect
-cd CogniVect
+git clone https://github.com/mattycigemp-crypto/GOD-OPENCODE
+cd GOD-OPENCODE
 ```
 
 ## 2. Install globally

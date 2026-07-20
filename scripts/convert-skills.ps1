@@ -297,7 +297,7 @@ if ($AllSkills) {
         $agentsMd += "# GOD-OPENCODE Skills - Universal Agent Instructions"
         $agentsMd += ""
         $agentsMd += "These skills are auto-converted from the GOD-OPENCODE skill library."
-        $agentsMd += "Source: https://github.com/CogniVect/GOD-OPENCODE"
+        $agentsMd += "Source: https://github.com/mattycigemp-crypto/GOD-OPENCODE"
         $agentsMd += ""
         $agentsMd += "## Available Skills"
         $agentsMd += ""
