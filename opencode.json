@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "./schemas/opencode.schema.json",
   "instructions": ["AGENTS.md", "docs/**/*.md"],
   "permission": {
@@ -120,7 +120,7 @@
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}" },
       "category": "devops",
-      "skills_description": "Interact with GitHub repositories, issues, and pull requests from inside a CogniVect session."
+      "skills_description": "Interact with GitHub repositories, issues, and pull requests from inside a GOD-OPENCODE session."
     },
     "playwright": {
       "transport": "stdio",

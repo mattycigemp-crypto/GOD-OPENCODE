@@ -1,5 +1,5 @@
 # ============================================
-# CogniVect MASTER INSTALLER
+# GOD-OPENCODE MASTER INSTALLER
 # Version 2.0
 # ============================================
 
@@ -9,7 +9,7 @@ $Root = Get-ProjectRoot
 $Scripts = Join-Path $Root "scripts"
 
 Clear-Host
-Write-Banner "CogniVect v2.0"
+Write-Banner "GOD-OPENCODE v2.0"
 
 # =====================================================
 # DIRECTORY STRUCTURE
@@ -100,6 +100,6 @@ $Summary.GetEnumerator() | ForEach-Object {
 
 Write-Host ""
 Write-Host "=====================================================" -ForegroundColor Green
-Write-Host "          CogniVect READY" -ForegroundColor Green
+Write-Host "          GOD-OPENCODE READY" -ForegroundColor Green
 Write-Host "=====================================================" -ForegroundColor Green
 Write-Host ""

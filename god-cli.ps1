@@ -1,5 +1,5 @@
 # ============================================
-# CogniVect CLI
+# GOD-OPENCODE CLI
 # Version 1.0
 # ============================================
 # Non-interactive command-line interface.
@@ -54,7 +54,7 @@ function Write-Status($label, $value, $color = "Green") {
 
 function Show-Help {
     Write-Host ""
-    Write-Host "  CogniVect CLI" -ForegroundColor $C.Accent
+    Write-Host "  GOD-OPENCODE CLI" -ForegroundColor $C.Accent
     Write-Host "  ═══════════════════════════════════════" -ForegroundColor $C.Dim
     Write-Host ""
     Write-Host "  Usage: .\god-cli.ps1 <command> [options]" -ForegroundColor White
@@ -105,7 +105,7 @@ if ($Help -or $Command -eq "" -or $Command -eq "help") {
 
 switch ($Command.ToLower()) {
     "install" {
-        Write-Host "`n  Installing CogniVect globally...`n" -ForegroundColor $C.Info
+        Write-Host "`n  Installing GOD-OPENCODE globally...`n" -ForegroundColor $C.Info
         & (Join-Path $Root "install.ps1")
     }
     "health" {
@@ -202,7 +202,7 @@ switch ($Command.ToLower()) {
         & (Join-Path $Root "scripts/smart-git.ps1") @gitParams
     }
     "status" {
-        Write-Host "`n  CogniVect Status" -ForegroundColor $C.Accent
+        Write-Host "`n  GOD-OPENCODE Status" -ForegroundColor $C.Accent
         Write-Host "  ═══════════════════════════════════════" -ForegroundColor $C.Dim
         Write-Host ""
 

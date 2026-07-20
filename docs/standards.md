@@ -1,8 +1,8 @@
-# CogniVect Standards
+# GOD-OPENCODE Standards
 
 ## PowerShell 5.1 Compatibility
 
-All PowerShell scripts in CogniVect must be compatible with **Windows PowerShell 5.1**.
+All PowerShell scripts in GOD-OPENCODE must be compatible with **Windows PowerShell 5.1**.
 
 ### Do
 
@@ -26,7 +26,7 @@ All PowerShell scripts in CogniVect must be compatible with **Windows PowerShell
 ```powershell
 # Good
 Write-Host "============================================"
-Write-Host "     CogniVect SMART INSTALLER"
+Write-Host "     GOD-OPENCODE SMART INSTALLER"
 Write-Host "============================================"
 
 # Bad
