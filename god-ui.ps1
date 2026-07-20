@@ -258,6 +258,7 @@ function Show-Dashboard {
     Write-MenuItem "A"     "Agent Orchestrator"    "Multi-agent task delegation"
     Write-MenuItem "M"     "MCP Connectors"        "Connect to Chrome/DB/Jira/Monitoring"
     Write-MenuItem "G"     "Smart Git"             "Atomic commits, save points, rollback"
+    Write-MenuItem "U"     "Publish Skills"        "Audit + convert + sync skills to all AI tools"
     Write-MenuItem "N"     "What's new in v1.7.0"  "Current release notes from CHANGELOG.md"
     Write-MenuItem "Q"     "Exit"                  "Close the interface"
 
@@ -604,6 +605,36 @@ function Show-MCPConnect {
     }
 }
 
+function Show-PublishSkills {
+    Clear-Screen
+    Write-Header "Publish Skills — Universal Distribution  (v1.7.0)"
+    Write-Host ""
+    $script = Join-Path $Root "scripts/publish-skills.ps1"
+    if (!(Test-Path $script)) {
+        Write-Host "  scripts/publish-skills.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    Write-Host "  Audit skills for security, convert to all AI formats, sync to agent dirs." -ForegroundColor $Colors.Muted
+    Write-Host ""
+    Write-Host "  1 - Full Pipeline (audit + convert + sync)" -ForegroundColor $Colors.Muted
+    Write-Host "  2 - Dry Run (preview without changes)" -ForegroundColor $Colors.Muted
+    Write-Host "  3 - Audit Only (security scan)" -ForegroundColor $Colors.Muted
+    Write-Host "  4 - Convert Only (SKILL.md to 5 formats)" -ForegroundColor $Colors.Muted
+    Write-Host "  5 - Sync Only (symlink to agent dirs)" -ForegroundColor $Colors.Muted
+    Write-Host "  6 - Full Pipeline + Package (create release zip)" -ForegroundColor $Colors.Muted
+    Write-Host "  B - Back" -ForegroundColor $Colors.Muted
+    $choice = Get-Input "Publish Skills"
+    switch ($choice.ToUpper()) {
+        "1" { & $script }
+        "2" { & $script -DryRun }
+        "3" { & (Join-Path $Root "scripts/audit-skills.ps1") }
+        "4" { & (Join-Path $Root "scripts/convert-skills.ps1") }
+        "5" { & (Join-Path $Root "scripts/sync-skills.ps1") }
+        "6" { & $script -Package }
+        "B" { return }
+    }
+}
+
 function Show-SmartGit {
     Clear-Screen
     Write-Header "Smart Git  (v1.7.0)"
@@ -695,6 +726,7 @@ while ($true) {
         "A" { Clear-Screen ; Show-AgentOrch       ; Wait-Key }
         "M" { Clear-Screen ; Show-MCPConnect     ; Wait-Key }
         "G" { Clear-Screen ; Show-SmartGit       ; Wait-Key }
+        "U" { Clear-Screen ; Show-PublishSkills  ; Wait-Key }
         "N" { Clear-Screen ; Show-WhatsNew        ; Wait-Key }
         "Q" {
             Clear-Screen

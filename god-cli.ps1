@@ -34,7 +34,10 @@ param(
     [switch]$Recall,
     [switch]$Prefs,
     [switch]$Stats,
-    [switch]$Help
+    [switch]$Help,
+    [switch]$DryRun,
+    [switch]$Package,
+    [string]$Tools = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -74,6 +77,7 @@ function Show-Help {
     Write-Host "    agent-orch       Multi-agent task delegation" -ForegroundColor White
     Write-Host "    mcp-connect      Connect to external tools via MCP" -ForegroundColor White
     Write-Host "    smart-git        AI-powered git integration" -ForegroundColor White
+    Write-Host "    publish-skills   Audit, convert, and sync skills to all AI tools" -ForegroundColor White
     Write-Host "    status           Show install status" -ForegroundColor White
     Write-Host "    ui               Launch interactive TUI" -ForegroundColor White
     Write-Host ""
@@ -86,6 +90,9 @@ function Show-Help {
     Write-Host "    -Skill <name>     Skill name for session tracking" -ForegroundColor $C.Dim
     Write-Host "    -Languages <list> Languages for code-graph (e.g. ps1,py,js)" -ForegroundColor $C.Dim
     Write-Host "    -Task <text>      Task description for agent-orch" -ForegroundColor $C.Dim
+    Write-Host "    -DryRun           Preview mode (publish-skills)" -ForegroundColor $C.Dim
+    Write-Host "    -Package          Create release zip (publish-skills)" -ForegroundColor $C.Dim
+    Write-Host "    -Tools <list>     Comma-separated tools to sync (publish-skills)" -ForegroundColor $C.Dim
     Write-Host "    -Tool <name>      Tool name for mcp-connect (chrome/database/jira/monitoring)" -ForegroundColor $C.Dim
     Write-Host "    -Action <name>    Action for mcp-connect" -ForegroundColor $C.Dim
     Write-Host "    -Target <name>    Target for mcp-connect" -ForegroundColor $C.Dim
@@ -200,6 +207,14 @@ switch ($Command.ToLower()) {
         $gitParams = @{ Command = $gitCommand }
         if ($Agent) { $gitParams["Message"] = $Agent }
         & (Join-Path $Root "scripts/smart-git.ps1") @gitParams
+    }
+    "publish-skills" {
+        Write-Host "`n  Running universal skill distribution pipeline...`n" -ForegroundColor $C.Info
+        $pubParams = @{}
+        if ($DryRun) { $pubParams["DryRun"] = $true }
+        if ($Package) { $pubParams["Package"] = $true }
+        if ($Tools) { $pubParams["Tools"] = $Tools }
+        & (Join-Path $Root "scripts/publish-skills.ps1") @pubParams
     }
     "status" {
         Write-Host "`n  GOD-OPENCODE Status" -ForegroundColor $C.Accent
