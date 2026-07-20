@@ -1,0 +1,6 @@
+# Code Owners for GOD-OPENCODE
+# This file defines code ownership for automatic review assignments.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Mind Dev — sole code owner for the entire repository
+* @mattycigemp-crypto
