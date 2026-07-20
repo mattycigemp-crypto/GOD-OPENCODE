@@ -62,9 +62,18 @@ open ui/index.html          # macOS
 xdg-open ui/index.html      # Linux
 ```
 
-## v1.6.0 Features (also accessible via TUI menu keys T/A/M/G or god-cli.ps1)
+## v1.7.0 Features — Universal Skill Distribution
 
-New in v1.6.0 — five features from deep research on developer needs:
+New in v1.7.0 — cross-tool skill ecosystem:
+
+| Feature | Command | Purpose |
+|---------|---------|--------|
+| Skill Security Auditor | `.\scripts\audit-skills.ps1` | Scan SKILL.md for malicious patterns |
+| Cross-Tool Converter | `.\scripts\convert-skills.ps1` | SKILL.md → .cursorrules, CLAUDE.md, .clinerules, .windsurfrules, copilot-instructions.md |
+| Skill Sync (16 tools) | `.\scripts\sync-skills.ps1` | Symlink skills to Claude, Cursor, Windsurf, Cline, Copilot, and 11 more |
+| Universal Publisher | `.\scripts\publish-skills.ps1` | One-command pipeline: audit → convert → sync → package |
+
+## v1.6.0 Features (also accessible via TUI menu keys T/A/M/G or god-cli.ps1)
 
 | Feature | Command | Purpose |
 |---------|---------|--------|

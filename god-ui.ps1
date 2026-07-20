@@ -1,6 +1,6 @@
-# ============================================
-# CogniVect — GOD-OPENCODE Terminal Interface
-# Version 6.0 - v1.6.0 with security scanner, agent orchestrator, MCP connectors, smart git
+﻿# ============================================
+# GOD-OPENCODE — GOD-OPENCODE Terminal Interface
+# Version 7.0 - v1.7.0 with universal skill distribution pipeline
 # ============================================
 # Usage: .\god-ui.ps1
 # Default action: Install globally to ~/.config/opencode/
@@ -258,7 +258,7 @@ function Show-Dashboard {
     Write-MenuItem "A"     "Agent Orchestrator"    "Multi-agent task delegation"
     Write-MenuItem "M"     "MCP Connectors"        "Connect to Chrome/DB/Jira/Monitoring"
     Write-MenuItem "G"     "Smart Git"             "Atomic commits, save points, rollback"
-    Write-MenuItem "N"     "What's new in v1.6.0"  "Current release notes from CHANGELOG.md"
+    Write-MenuItem "N"     "What's new in v1.7.0"  "Current release notes from CHANGELOG.md"
     Write-MenuItem "Q"     "Exit"                  "Close the interface"
 
     Write-Divider
@@ -534,7 +534,7 @@ function Show-WikiBuilder {
 
 function Show-SecurityScan {
     Clear-Screen
-    Write-Header "Security Scanner  (v1.6.0)"
+    Write-Header "Security Scanner  (v1.6.0+)"
     Write-Host ""
     $script = Join-Path $Root "scripts/security-scan.ps1"
     if (!(Test-Path $script)) {
@@ -559,7 +559,7 @@ function Show-SecurityScan {
 
 function Show-AgentOrch {
     Clear-Screen
-    Write-Header "Agent Orchestrator  (v1.6.0)"
+    Write-Header "Agent Orchestrator  (v1.6.0+)"
     Write-Host ""
     $script = Join-Path $Root "scripts/agent-orchestrator.ps1"
     if (!(Test-Path $script)) {
@@ -580,7 +580,7 @@ function Show-AgentOrch {
 
 function Show-MCPConnect {
     Clear-Screen
-    Write-Header "MCP Connectors  (v1.6.0)"
+    Write-Header "MCP Connectors  (v1.6.0+)"
     Write-Host ""
     $script = Join-Path $Root "scripts/mcp-connect.ps1"
     if (!(Test-Path $script)) {
@@ -606,7 +606,7 @@ function Show-MCPConnect {
 
 function Show-SmartGit {
     Clear-Screen
-    Write-Header "Smart Git  (v1.6.0)"
+    Write-Header "Smart Git  (v1.6.0+)"
     Write-Host ""
     $script = Join-Path $Root "scripts/smart-git.ps1"
     if (!(Test-Path $script)) {
@@ -636,7 +636,7 @@ function Show-SmartGit {
 
 function Show-WhatsNew {
     Clear-Screen
-    Write-Header "What's New in v1.6.0"
+    Write-Header "What's New in v1.7.0"
     Write-Host ""
     Write-Host "  Five new features from deep research on what developers want." -ForegroundColor $Colors.Accent
     Write-Host ""
@@ -661,7 +661,8 @@ function Show-WhatsNew {
     Write-Host "  Generate tests before code, then implement to pass." -ForegroundColor $Colors.Text
     Write-Host ""
     Write-Divider
-    Write-Host "  Canonical release notes: CHANGELOG.md  ([1.6.0] section)" -ForegroundColor $Colors.Muted
+    Write-Host "Canonical release notes: CHANGELOG.md 
+                                                                ([1.7.0] section)" -ForegroundColor $Colors.Muted
     Write-Divider
 }
 
@@ -697,7 +698,7 @@ while ($true) {
         "N" { Clear-Screen ; Show-WhatsNew        ; Wait-Key }
         "Q" {
             Clear-Screen
-            Write-Host "" ; Write-Host "  CogniVect GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""
+            Write-Host "" ; Write-Host "  GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""
             exit
         }
         default {

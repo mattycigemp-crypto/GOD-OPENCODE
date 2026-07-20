@@ -18,9 +18,18 @@ architectural concerns we're actively working on (see [Roadmap](roadmap.md)).
 | [Memory System](memory.md) | Long-term session + project memory |
 | [Roadmap](roadmap.md) | Four open architectural concerns and how we're addressing them |
 
-## v1.6.0 Features
+## v1.7.0 Features — Universal Skill Distribution
 
-New in v1.6.0 — five features from deep research on developer needs:
+New in v1.7.0 — cross-tool skill ecosystem:
+
+| Feature | Access | Purpose |
+|---------|--------|--------|
+| Skill Security Auditor | CLI `audit-skills` | Scan SKILL.md for malicious patterns |
+| Cross-Tool Converter | CLI `convert-skills` | SKILL.md → .cursorrules, CLAUDE.md, .clinerules, .windsurfrules, copilot-instructions.md |
+| Skill Sync (16 tools) | CLI `sync-skills` | Symlink skills to Claude, Cursor, Windsurf, Cline, Copilot, and 11 more |
+| Universal Publisher | CLI `publish-skills` | One-command pipeline: audit → convert → sync → package |
+
+## v1.6.0 Features
 
 | Feature | Access | Purpose |
 |---------|--------|--------|

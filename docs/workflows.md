@@ -109,7 +109,7 @@ The workflow engine (`scripts/workflow-engine.ps1`) performs the following:
 - Order steps logically (design → implement → test → deploy).
 - Include a final documentation or review step.
 
-## New in v1.6.0: Test-Driven AI Workflow
+## New in v1.6.0+: Test-Driven AI Workflow
 
 The `test-driven-ai.md` workflow follows a test-first approach:
 
