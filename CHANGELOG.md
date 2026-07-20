@@ -6,6 +6,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.7.0 - Universal Skills Release] - 2026-07-20
+
+### Added
+
+- **Skill Security Auditor** ([`scripts/audit-skills.ps1`](scripts/audit-skills.ps1)) — supply-chain integrity scanner that detects malicious patterns in SKILL.md files: command injection (eval, exec, subprocess, Invoke-Expression), data exfiltration (curl, wget, HTTP requests, netcat), hardcoded secrets (API keys, passwords, tokens, private keys), filesystem abuse (rm -rf, chmod 777, path traversal), and network manipulation (iptables flush, firewall modifications). 44 detection patterns across 5 categories. Security skills are allowlisted to prevent false positives. Letter-grade scoring (A+ through F) with JSON report export.
+- **Cross-Tool Skill Converter** ([`scripts/convert-skills.ps1`](scripts/convert-skills.ps1)) — converts SKILL.md files into 5 agent-native config formats: `.cursorrules` (Cursor / Windsurf / Aider), `CLAUDE.md` (Claude Code), `.clinerules` (Cline / Roo Code), `.windsurfrules` (Windsurf standalone), `.github/copilot-instructions.md` (GitHub Copilot). Also generates a universal `AGENTS.md` index. Supports single-skill and batch conversion with dry-run mode.
+- **Skill Sync to Agent Dirs** ([`scripts/sync-skills.ps1`](scripts/sync-skills.ps1)) — symlinks installed skills into 16 AI tool config directories: Claude Code, Cursor, Windsurf, Cline/Roo Code, GitHub Copilot, Aider, OpenHands, Continue.dev, Zed AI, Gemini CLI, OpenAI Codex, Hermes Agent, VS Code, JetBrains AI, Neovim AI, OpenCode. Falls back to copy when symlinks aren't available. Supports `-Tool all`, `-Tool cursor`, `-List`, `-Unsync`, `-DryRun`.
+- **Universal Skills Publisher** ([`scripts/publish-skills.ps1`](scripts/publish-skills.ps1)) — one-command orchestrator that runs the full skill distribution pipeline: security audit → cross-tool conversion → agent directory sync → optional release zip packaging. Summary table with timing, error handling, and dry-run mode.
+- **Competitive Landscape** ([`docs/competitive-landscape.md`](docs/competitive-landscape.md)) — comprehensive analysis of the AI skills/workflows ecosystem: tier-by-tier breakdown of 8 ecosystem layers, feature matrix comparing GOD-OPENCODE to claude-skills, skills-hub, CrewAI, Mastra, LangGraph, and SWE-agent. Key 2026 trends (MCP standardization, skills-as-npm, AGENTS.md adoption, curated vs. scraped).
+- **Ecosystem Comparison Section** ([`ui/index.html`](ui/index.html)) — new full-page "Ecosystem" section with competitor comparison table, agent framework star rankings (OpenHands 67k, AutoGen 53k, CrewAI 43k, LangGraph 23k, Mastra 19k, SWE-agent 15k), 2026 trend cards, and skill management tools comparison.
+
+### Changed
+
+- **README** — added Universal Skill Distribution to "What is GOD-OPENCODE", v1.7.0 feature table, Skill Ecosystem section with usage examples and supported tools table, updated skill count to 88.
+
+---
+
 ## [1.6.0 - GOD-OPENCODE Release] - 2026-07-17
 
 ### Added

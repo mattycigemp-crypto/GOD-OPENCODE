@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CogniVect | AI Engineering OS</title>
+  <title>GOD-OPENCODE | AI Engineering OS</title>
   <link rel="icon" type="image/png" href="../brand/icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -169,45 +169,6 @@
 
     .nav-links a:hover { color: var(--text); }
     .nav-links a.active { color: var(--text); }
-
-    /* ANNOUNCEMENT BANNER */
-    .announce-banner {
-      background: linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(6,182,212,0.08) 100%);
-      border: 1px solid var(--border-dim);
-      border-radius: 12px;
-      padding: 20px 28px;
-      margin: 0 auto 40px;
-      max-width: 800px;
-      text-align: center;
-    }
-    .announce-banner h3 {
-      font-size: 14px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--violet), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 10px;
-    }
-    .announce-banner p {
-      font-size: 12px;
-      color: var(--text-2);
-      line-height: 1.6;
-    }
-    .announce-features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      justify-content: center;
-      margin-top: 12px;
-    }
-    .announce-features .tag {
-      cursor: default;
-      transition: transform 0.2s ease;
-    }
-    .announce-features .tag:hover {
-      transform: translateY(-1px);
-    }
 
     /* HERO */
     .hero {
@@ -724,6 +685,7 @@
         <li><a href="#" data-nav="quickstart" onclick="showPage('quickstart'); return false;">Quick Start</a></li>
         <li><a href="#" data-nav="wiki" onclick="showPage('wiki'); return false;">Wiki</a></li>
         <li><a href="#" data-nav="tui" onclick="showPage('tui'); return false;">TUI</a></li>
+        <li><a href="#" data-nav="ecosystem" onclick="showPage('ecosystem'); return false;">Ecosystem</a></li>
       </ul>
     </nav>
   </div>
@@ -745,101 +707,13 @@
 <!-- STATS -->
 <div class="stats-bar">
   <div class="stats-inner">
-    <div class="stat"><div class="stat-value">10</div><div class="stat-label">Expert Agents</div></div>
-    <div class="stat"><div class="stat-value">88</div><div class="stat-label">Domain Skills</div></div>
-    <div class="stat"><div class="stat-value">16</div><div class="stat-label">Workflows</div></div>
-    <div class="stat"><div class="stat-value">6</div><div class="stat-label">Slash Commands</div></div>
+    <div class="stat"><div class="stat-value" data-target="10">10</div><div class="stat-label">Expert Agents</div></div>
+    <div class="stat"><div class="stat-value" data-target="88">88</div><div class="stat-label">Domain Skills</div></div>
+    <div class="stat"><div class="stat-value" data-target="16">16</div><div class="stat-label">Workflows</div></div>
+    <div class="stat"><div class="stat-value" data-target="6">6</div><div class="stat-label">Slash Commands</div></div>
   </div>
 </div>
 
-<!-- v1.6.0 ANNOUNCEMENT BANNER -->
-<section class="section">
-  <div class="announce-banner reveal">
-    <h3>v1.6.0 — Security Scanner + Agent Orchestrator + MCP Connectors + Smart Git</h3>
-    <p>Pre-commit security scanning, multi-agent task delegation, MCP tool connectors, and AI-powered git integration with save points.</p>
-    <div class="announce-features">
-      <span class="tag red">security-scan</span>
-      <span class="tag violet">agent-orchestrator</span>
-      <span class="tag cyan">mcp-connect</span>
-      <span class="tag green">smart-git</span>
-      <span class="tag yellow">test-driven-ai</span>
-    </div>
-  </div>
-</section>
-
-<!-- v1.5.0 ANNOUNCEMENT BANNER -->
-<section class="section">
-  <div class="announce-banner reveal">
-    <h3>v1.5.0 — Anti-slop skill + CLI + Unicode TUI</h3>
-    <p>3 new skills (no-ai-slop, technical-documentation, code-generation), non-interactive CLI, Unicode box-drawing in TUI.</p>
-    <div class="announce-features">
-      <span class="tag violet">no-ai-slop</span>
-      <span class="tag cyan">technical-docs</span>
-      <span class="tag green">code-generation</span>
-      <span class="tag yellow">god-cli.ps1</span>
-      <span class="tag pink">Unicode TUI</span>
-    </div>
-  </div>
-</section>
-
-<!-- v1.4.0 ANNOUNCEMENT BANNER -->
-<section class="section">
-  <div class="announce-banner reveal">
-    <h3>v1.4.0 — All 5 roadmap concerns resolved</h3>
-    <p>Persistent session memory, wiki auto-builder, native bash installer, multi-language code graph (6 langs), and smart skill loader with TF-IDF caching.</p>
-    <div class="announce-features">
-      <span class="tag violet">session-memory.ps1</span>
-      <span class="tag cyan">build-wiki.ps1</span>
-      <span class="tag green">install.sh v2.0</span>
-      <span class="tag yellow">code-graph 6-lang</span>
-      <span class="tag pink">smart-loader cache</span>
-    </div>
-  </div>
-</section>
-
-<!-- v1.3.0 RELEASE BANNER -->
-<section class="section" id="page-whats-new">
-  <div class="section-header">
-    <p class="section-eyebrow reveal">November 2026 Release</p>
-    <h2 class="section-title reveal reveal-d1">v1.3.0 — Agent OS unlocked</h2>
-    <p class="section-desc reveal reveal-d2">Five new capabilities landed: live skill graph, Cursor drop-in exporter, skills registry mirror sync, JSON Schema, MCP bridge. Pick a card to dive in.</p>
-  </div>
-  <div class="card-grid">
-    <div class="card reveal">
-      <div class="card-eyebrow">Visual</div>
-      <h3>Live Skill Graph</h3>
-      <p>scripts/build-skill-graph.ps1 regenerates <code>docs/wiki/_data/architecture.mmd</code> on every wiki build from the actual agents/, skills/, workflows/ filesystem. No manual diagram maintenance.</p>
-      <div class="card-tags"><span class="tag violet">wiki</span><span class="tag cyan">auto-generated</span></div>
-    </div>
-    <div class="card reveal reveal-d1">
-      <div class="card-eyebrow">Cross-host</div>
-      <h3>Cursor Drop-in</h3>
-      <p><code>scripts/install-skill.ps1 -Use cursorrules</code> writes a .cursorrules per agent into <code>dist/cursorrules/</code>. Drop one into your project root and Cursor / Windsurf / Aider pick up the persona instantly.</p>
-      <div class="card-tags"><span class="tag yellow">cursor</span><span class="tag yellow">windsurf</span><span class="tag yellow">aider</span></div>
-    </div>
-    <div class="card reveal reveal-d2">
-      <div class="card-eyebrow">Registry</div>
-      <h3>Skills Mirror Sync</h3>
-      <p><code>scripts/install-skill.ps1 -Sync -TopN 20</code> shallow-clones the top 20 entries from <code>registry-sources.txt</code> into <code>skills-mirror/</code>. Aggregate skill bundles across repos with one command.</p>
-      <div class="card-tags"><span class="tag cyan">git</span><span class="tag cyan">aggregator</span></div>
-    </div>
-    <div class="card reveal reveal-d3">
-      <div class="card-eyebrow">Validation</div>
-      <h3>JSON Schema</h3>
-      <p><code>schemas/opencode.schema.json</code> is Draft 2020-12. Editors (Cursor, VS Code) auto-lint <code>opencode.json</code> against it via the <code>$schema</code> reference.</p>
-      <div class="card-tags"><span class="tag green">schema</span><span class="tag green">draft-2020-12</span></div>
-    </div>
-    <div class="card reveal">
-      <div class="card-eyebrow">Bridge</div>
-      <h3>MCP-to-Skill</h3>
-      <p><code>scripts/mcp-to-skill.ps1</code> wraps each <code>opencode.json#mcp_servers</code> entry as a regular skill. One install, both MCP client and skill discoverability.</p>
-      <div class="card-tags"><span class="tag pink">mcp</span><span class="tag pink">bridge</span></div>
-    </div>
-  </div>
-  <div style="text-align:center; margin-top:32px; font-size:13px; color:var(--text-3);">
-    Full release notes: <a href="CHANGELOG.md" style="color:var(--violet); text-decoration:underline;">CHANGELOG.md</a> · <a href="docs/wiki/index.md" style="color:var(--violet); text-decoration:underline;">Wiki</a>
-  </div>
-</section>
 
 <!-- AGENTS -->
 <section class="section page-section active" id="page-agents">
@@ -916,7 +790,7 @@
 <section class="section page-section" id="page-skills">
   <div class="section-header">
     <p class="section-eyebrow reveal">Knowledge</p>
-    <h2 class="section-title reveal reveal-d1">84 domain skills</h2>
+    <h2 class="section-title reveal reveal-d1">88 domain skills</h2>
     <p class="section-desc reveal reveal-d2">Expert knowledge documents installed into OpenCode at ~/.config/opencode/skills/.</p>
   </div>
 
@@ -1149,12 +1023,12 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
   <div class="section-header">
     <p class="section-eyebrow reveal">Terminal</p>
     <h2 class="section-title reveal reveal-d1">Terminal UI</h2>
-    <p class="section-desc reveal reveal-d2">Launch the interactive terminal interface for managing CogniVect.</p>
+    <p class="section-desc reveal reveal-d2">Launch the interactive terminal interface for managing GOD-OPENCODE.</p>
   </div>
 
   <div style="margin-top: 48px;">
     <p class="section-eyebrow reveal">Launch</p>
-    <div class="code-block reveal reveal-d1"><span class="comment"># From the CogniVect directory</span>
+    <div class="code-block reveal reveal-d1"><span class="comment"># From the GOD-OPENCODE directory</span>
 <span class="cmd">.\god-ui.ps1</span></div>
   </div>
 
@@ -1278,6 +1152,76 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
   </div>
 </section>
 
+<!-- ECOSYSTEM -->
+<section class="section page-section" id="page-ecosystem">
+  <div class="section-header">
+    <p class="section-eyebrow reveal">Landscape</p>
+    <h2 class="section-title reveal reveal-d1">AI Skills Ecosystem</h2>
+    <p class="section-desc reveal reveal-d2">Deep research across 50+ GitHub repos. GOD-OPENCODE is the only platform combining all 8 layers in one package.</p>
+  </div>
+
+  <div style="margin-top: 40px;">
+    <p class="section-eyebrow reveal">Feature Matrix</p>
+    <div class="table-wrap reveal reveal-d1">
+      <table>
+        <thead><tr><th>Feature</th><th>claude-skills</th><th>skills-hub</th><th>CrewAI</th><th>Mastra</th><th>LangGraph</th><th style="color:var(--violet)">GOD-OPENCODE</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Domain skills (88)</strong></td><td>✅ (362)</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅</td></tr>
+          <tr><td><strong>Parameterized workflows</strong></td><td>—</td><td>—</td><td>✅</td><td>✅</td><td>✅</td><td style="color:var(--green)">✅ (16)</td></tr>
+          <tr><td><strong>Specialized agent personas</strong></td><td>—</td><td>—</td><td>✅</td><td>✅</td><td>—</td><td style="color:var(--green)">✅ (10)</td></tr>
+          <tr><td><strong>Security scanner</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅</td></tr>
+          <tr><td><strong>Skill security auditor</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅ ✨NEW</td></tr>
+          <tr><td><strong>Cross-tool skill converter</strong></td><td>✅</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅ ✨NEW</td></tr>
+          <tr><td><strong>Skill sync to agent dirs</strong></td><td>—</td><td>✅ (46)</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅ (16) ✨NEW</td></tr>
+          <tr><td><strong>Smart Git integration</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅</td></tr>
+          <tr><td><strong>Health checks</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅</td></tr>
+          <tr><td><strong>Agent orchestrator</strong></td><td>—</td><td>—</td><td>✅</td><td>✅</td><td>✅</td><td style="color:var(--green)">✅</td></tr>
+          <tr><td><strong>MCP connectors</strong></td><td>—</td><td>—</td><td>—</td><td>✅</td><td>—</td><td style="color:var(--green)">✅</td></tr>
+          <tr><td><strong>Code graph analysis</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅</td></tr>
+          <tr><td><strong>Wiki auto-builder</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="color:var(--green)">✅</td></tr>
+          <tr><td><strong>Session memory</strong></td><td>—</td><td>—</td><td>—</td><td>✅</td><td>—</td><td style="color:var(--green)">✅</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top: 48px;">
+    <p class="section-eyebrow reveal">Agent Frameworks (by GitHub Stars)</p>
+    <div class="card-grid" style="margin-top: 16px;">
+      <div class="card reveal"><div class="card-eyebrow">67k ★</div><h3>OpenHands</h3><p>Formerly OpenDevin. Full dev environment for autonomous software engineering.</p><div class="card-tags"><span class="tag blue">Python</span><span class="tag blue">autonomous</span></div></div>
+      <div class="card reveal reveal-d1"><div class="card-eyebrow">53k ★</div><h3>Microsoft AutoGen</h3><p>Multi-agent conversations. Recommends Microsoft Agent Framework for new projects.</p><div class="card-tags"><span class="tag blue">Python/.NET</span></div></div>
+      <div class="card reveal reveal-d2"><div class="card-eyebrow">43k ★</div><h3>CrewAI</h3><p>Role-based multi-agent orchestration with "crews" and "flows".</p><div class="card-tags"><span class="tag green">Python</span><span class="tag green">rapid</span></div></div>
+      <div class="card reveal reveal-d3"><div class="card-eyebrow">23k ★</div><h3>LangGraph</h3><p>State-based multi-actor applications using explicit graphs. Deeply integrated with LangChain.</p><div class="card-tags"><span class="tag violet">Python/TS</span><span class="tag violet">graphs</span></div></div>
+      <div class="card reveal"><div class="card-eyebrow">19k ★</div><h3>Mastra</h3><p>TypeScript-native. Agents, workflows, RAG, memory, and observability in one package.</p><div class="card-tags"><span class="tag cyan">TypeScript</span><span class="tag cyan">batteries-included</span></div></div>
+      <div class="card reveal reveal-d1"><div class="card-eyebrow">15k ★</div><h3>SWE-agent</h3><p>Specialized tools for autonomous GitHub issue fixing. Research-focused.</p><div class="card-tags"><span class="tag yellow">Python</span><span class="tag yellow">research</span></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 48px;">
+    <p class="section-eyebrow reveal">Key 2026 Trends</p>
+    <div class="card-grid" style="margin-top: 16px;">
+      <div class="card reveal"><div class="card-eyebrow">Standard</div><h3>MCP is the Universal Standard</h3><p>Model Context Protocol replaces fragmented plugin SDKs for AI tool extensibility.</p><div class="card-tags"><span class="tag violet">protocol</span><span class="tag violet">interoperability</span></div></div>
+      <div class="card reveal reveal-d1"><div class="card-eyebrow">Security</div><h3>Skills = The New npm</h3><p>Supply-chain security is critical. "Slopsquatting" attacks use hallucinated package names.</p><div class="card-tags"><span class="tag red">supply-chain</span><span class="tag red">auditing</span></div></div>
+      <div class="card reveal reveal-d2"><div class="card-eyebrow">Portability</div><h3>AGENTS.md Emerging Standard</h3><p>Cross-tool config file. GOD-OPENCODE already uses this convention.</p><div class="card-tags"><span class="tag green">portability</span><span class="tag green">standard</span></div></div>
+      <div class="card reveal reveal-d3"><div class="card-eyebrow">Quality</div><h3>Curated > Scraped</h3><p>Top-quartile curated skills boost agent success by >50 points in specialized domains.</p><div class="card-tags"><span class="tag yellow">curation</span><span class="tag yellow">quality</span></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 48px;">
+    <p class="section-eyebrow reveal">Skill Management Tools</p>
+    <div class="card-grid" style="margin-top: 16px;">
+      <div class="card reveal"><div class="card-eyebrow">Desktop App</div><h3>qufei1993/skills-hub</h3><p>Tauri-based. Symlink sync to 46 AI tools from central ~/.skillshub storage.</p><div class="card-tags"><span class="tag orange">Tauri</span><span class="tag orange">46 tools</span></div></div>
+      <div class="card reveal reveal-d1"><div class="card-eyebrow">CLI</div><h3>npx skills add</h3><p>Cross-agent install: npx skills add &lt;owner/repo&gt;. Pin versions, verify provenance.</p><div class="card-tags"><span class="tag cyan">npm</span><span class="tag cyan">CLI</span></div></div>
+      <div class="card reveal reveal-d2"><div class="card-eyebrow">Registry</div><h3>AgentSkillsHub.dev</h3><p>790+ skills with A–F security grades. Security-reviewed directory.</p><div class="card-tags"><span class="tag green">audited</span><span class="tag green">ratings</span></div></div>
+      <div class="card reveal reveal-d3"><div class="card-eyebrow">Enterprise</div><h3>JFrog Agent Skills Registry</h3><p>Compliance-aware deployment. Security hardening-as-a-service for agent skills.</p><div class="card-tags"><span class="tag blue">enterprise</span><span class="tag blue">compliance</span></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 48px; text-align:center;">
+    <a href="docs/competitive-landscape.md" class="btn btn-secondary" style="text-decoration:none;">Read Full Competitive Analysis →</a>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
@@ -1376,6 +1320,31 @@ As the <span class="arg">ai-engineer</span>, design a RAG pipeline for a custome
       this.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
       this.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
     });
+  }
+
+  /* ===== STAT COUNTERS (animate on scroll into view) ===== */
+  var counters = document.querySelectorAll('.stat-value[data-target]');
+  if (counters.length && 'IntersectionObserver' in window) {
+    var counterObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          var el = e.target;
+          var target = parseInt(el.getAttribute('data-target'), 10);
+          el.textContent = '0';
+          var duration = 1200;
+          var start = performance.now();
+          function tick(now) {
+            var p = Math.min((now - start) / duration, 1);
+            var ease = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(ease * target);
+            if (p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+          counterObs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.3 });
+    counters.forEach(function(el) { counterObs.observe(el); });
   }
 
   /* ===== SCROLL REVEAL ===== */

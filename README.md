@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.6.0"><img alt="v1.6.0" src="https://img.shields.io/badge/release-v1.6.0-8b5cf6?style=for-the-badge"/></a>
+  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.7.0"><img alt="v1.7.0" src="https://img.shields.io/badge/release-v1.7.0-8b5cf6?style=for-the-badge"/></a>
   <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge"/></a>
   <a href="https://cognivect.com"><img alt="CogniVect" src="https://img.shields.io/badge/company-CogniVect-8b5cf6?style=for-the-badge"/></a>
 </p>
@@ -23,8 +23,9 @@ GOD-OPENCODE wraps OpenCode with a three-layer architecture that gives every req
 - **10 Specialist Agents** — senior principal engineers, security auditors, database architects, and more
 - **88 Domain Skills** — production-grade knowledge for fastapi, react, postgres, kubernetes, and 84 other domains
 - **16 Automated Workflows** — step-by-step processes for API development, security audits, debugging, and deployment
+- **Universal Skill Distribution** — convert and sync skills to 16+ AI tools (Cursor, Claude, Cline, Windsurf, Copilot, and more)
 
-Instead of getting a generic AI assistant, you get the right expert for the job. Everything is file-based, transparent, and extensible.
+Instead of getting a generic AI assistant, you get the right expert for the job. Skills work everywhere — not just OpenCode.
 
 ---
 
@@ -55,7 +56,19 @@ Press Enter to install globally — installs skills/agents/workflows into `~/.co
 
 ---
 
-## What's New in v1.6.0
+## What's New in v1.7.0
+
+| Feature | Command | Purpose |
+|---------|---------|--------|
+| Skill Security Auditor | `.\scripts\audit-skills.ps1` | Scan SKILL.md for malicious patterns |
+| Cross-Tool Converter | `.\scripts\convert-skills.ps1` | Convert SKILL.md → .cursorrules, CLAUDE.md, .clinerules, .windsurfrules, copilot-instructions.md |
+| Skill Sync (16 tools) | `.\scripts\sync-skills.ps1` | Symlink skills into Claude, Cursor, Windsurf, Cline, Copilot, and 11 more |
+| Universal Publisher | `.\scripts\publish-skills.ps1` | One-command pipeline: audit → convert → sync → package |
+| Competitive Landscape | `docs/competitive-landscape.md` | Full ecosystem analysis vs. claude-skills, CrewAI, Mastra, LangGraph |
+
+---
+
+## What Was New in v1.6.0
 
 | Feature | Command | Purpose |
 |---------|---------|--------|
@@ -103,6 +116,33 @@ Press Enter to install globally — installs skills/agents/workflows into `~/.co
 | G | Smart Git |
 | N | What's New |
 | Q | Exit |
+
+---
+
+## Skill Ecosystem
+
+```powershell
+# One command to audit, convert, and sync all 88 skills:
+.\scripts\publish-skills.ps1
+
+# Or run individually:
+.\scripts\audit-skills.ps1                          # security scan (44 patterns)
+.\scripts\convert-skills.ps1 -AllSkills             # → .cursorrules, CLAUDE.md, .clinerules, .windsurfrules, copilot-instructions.md
+.\scripts\sync-skills.ps1 -Tool all                 # symlink to 16 AI tool dirs
+
+# Single skill:
+.\scripts\convert-skills.ps1 -Skill backend/fastapi -Format cursorrules
+.\scripts\sync-skills.ps1 -Tool cursor -Skill backend/fastapi
+```
+
+### Supported AI Tools
+
+| Tier | Tools |
+|------|-------|
+| Primary | Claude Code, Cursor, Windsurf, Cline/Roo Code, GitHub Copilot, Aider |
+| Additional | OpenHands, Continue.dev, Zed AI, Gemini CLI, OpenAI Codex, Hermes |
+| IDE Extensions | VS Code (Copilot), JetBrains AI, Neovim AI |
+| Native | OpenCode |
 
 ---
 
