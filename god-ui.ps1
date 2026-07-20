@@ -534,7 +534,7 @@ function Show-WikiBuilder {
 
 function Show-SecurityScan {
     Clear-Screen
-    Write-Header "Security Scanner  (v1.6.0+)"
+    Write-Header "Security Scanner  (v1.7.0)"
     Write-Host ""
     $script = Join-Path $Root "scripts/security-scan.ps1"
     if (!(Test-Path $script)) {
@@ -559,7 +559,7 @@ function Show-SecurityScan {
 
 function Show-AgentOrch {
     Clear-Screen
-    Write-Header "Agent Orchestrator  (v1.6.0+)"
+    Write-Header "Agent Orchestrator  (v1.7.0)"
     Write-Host ""
     $script = Join-Path $Root "scripts/agent-orchestrator.ps1"
     if (!(Test-Path $script)) {
@@ -580,7 +580,7 @@ function Show-AgentOrch {
 
 function Show-MCPConnect {
     Clear-Screen
-    Write-Header "MCP Connectors  (v1.6.0+)"
+    Write-Header "MCP Connectors  (v1.7.0)"
     Write-Host ""
     $script = Join-Path $Root "scripts/mcp-connect.ps1"
     if (!(Test-Path $script)) {
@@ -606,7 +606,7 @@ function Show-MCPConnect {
 
 function Show-SmartGit {
     Clear-Screen
-    Write-Header "Smart Git  (v1.6.0+)"
+    Write-Header "Smart Git  (v1.7.0)"
     Write-Host ""
     $script = Join-Path $Root "scripts/smart-git.ps1"
     if (!(Test-Path $script)) {
