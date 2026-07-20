@@ -114,6 +114,7 @@ Press Enter to install globally — installs skills/agents/workflows into `~/.co
 | A | Agent Orchestrator |
 | M | MCP Connectors |
 | G | Smart Git |
+| U | Publish Skills |
 | N | What's New |
 | Q | Exit |
 
@@ -156,6 +157,7 @@ Press Enter to install globally — installs skills/agents/workflows into `~/.co
 .\god-cli.ps1 agent-orch -Task "Build API"  # multi-agent task
 .\god-cli.ps1 mcp-connect -Tool chrome -Action screenshot
 .\god-cli.ps1 smart-git commit    # smart commit staged
+.\god-cli.ps1 publish-skills     # audit + convert + sync all skills
 .\god-cli.ps1 -Help               # show all commands
 ```
 
@@ -211,6 +213,14 @@ GOD-OPENCODE/
 ├── memory/                    # Long-term memory store
 └── ui/                        # Browser dashboard
 ```
+
+---
+
+## Documentation
+
+- **GitHub Wiki** (native): [github.com/mattycigemp-crypto/GOD-OPENCODE/wiki](https://github.com/mattycigemp-crypto/GOD-OPENCODE/wiki)
+- **MkDocs Wiki** (with search + dark mode): [mattycigemp-crypto.github.io/GOD-OPENCODE Wiki](https://mattycigemp-crypto.github.io/GOD-OPENCODE%20Wiki/)
+- **In-app Wiki**: TUI `[8] Wiki` or `W`
 
 ---
 

@@ -16,15 +16,16 @@ architectural concerns we're actively working on (see [Roadmap](roadmap.md)).
 | [Dynamic Skills](dynamic-skills.md) | Per-request context pruning for skills |
 | [Cross-Platform](cross-platform.md) | Linux / macOS / Windows / Docker install matrix |
 | [Memory System](memory.md) | Long-term session + project memory |
+| [Skill Ecosystem](#skill-ecosystem) | Universal skill distribution (audit, convert, sync) |
 | [Roadmap](roadmap.md) | Four open architectural concerns and how we're addressing them |
 
-## v1.7.0 Features — Universal Skill Distribution
+## Skill Ecosystem
 
-New in v1.7.0 — cross-tool skill ecosystem:
+New in v1.7.0 — universal cross-tool skill distribution:
 
 | Feature | Access | Purpose |
 |---------|--------|--------|
-| Skill Security Auditor | CLI `audit-skills` | Scan SKILL.md for malicious patterns |
+| Skill Security Auditor | CLI `audit-skills` | Scan SKILL.md for 44 malicious patterns |
 | Cross-Tool Converter | CLI `convert-skills` | SKILL.md → .cursorrules, CLAUDE.md, .clinerules, .windsurfrules, copilot-instructions.md |
 | Skill Sync (16 tools) | CLI `sync-skills` | Symlink skills to Claude, Cursor, Windsurf, Cline, Copilot, and 11 more |
 | Universal Publisher | CLI `publish-skills` | One-command pipeline: audit → convert → sync → package |
