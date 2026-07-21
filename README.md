@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/actions/workflows/publish-skills.yml"><img alt="CI" src="https://github.com/mattycigemp-crypto/GOD-OPENCODE/actions/workflows/publish-skills.yml/badge.svg?style=for-the-badge"/></a>
   <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE/releases/tag/v1.7.0"><img alt="v1.7.0" src="https://img.shields.io/badge/release-v1.7.0-8b5cf6?style=for-the-badge"/></a>
   <a href="https://github.com/mattycigemp-crypto/GOD-OPENCODE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge"/></a>
   <a href="https://cognivect.com"><img alt="CogniVect" src="https://img.shields.io/badge/company-CogniVect-8b5cf6?style=for-the-badge"/></a>
