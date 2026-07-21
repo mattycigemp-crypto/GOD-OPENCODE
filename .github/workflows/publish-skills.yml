@@ -1,0 +1,69 @@
+name: Publish Skills
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'skills/**'
+      - 'scripts/audit-skills.ps1'
+      - 'scripts/convert-skills.ps1'
+      - 'scripts/sync-skills.ps1'
+      - 'scripts/publish-skills.ps1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-skills-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Security Audit
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run skill security auditor
+        shell: pwsh
+        run: |
+          .\scripts\audit-skills.ps1 -Quiet
+
+  convert:
+    name: Cross-Tool Conversion
+    needs: audit
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Convert skills to all formats
+        shell: pwsh
+        run: |
+          .\scripts\convert-skills.ps1 -AllSkills -OutDir dist/converted
+
+      - name: Upload converted skills artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: converted-skills
+          path: dist/converted/
+          retention-days: 30
+
+  summary:
+    name: Pipeline Summary
+    needs: [audit, convert]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Report status
+        run: |
+          echo "## Skill Pipeline Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Audit | ${{ needs.audit.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Cross-Tool Conversion | ${{ needs.convert.result == 'success' && '✅ Complete' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Converted skills are available as a build artifact for 30 days." >> $GITHUB_STEP_SUMMARY
