@@ -259,6 +259,7 @@ function Show-Dashboard {
     Write-MenuItem "M"     "MCP Connectors"        "Connect to Chrome/DB/Jira/Monitoring"
     Write-MenuItem "G"     "Smart Git"             "Atomic commits, save points, rollback"
     Write-MenuItem "U"     "Publish Skills"        "Audit + convert + sync skills to all AI tools"
+    Write-MenuItem "X"     "Uninstall"             "Remove all GOD-OPENCODE installed components"
     Write-MenuItem "N"     "What's new in v1.7.0"  "Current release notes from CHANGELOG.md"
     Write-MenuItem "Q"     "Exit"                  "Close the interface"
 
@@ -635,6 +636,38 @@ function Show-PublishSkills {
     }
 }
 
+function Show-Uninstall {
+    Clear-Screen
+    Write-Header "Uninstall GOD-OPENCODE"
+    Write-Host ""
+    Write-Host "  This will remove ALL GOD-OPENCODE installed components:" -ForegroundColor $Colors.Warning
+    Write-Host "    - Skills from ~/.config/opencode/skills/" -ForegroundColor $Colors.Muted
+    Write-Host "    - Agents, workflows, commands data dirs" -ForegroundColor $Colors.Muted
+    Write-Host "    - Synced skills from 16 AI tool directories" -ForegroundColor $Colors.Muted
+    Write-Host "    - Global config entries (opencode.jsonc)" -ForegroundColor $Colors.Muted
+    Write-Host ""
+    Write-Host "  1 - Full Uninstall (interactive, asks before each step)" -ForegroundColor $Colors.Muted
+    Write-Host "  2 - Full Uninstall + Local Artifacts (-All flag)" -ForegroundColor $Colors.Muted
+    Write-Host "  3 - Dry Run (preview only, no changes)" -ForegroundColor $Colors.Muted
+    Write-Host "  4 - Status (show what is installed)" -ForegroundColor $Colors.Muted
+    Write-Host "  5 - Force Uninstall (skip all prompts)" -ForegroundColor $Colors.Muted
+    Write-Host "  B - Back" -ForegroundColor $Colors.Muted
+    $choice = Get-Input "Uninstall"
+    $uninst = Join-Path $Root "god-uninstall.ps1"
+    if (!(Test-Path $uninst)) {
+        Write-Host "  god-uninstall.ps1 missing." -ForegroundColor $Colors.Error
+        return
+    }
+    switch ($choice.ToUpper()) {
+        "1" { & $uninst }
+        "2" { & $uninst -All }
+        "3" { & $uninst -DryRun }
+        "4" { & $uninst -Status }
+        "5" { & $uninst -Force -All }
+        "B" { return }
+    }
+}
+
 function Show-SmartGit {
     Clear-Screen
     Write-Header "Smart Git  (v1.7.0)"
@@ -728,6 +761,7 @@ while ($true) {
         "G" { Clear-Screen ; Show-SmartGit       ; Wait-Key }
         "U" { Clear-Screen ; Show-PublishSkills  ; Wait-Key }
         "N" { Clear-Screen ; Show-WhatsNew        ; Wait-Key }
+        "X" { Clear-Screen ; Show-Uninstall      ; Wait-Key }
         "Q" {
             Clear-Screen
             Write-Host "" ; Write-Host "  GOD-OPENCODE UI closed." -ForegroundColor $Colors.Muted ; Write-Host ""

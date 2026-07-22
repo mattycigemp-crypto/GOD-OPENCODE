@@ -78,6 +78,7 @@ function Show-Help {
     Write-Host "    mcp-connect      Connect to external tools via MCP" -ForegroundColor White
     Write-Host "    smart-git        AI-powered git integration" -ForegroundColor White
     Write-Host "    publish-skills   Audit, convert, and sync skills to all AI tools" -ForegroundColor White
+    Write-Host "    uninstall        Remove all GOD-OPENCODE installed components" -ForegroundColor White
     Write-Host "    status           Show install status" -ForegroundColor White
     Write-Host "    ui               Launch interactive TUI" -ForegroundColor White
     Write-Host ""
@@ -96,6 +97,9 @@ function Show-Help {
     Write-Host "    -Tool <name>      Tool name for mcp-connect (chrome/database/jira/monitoring)" -ForegroundColor $C.Dim
     Write-Host "    -Action <name>    Action for mcp-connect" -ForegroundColor $C.Dim
     Write-Host "    -Target <name>    Target for mcp-connect" -ForegroundColor $C.Dim
+    Write-Host "    -All              Remove everything including local artifacts (uninstall)" -ForegroundColor $C.Dim
+    Write-Host "    -DryRun           Preview what would be removed (uninstall)" -ForegroundColor $C.Dim
+    Write-Host "    -Force            Skip confirmation prompts (uninstall)" -ForegroundColor $C.Dim
     Write-Host "    -Message <text>   Commit message for smart-git" -ForegroundColor $C.Dim
     Write-Host "    -Init             Initialize new session" -ForegroundColor $C.Dim
     Write-Host "    -Recall           Recall last session" -ForegroundColor $C.Dim
@@ -215,6 +219,14 @@ switch ($Command.ToLower()) {
         if ($Package) { $pubParams["Package"] = $true }
         if ($Tools) { $pubParams["Tools"] = $Tools }
         & (Join-Path $Root "scripts/publish-skills.ps1") @pubParams
+    }
+    "uninstall" {
+        Write-Host "`n  Running GOD-OPENCODE uninstaller...`n" -ForegroundColor $C.Info
+        $uninstParams = @{}
+        if ($All) { $uninstParams["All"] = $true }
+        if ($DryRun) { $uninstParams["DryRun"] = $true }
+        if ($Help) { $uninstParams["Status"] = $true }
+        & (Join-Path $Root "god-uninstall.ps1") @uninstParams
     }
     "status" {
         Write-Host "`n  GOD-OPENCODE Status" -ForegroundColor $C.Accent
