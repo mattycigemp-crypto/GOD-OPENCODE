@@ -116,6 +116,88 @@ function Remove-FileSafely($path, $label) {
 }
 
 # ============================================
+# Config Cleanup Helper
+# ============================================
+# Removes GOD-OPENCODE entries from global opencode.jsonc/opencode.json
+# using proper JSON parsing instead of fragile line filtering.
+function Remove-GocEntries {
+    param([string]$ConfigFile)
+    $raw = Get-Content $ConfigFile -Raw
+    # Strip JSONC comments (lines starting with //) before parsing
+    $stripped = ($raw -split "`r?`n" | Where-Object { $_ -notmatch '^[\s]*//' }) -join "`n"
+    try {
+        $json = $stripped | ConvertFrom-Json
+    } catch {
+        Write-Host "  [WARN] Could not parse $ConfigFile as JSON -- skipping config cleanup" -ForegroundColor Yellow
+        return $false
+    }
+
+    $gocAgents = @(
+        "backend-engineer", "frontend-engineer", "fullstack-engineer",
+        "security-engineer", "devops-engineer", "data-engineer",
+        "qa-engineer", "ai-engineer", "documentation-engineer", "refactoring-engineer"
+    )
+    $gocCommands = @(
+        "/brainstorm", "/code-review", "/debug", "/deploy",
+        "/explain", "/refactor", "/test"
+    )
+    $changed = $false
+
+    # Remove GOD-OPENCODE agents from agent object
+    if ($json.agent) {
+        foreach ($name in $gocAgents) {
+            if ($json.agent.PSObject.Properties[$name]) {
+                $json.agent.PSObject.Properties.Remove($name)
+                $changed = $true
+            }
+        }
+    }
+
+    # Remove GOD-OPENCODE commands from command object
+    if ($json.command) {
+        foreach ($name in $gocCommands) {
+            $cmdKey = $name.TrimStart('/')
+            if ($json.command.PSObject.Properties[$cmdKey]) {
+                $json.command.PSObject.Properties.Remove($cmdKey)
+                $changed = $true
+            }
+        }
+    }
+
+    # Remove instructions that reference god-opencode
+    if ($json.instructions) {
+        $filtered = @($json.instructions) | Where-Object { $_ -notmatch 'god-opencode' }
+        if ($filtered.Count -ne @($json.instructions).Count) {
+            $json.instructions = @($filtered)
+            $changed = $true
+        }
+    }
+
+    # Remove permission entries referencing god-opencode
+    if ($json.permission) {
+        foreach ($tool in @($json.permission.PSObject.Properties.Name)) {
+            $toolObj = $json.permission.$tool
+            if ($toolObj.deny) {
+                $filtered = @($toolObj.deny) | Where-Object { $_ -notmatch 'god-opencode' }
+                if ($filtered.Count -ne @($toolObj.deny).Count) {
+                    $toolObj.deny = @($filtered)
+                    $changed = $true
+                }
+            }
+        }
+    }
+
+    if ($changed) {
+        $json | ConvertTo-Json -Depth 10 | Set-Content $ConfigFile -Encoding UTF8
+        Write-Removed "GOD-OPENCODE entries from $ConfigFile"
+        return $true
+    } else {
+        Write-Status "Global Config" "No GOD-OPENCODE entries found" "Dim"
+        return $false
+    }
+}
+
+# ============================================
 # Header
 # ============================================
 
@@ -377,84 +459,6 @@ if (-not $KeepConfig) {
     if ($cfgFile) {
         $cfgContent = Get-Content $cfgFile -Raw -ErrorAction SilentlyContinue
         if ($cfgContent -and ($cfgContent -match "god-opencode" -or $cfgContent -match "security-engineer")) {
-            # Helper: remove GOD-OPENCODE entries from parsed JSON
-            function Remove-GocEntries {
-                param([string]$ConfigFile)
-                $raw = Get-Content $ConfigFile -Raw
-                # Strip JSONC comments (lines starting with //) before parsing
-                $stripped = ($raw -split "`r?`n" | Where-Object { $_ -notmatch '^[\s]*//' }) -join "`n"
-                try {
-                    $json = $stripped | ConvertFrom-Json
-                } catch {
-                    Write-Host "  [WARN] Could not parse $ConfigFile as JSON — skipping config cleanup" -ForegroundColor Yellow
-                    return $false
-                }
-
-                $gocAgents = @(
-                    "backend-engineer", "frontend-engineer", "fullstack-engineer",
-                    "security-engineer", "devops-engineer", "data-engineer",
-                    "qa-engineer", "ai-engineer", "documentation-engineer", "refactoring-engineer"
-                )
-                $gocCommands = @(
-                    "/brainstorm", "/code-review", "/debug", "/deploy",
-                    "/explain", "/refactor", "/test"
-                )
-                $changed = $false
-
-                # Remove GOD-OPENCODE agents from agent object
-                if ($json.agent) {
-                    foreach ($name in $gocAgents) {
-                        if ($json.agent.PSObject.Properties[$name]) {
-                            $json.agent.PSObject.Properties.Remove($name)
-                            $changed = $true
-                        }
-                    }
-                }
-
-                # Remove GOD-OPENCODE commands from command object
-                if ($json.command) {
-                    foreach ($name in $gocCommands) {
-                        $cmdKey = $name.TrimStart('/')
-                        if ($json.command.PSObject.Properties[$cmdKey]) {
-                            $json.command.PSObject.Properties.Remove($cmdKey)
-                            $changed = $true
-                        }
-                    }
-                }
-
-                # Remove instructions that reference god-opencode
-                if ($json.instructions) {
-                    $filtered = @($json.instructions) | Where-Object { $_ -notmatch 'god-opencode' }
-                    if ($filtered.Count -ne @($json.instructions).Count) {
-                        $json.instructions = @($filtered)
-                        $changed = $true
-                    }
-                }
-
-                # Remove permission entries referencing god-opencode
-                if ($json.permission) {
-                    foreach ($tool in @($json.permission.PSObject.Properties.Name)) {
-                        $toolObj = $json.permission.$tool
-                        if ($toolObj.deny) {
-                            $filtered = @($toolObj.deny) | Where-Object { $_ -notmatch 'god-opencode' }
-                            if ($filtered.Count -ne @($toolObj.deny).Count) {
-                                $toolObj.deny = @($filtered)
-                                $changed = $true
-                            }
-                        }
-                    }
-                }
-
-                if ($changed) {
-                    $json | ConvertTo-Json -Depth 10 | Set-Content $ConfigFile -Encoding UTF8
-                    Write-Removed "GOD-OPENCODE entries from $ConfigFile"
-                    return $true
-                } else {
-                    Write-Status "Global Config" "No GOD-OPENCODE entries found" "Dim"
-                    return $false
-                }
-            }
-
             if ($DryRun) {
                 Write-DryRun "$cfgFile (remove GOD-OPENCODE entries via JSON parse)"
             } elseif ($Force) {
