@@ -71,7 +71,7 @@ function Remove-DirectorySafely($path, $label) {
         Write-DryRun "$path ($items items)"
         return $true
     }
-    if ($Force -or $Status) {
+    if ($Force) {
         Remove-Item -Path $path -Recurse -Force -ErrorAction SilentlyContinue
         Write-Removed "$path ($items items)"
         return $true
@@ -97,7 +97,7 @@ function Remove-FileSafely($path, $label) {
         Write-DryRun $path
         return $true
     }
-    if ($Force -or $Status) {
+    if ($Force) {
         Remove-Item -Path $path -Force -ErrorAction SilentlyContinue
         Write-Removed $path
         return $true
@@ -377,17 +377,19 @@ if (-not $KeepConfig) {
     if ($cfgFile) {
         $cfgContent = Get-Content $cfgFile -Raw -ErrorAction SilentlyContinue
         if ($cfgContent -and ($cfgContent -match "god-opencode" -or $cfgContent -match "security-engineer")) {
-            if ($DryRun) {
-                Write-DryRun "$cfgFile (remove GOD-OPENCODE entries)"
-            } elseif ($Force) {
-                # Backup then strip GOD-OPENCODE entries
-                $backupPath = "$cfgFile.god-backup"
-                Copy-Item $cfgFile $backupPath -Force
-                Write-Host "  [BACKUP] $backupPath" -ForegroundColor $C.Dim
+            # Helper: remove GOD-OPENCODE entries from parsed JSON
+            function Remove-GocEntries {
+                param([string]$ConfigFile)
+                $raw = Get-Content $ConfigFile -Raw
+                # Strip JSONC comments (lines starting with //) before parsing
+                $stripped = ($raw -split "`r?`n" | Where-Object { $_ -notmatch '^[\s]*//' }) -join "`n"
+                try {
+                    $json = $stripped | ConvertFrom-Json
+                } catch {
+                    Write-Host "  [WARN] Could not parse $ConfigFile as JSON — skipping config cleanup" -ForegroundColor Yellow
+                    return $false
+                }
 
-                # Remove lines referencing god-opencode agent names and MCP entries
-                $lines = $cfgContent -split "`r?`n"
-                $filtered = @()
                 $gocAgents = @(
                     "backend-engineer", "frontend-engineer", "fullstack-engineer",
                     "security-engineer", "devops-engineer", "data-engineer",
@@ -397,23 +399,69 @@ if (-not $KeepConfig) {
                     "/brainstorm", "/code-review", "/debug", "/deploy",
                     "/explain", "/refactor", "/test"
                 )
+                $changed = $false
 
-                foreach ($line in $lines) {
-                    $skip = $false
-                    foreach ($agent in $gocAgents) {
-                        if ($line -match $agent) { $skip = $true; break }
+                # Remove GOD-OPENCODE agents from agent object
+                if ($json.agent) {
+                    foreach ($name in $gocAgents) {
+                        if ($json.agent.PSObject.Properties[$name]) {
+                            $json.agent.PSObject.Properties.Remove($name)
+                            $changed = $true
+                        }
                     }
-                    foreach ($cmd in $gocCommands) {
-                        if ($line -match [regex]::Escape($cmd)) { $skip = $true; break }
-                    }
-                    if ($line -match "god-opencode") { $skip = $true }
-                    if (-not $skip) { $filtered += $line }
                 }
 
-                $newContent = $filtered -join "`n"
-                [System.IO.File]::WriteAllText($cfgFile, $newContent)
-                Write-Removed "GOD-OPENCODE entries from $cfgFile"
-                $removedFiles++
+                # Remove GOD-OPENCODE commands from command object
+                if ($json.command) {
+                    foreach ($name in $gocCommands) {
+                        $cmdKey = $name.TrimStart('/')
+                        if ($json.command.PSObject.Properties[$cmdKey]) {
+                            $json.command.PSObject.Properties.Remove($cmdKey)
+                            $changed = $true
+                        }
+                    }
+                }
+
+                # Remove instructions that reference god-opencode
+                if ($json.instructions) {
+                    $filtered = @($json.instructions) | Where-Object { $_ -notmatch 'god-opencode' }
+                    if ($filtered.Count -ne @($json.instructions).Count) {
+                        $json.instructions = @($filtered)
+                        $changed = $true
+                    }
+                }
+
+                # Remove permission entries referencing god-opencode
+                if ($json.permission) {
+                    foreach ($tool in @($json.permission.PSObject.Properties.Name)) {
+                        $toolObj = $json.permission.$tool
+                        if ($toolObj.deny) {
+                            $filtered = @($toolObj.deny) | Where-Object { $_ -notmatch 'god-opencode' }
+                            if ($filtered.Count -ne @($toolObj.deny).Count) {
+                                $toolObj.deny = @($filtered)
+                                $changed = $true
+                            }
+                        }
+                    }
+                }
+
+                if ($changed) {
+                    $json | ConvertTo-Json -Depth 10 | Set-Content $ConfigFile -Encoding UTF8
+                    Write-Removed "GOD-OPENCODE entries from $ConfigFile"
+                    return $true
+                } else {
+                    Write-Status "Global Config" "No GOD-OPENCODE entries found" "Dim"
+                    return $false
+                }
+            }
+
+            if ($DryRun) {
+                Write-DryRun "$cfgFile (remove GOD-OPENCODE entries via JSON parse)"
+            } elseif ($Force) {
+                $backupPath = "$cfgFile.god-backup"
+                Copy-Item $cfgFile $backupPath -Force
+                Write-Host "  [BACKUP] $backupPath" -ForegroundColor $C.Dim
+                if (Remove-GocEntries -ConfigFile $cfgFile) { $removedFiles++ }
             } else {
                 Write-Host "  Found GOD-OPENCODE entries in: $cfgFile" -ForegroundColor $C.Info
                 $ans = Read-Host "  Remove GOD-OPENCODE entries (backup will be created)? [y/N]"
@@ -421,35 +469,7 @@ if (-not $KeepConfig) {
                     $backupPath = "$cfgFile.god-backup"
                     Copy-Item $cfgFile $backupPath -Force
                     Write-Host "  [BACKUP] $backupPath" -ForegroundColor $C.Dim
-
-                    $lines = $cfgContent -split "`r?`n"
-                    $filtered = @()
-                    $gocAgents = @(
-                        "backend-engineer", "frontend-engineer", "fullstack-engineer",
-                        "security-engineer", "devops-engineer", "data-engineer",
-                        "qa-engineer", "ai-engineer", "documentation-engineer", "refactoring-engineer"
-                    )
-                    $gocCommands = @(
-                        "/brainstorm", "/code-review", "/debug", "/deploy",
-                        "/explain", "/refactor", "/test"
-                    )
-
-                    foreach ($line in $lines) {
-                        $skip = $false
-                        foreach ($agent in $gocAgents) {
-                            if ($line -match $agent) { $skip = $true; break }
-                        }
-                        foreach ($cmd in $gocCommands) {
-                            if ($line -match [regex]::Escape($cmd)) { $skip = $true; break }
-                        }
-                        if ($line -match "god-opencode") { $skip = $true }
-                        if (-not $skip) { $filtered += $line }
-                    }
-
-                    $newContent = $filtered -join "`n"
-                    [System.IO.File]::WriteAllText($cfgFile, $newContent)
-                    Write-Removed "GOD-OPENCODE entries from $cfgFile"
-                    $removedFiles++
+                    if (Remove-GocEntries -ConfigFile $cfgFile) { $removedFiles++ }
                 } else {
                     Write-Kept $cfgFile
                 }

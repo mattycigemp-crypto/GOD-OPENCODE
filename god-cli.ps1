@@ -37,6 +37,9 @@ param(
     [switch]$Help,
     [switch]$DryRun,
     [switch]$Package,
+    [switch]$All,
+    [switch]$Force,
+    [switch]$Status,
     [string]$Tools = ""
 )
 
@@ -91,15 +94,15 @@ function Show-Help {
     Write-Host "    -Skill <name>     Skill name for session tracking" -ForegroundColor $C.Dim
     Write-Host "    -Languages <list> Languages for code-graph (e.g. ps1,py,js)" -ForegroundColor $C.Dim
     Write-Host "    -Task <text>      Task description for agent-orch" -ForegroundColor $C.Dim
-    Write-Host "    -DryRun           Preview mode (publish-skills)" -ForegroundColor $C.Dim
+    Write-Host "    -DryRun           Preview mode (publish-skills, uninstall)" -ForegroundColor $C.Dim
     Write-Host "    -Package          Create release zip (publish-skills)" -ForegroundColor $C.Dim
     Write-Host "    -Tools <list>     Comma-separated tools to sync (publish-skills)" -ForegroundColor $C.Dim
     Write-Host "    -Tool <name>      Tool name for mcp-connect (chrome/database/jira/monitoring)" -ForegroundColor $C.Dim
     Write-Host "    -Action <name>    Action for mcp-connect" -ForegroundColor $C.Dim
     Write-Host "    -Target <name>    Target for mcp-connect" -ForegroundColor $C.Dim
     Write-Host "    -All              Remove everything including local artifacts (uninstall)" -ForegroundColor $C.Dim
-    Write-Host "    -DryRun           Preview what would be removed (uninstall)" -ForegroundColor $C.Dim
     Write-Host "    -Force            Skip confirmation prompts (uninstall)" -ForegroundColor $C.Dim
+    Write-Host "    -Status           Show what is installed (uninstall)" -ForegroundColor $C.Dim
     Write-Host "    -Message <text>   Commit message for smart-git" -ForegroundColor $C.Dim
     Write-Host "    -Init             Initialize new session" -ForegroundColor $C.Dim
     Write-Host "    -Recall           Recall last session" -ForegroundColor $C.Dim
@@ -225,7 +228,8 @@ switch ($Command.ToLower()) {
         $uninstParams = @{}
         if ($All) { $uninstParams["All"] = $true }
         if ($DryRun) { $uninstParams["DryRun"] = $true }
-        if ($Help) { $uninstParams["Status"] = $true }
+        if ($Force) { $uninstParams["Force"] = $true }
+        if ($Status) { $uninstParams["Status"] = $true }
         & (Join-Path $Root "god-uninstall.ps1") @uninstParams
     }
     "status" {
