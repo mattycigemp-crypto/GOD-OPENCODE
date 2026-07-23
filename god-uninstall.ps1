@@ -39,6 +39,8 @@ $C = @{
 }
 
 function Write-Status($label, $value, $color = "Green") {
+    # Resolve symbolic color names (e.g. "Dim") through the $C map
+    if ($C.ContainsKey($color)) { $color = $C[$color] }
     Write-Host "  " -NoNewline
     Write-Host ($label.PadRight(28)) -ForegroundColor $C.Dim -NoNewline
     Write-Host $value -ForegroundColor $color
@@ -231,6 +233,27 @@ $GlobalConfig2 = Join-Path $OpenCodeDir "opencode.json"
 
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 
+# ============================================
+# GOD-OPENCODE Skill Manifest
+# ============================================
+# Scans our local skills/ directory to build a list of all
+# GOD-OPENCODE skill directory names. Used in STEP 1 and STEP 5
+# to ONLY remove our own skills — never touching other users' content.
+$GocSkillNames = @()
+$GocSkillsRoot = Join-Path $Root "skills"
+if (Test-Path $GocSkillsRoot) {
+    # Each skill lives at: skills/<category>/<skill-name>/SKILL.md
+    Get-ChildItem -Path $GocSkillsRoot -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+        $catDir = $_.FullName
+        Get-ChildItem -Path $catDir -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+            $skillMd = Join-Path $_.FullName "SKILL.md"
+            if (Test-Path $skillMd) {
+                $GocSkillNames += $_.Name
+            }
+        }
+    }
+}
+
 # AI tool directories that sync-skills.ps1 targets
 $ToolDirectories = [ordered]@{
     "claude"     = Join-Path $HOME ".claude\skills"
@@ -378,22 +401,50 @@ $skippedDirs = 0
 $skippedFiles = 0
 
 # ============================================
-# STEP 1: Remove Global Skills
+# STEP 1: Remove Global Skills (OUR skills only)
 # ============================================
+# SAFETY: Only removes skill directories whose names match
+# our manifest ($GocSkillNames). Never touches the parent
+# skills/ directory or other users' content.
 
 Write-Host ""
-Write-Host "  --- Removing Global Skills ---" -ForegroundColor $C.Info
+Write-Host "  --- Removing Global Skills (GOD-OPENCODE only) ---" -ForegroundColor $C.Info
 Write-Host ""
 
 if (Test-Path $SkillsDir) {
-    $skillCount = (Get-ChildItem -Path $SkillsDir -Recurse -Filter "SKILL.md" -File -ErrorAction SilentlyContinue).Count
-    if ($skillCount -gt 0) {
-        if (Remove-DirectorySafely $SkillsDir "skills") { $removedDirs++ }
-    } else {
-        if ($DryRun) {
-            Write-Host "  [SKIPPED] $SkillsDir (empty)" -ForegroundColor $C.Dim
+    $gocRemoved = 0
+    $gocSkipped = 0
+    foreach ($skillName in $GocSkillNames) {
+        # Check both flat layout (skills/<name>/) and category layout (skills/<cat>/<name>/)
+        $flatPath = Join-Path $SkillsDir $skillName
+        if (Test-Path $flatPath) {
+            if (Remove-DirectorySafely $flatPath "skills/$skillName") { $gocRemoved++ }
+            else { $gocSkipped++ }
         }
-        $skippedDirs++
+        # Check category subdirectories
+        Get-ChildItem -Path $SkillsDir -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+            $catPath = Join-Path $_.FullName $skillName
+            if (Test-Path $catPath) {
+                $rel = "$($_.Name)/$skillName"
+                if (Remove-DirectorySafely $catPath "skills/$rel") { $gocRemoved++ }
+                else { $gocSkipped++ }
+            }
+        }
+    }
+    $removedDirs += $gocRemoved
+    $skippedDirs += $gocSkipped
+
+    # Only remove the skills/ parent dir if it's now empty
+    $remaining = (Get-ChildItem -Path $SkillsDir -ErrorAction SilentlyContinue).Count
+    if ($remaining -eq 0) {
+        if ($DryRun) { Write-DryRun "$SkillsDir (empty after cleanup)" }
+        else { Remove-Item -Path $SkillsDir -Force; Write-Removed $SkillsDir }
+        $removedDirs++
+    } elseif ($gocRemoved -gt 0) {
+        Write-Host "  [KEPT]    $SkillsDir ($remaining items from other tools remain)" -ForegroundColor Green
+    }
+    if ($gocRemoved -eq 0 -and $gocSkipped -eq 0) {
+        if (-not $DryRun) { Write-Status "Global Skills" "No GOD-OPENCODE skills found" "Dim" }
     }
 } else {
     if (-not $DryRun) { Write-Status "Global Skills" "Not installed" "Dim" }
@@ -489,46 +540,103 @@ if (-not $KeepConfig) {
 }
 
 # ============================================
-# STEP 5: Remove Synced Skills from AI Tool Dirs
+# STEP 5: Remove Synced Skills from AI Tool Dirs (OUR skills only)
 # ============================================
+# SAFETY: Only removes skill directories/files whose names match
+# our manifest ($GocSkillNames). Never deletes the parent
+# tool/skills directory or other users' content.
 
 Write-Host ""
-Write-Host "  --- Removing Synced Skills from AI Tools ---" -ForegroundColor $C.Info
+Write-Host "  --- Removing Synced Skills from AI Tools (GOD-OPENCODE only) ---" -ForegroundColor $C.Info
 Write-Host ""
 
 $foundSynced = $false
 foreach ($key in $ToolDirectories.Keys) {
     $toolPath = $ToolDirectories[$key]
     if (Test-Path $toolPath) {
-        $syncedSkills = Get-ChildItem -Path $toolPath -Recurse -Filter "SKILL.md" -File -ErrorAction SilentlyContinue
-        if ($syncedSkills.Count -gt 0) {
-            $foundSynced = $true
-            if ($DryRun) {
-                Write-DryRun "$key ($($syncedSkills.Count) skills in $toolPath)"
-            } elseif ($Force) {
-                Remove-Item -Path $toolPath -Recurse -Force -ErrorAction SilentlyContinue
-                Write-Removed "$key ($($syncedSkills.Count) skills)"
+        $toolRemoved = 0
+        foreach ($skillName in $GocSkillNames) {
+            # Check flat layout: <tool-skills-dir>/<skill-name>/
+            $flatPath = Join-Path $toolPath $skillName
+            if (Test-Path $flatPath) {
+                $foundSynced = $true
+                if ($DryRun) {
+                    Write-DryRun "$key: $flatPath"
+                } elseif ($Force) {
+                    Remove-Item -Path $flatPath -Recurse -Force -ErrorAction SilentlyContinue
+                    Write-Removed "$key/$skillName"
+                    $toolRemoved++
+                } else {
+                    if ($toolRemoved -eq 0) {
+                        Write-Host ""
+                        Write-Host "  Found GOD-OPENCODE skills in $key" -ForegroundColor $C.Info
+                        Write-Host "  Path: $toolPath" -ForegroundColor $C.Dim
+                        $ans = Read-Host "  Remove GOD-OPENCODE skills only? [y/N]"
+                        if ($ans -notmatch '^[Yy]') {
+                            Write-Kept "$key (all skills)"
+                            $skippedDirs++
+                            $toolRemoved = -1  # sentinel: skip remaining
+                            break
+                        }
+                    }
+                    if ($toolRemoved -ge 0) {
+                        Remove-Item -Path $flatPath -Recurse -Force -ErrorAction SilentlyContinue
+                        Write-Removed "$key/$skillName"
+                        $toolRemoved++
+                    }
+                }
+            }
+            # Check category layout: <tool-skills-dir>/<category>/<skill-name>/
+            Get-ChildItem -Path $toolPath -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+                $catPath = Join-Path $_.FullName $skillName
+                if (Test-Path $catPath) {
+                    $foundSynced = $true
+                    $rel = "$($_.Name)/$skillName"
+                    if ($DryRun) {
+                        Write-DryRun "$key: $catPath"
+                    } elseif ($Force) {
+                        Remove-Item -Path $catPath -Recurse -Force -ErrorAction SilentlyContinue
+                        Write-Removed "$key/$rel"
+                        $toolRemoved++
+                    } else {
+                        if ($toolRemoved -eq 0) {
+                            Write-Host ""
+                            Write-Host "  Found GOD-OPENCODE skills in $key" -ForegroundColor $C.Info
+                            Write-Host "  Path: $toolPath" -ForegroundColor $C.Dim
+                            $ans = Read-Host "  Remove GOD-OPENCODE skills only? [y/N]"
+                            if ($ans -notmatch '^[Yy]') {
+                                Write-Kept "$key (all skills)"
+                                $skippedDirs++
+                                $toolRemoved = -1  # sentinel: skip remaining
+                                return  # break out of ForEach-Object
+                            }
+                        }
+                        if ($toolRemoved -ge 0) {
+                            Remove-Item -Path $catPath -Recurse -Force -ErrorAction SilentlyContinue
+                            Write-Removed "$key/$rel"
+                            $toolRemoved++
+                        }
+                    }
+                }
+            }
+        }
+        if ($toolRemoved -gt 0) {
+            $removedDirs += $toolRemoved
+            # Only remove the tool skills dir if it's now empty
+            $remaining = (Get-ChildItem -Path $toolPath -ErrorAction SilentlyContinue).Count
+            if ($remaining -eq 0) {
+                if ($DryRun) { Write-DryRun "$toolPath (empty after cleanup)" }
+                else { Remove-Item -Path $toolPath -Force; Write-Removed $toolPath }
                 $removedDirs++
             } else {
-                Write-Host ""
-                Write-Host "  Found $($syncedSkills.Count) skills in $key" -ForegroundColor $C.Info
-                Write-Host "  Path: $toolPath" -ForegroundColor $C.Dim
-                $ans = Read-Host "  Remove all? [y/N]"
-                if ($ans -match '^[Yy]') {
-                    Remove-Item -Path $toolPath -Recurse -Force -ErrorAction SilentlyContinue
-                    Write-Removed "$key ($($syncedSkills.Count) skills)"
-                    $removedDirs++
-                } else {
-                    Write-Kept "$key ($($syncedSkills.Count) skills)"
-                    $skippedDirs++
-                }
+                Write-Host "  [KEPT]    $toolPath ($remaining items from other tools remain)" -ForegroundColor Green
             }
         }
     }
 }
 
 if (-not $foundSynced -and -not $DryRun) {
-    Write-Status "Synced Skills" "None found" "Dim"
+    Write-Status "Synced Skills" "No GOD-OPENCODE skills found" "Dim"
 }
 
 # ============================================
@@ -655,9 +763,9 @@ Write-Host ""
 if ($DryRun) {
     Write-Host "  No files were removed. Re-run without -DryRun to proceed." -ForegroundColor $C.Dim
 } else {
-    Write-Host "  Directories removed: $removedDirs" -ForegroundColor $(if ($removedDirs -gt 0) { "Green" } else { "Dim" })
-    Write-Host "  Files removed:       $removedFiles" -ForegroundColor $(if ($removedFiles -gt 0) { "Green" } else { "Dim" })
-    Write-Host "  Directories kept:    $skippedDirs" -ForegroundColor $(if ($skippedDirs -gt 0) { "Yellow" } else { "Dim" })
+    Write-Host "  Directories removed: $removedDirs" -ForegroundColor $(if ($removedDirs -gt 0) { "Green" } else { $C.Dim })
+    Write-Host "  Files removed:       $removedFiles" -ForegroundColor $(if ($removedFiles -gt 0) { "Green" } else { $C.Dim })
+    Write-Host "  Directories kept:    $skippedDirs" -ForegroundColor $(if ($skippedDirs -gt 0) { "Yellow" } else { $C.Dim })
     Write-Host ""
 
     # Post-uninstall status
